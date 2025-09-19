@@ -1,0 +1,155 @@
+import type { ActionItem } from '../types';
+
+export const ACTION_LIBRARY: ActionItem[] = [
+  // Resety Energetyczne (SZYBKI RESET 1-5 min)
+  {
+    id: 'reset_cold_shower',
+    triggerTags: ['Słaby sen', 'Stres'],
+    type: 'Reset Energetyczny',
+    duration: 2,
+    title: 'Zimny prysznic',
+    content: 'Idź pod prysznic i zrób 30 sekundowy zimny prysznic. To natychmiastowy sygnał dla ciała, by się obudziło i podniosło poziom dopaminy na +/- 3 godziny.',
+  },
+  {
+    id: 'reset_sound_music',
+    triggerTags: ['Praca głęboka', 'Stres'],
+    type: 'Reset Energetyczny',
+    duration: 3,
+    title: 'Dźwięk i muzyka',
+    content: 'Opcja 1: Puść głośno ulubioną piosenkę. Koniecznie bez słuchawek, aby dźwięk wypełnił przestrzeń.\nOpcja 2: Użyj aplikacji ze ścieżkami dźwiękowymi wspierającymi pracę mózgu (np. Endel, Brain.fm, Binaural Beats).',
+  },
+  {
+    id: 'reset_breathing_478',
+    triggerTags: ['Stres', 'Spotkanie'],
+    type: 'Reset Energetyczny',
+    duration: 2,
+    title: 'Weź oddech (4-7-8)',
+    content: 'Zastosuj technikę 4-7-8:\n- 4 sekundy wdechu\n- 7 sekund wstrzymania\n- 8 sekund wydechu\nPowtarzaj przez co najmniej 2 minuty, aby osiągnąć zamierzony efekt.',
+  },
+  {
+    id: 'reset_change_clothes',
+    triggerTags: ['Relaks'],
+    type: 'Reset Energetyczny',
+    duration: 1,
+    title: 'Zmień ubranie',
+    content: 'Zmiana ubrania może być szybkim sygnałem dla mózgu, aby zmienić tryb i odświeżyć stan umysłu.',
+  },
+  {
+    id: 'reset_change_task',
+    triggerTags: ['Praca głęboka'],
+    type: 'Reset Energetyczny',
+    duration: 1,
+    title: 'Zmień zadanie',
+    content: 'Czasem nie możesz się zabrać za to konkretne zadanie. Zmiana (nawet na chwilę) zadania na inne może dać szybki reset i przywrócić energię.',
+  },
+  {
+    id: 'reset_clean_desk',
+    triggerTags: ['Praca głęboka', 'Stres'],
+    type: 'Reset Energetyczny',
+    duration: 1,
+    title: 'Posprzątaj biurko',
+    content: 'Poświęć minutę na uporządkowanie przestrzeni wokół siebie. Czyste otoczenie sprzyja skupieniu.',
+  },
+  {
+    id: 'reset_change_room',
+    triggerTags: ['Praca głęboka', 'Relaks'],
+    type: 'Reset Energetyczny',
+    duration: 1,
+    title: 'Przenieś się do innego pokoju',
+    content: 'Czasem wystarczy zmiana otoczenia, aby poczuć się lepiej i odzyskać perspektywę.',
+  },
+  {
+    id: 'reset_oxygen',
+    triggerTags: ['Posiłek', 'Słaby sen'],
+    type: 'Reset Energetyczny',
+    duration: 1,
+    title: 'Więcej tlenu!',
+    content: 'Przewietrz mieszkanie lub włącz klimatyzację. Świeże powietrze to natychmiastowy zastrzyk energii dla mózgu.',
+  },
+  {
+    id: 'reset_fullscreen',
+    triggerTags: ['Praca głęboka'],
+    type: 'Reset Energetyczny',
+    duration: 1,
+    title: 'Tryb pełnoekranowy',
+    content: 'Włącz go w aplikacji, nad którą pracujesz. Ukrycie wszystkich rozpraszaczy z pola widzenia pomaga w pełni skupić się na zadaniu.',
+  },
+  {
+    id: 'reset_block_distractions',
+    triggerTags: ['Praca głęboka', 'Stres'],
+    type: 'Reset Energetyczny',
+    duration: 1,
+    title: 'Blokuj, nie walcz',
+    content: 'Jeśli masz problem ze skupieniem i uciekasz do innych stron, zablokuj je (np. aplikacją Freedom). Nie trać energii na walkę z chęcią przełączenia karty.',
+  },
+  // Resety Energetyczne (SZYBKI RECHARGE 10-15 min)
+  {
+    id: 'recharge_braindump_walk',
+    triggerTags: ['Stres', 'Praca głęboka'],
+    type: 'Reset Energetyczny',
+    duration: 15,
+    title: 'Spacerowy “BrainDump”',
+    content: 'Użyj aplikacji do transkrypcji audio (np. VoicePal) i podczas spaceru wyrzuć z siebie wszystko, co siedzi Ci w głowie. To daje mocny zastrzyk energii.',
+  },
+  {
+    id: 'recharge_walk_no_phone',
+    triggerTags: ['Relaks', 'Spotkanie'],
+    type: 'Reset Energetyczny',
+    duration: 15,
+    title: 'Spacer bez telefonu',
+    content: 'Chodzenie to fundament pracy mózgu. Obserwowanie otoczenia (drzew, chmur, budynków) i poruszanie gałkami ocznymi synchronizuje obie półkule mózgowe.',
+  },
+  {
+    id: 'recharge_nsdr',
+    triggerTags: ['Słaby sen', 'Stres'],
+    type: 'Reset Energetyczny',
+    duration: 10,
+    title: 'NSDR (Non-Sleep Deep Rest)',
+    content: 'Ta metoda może podnieść poziom dopaminy i sprawić, że poczujesz się świetnie. Jest doskonałą alternatywą dla medytacji.',
+  },
+  {
+    id: 'recharge_create_something',
+    triggerTags: ['Relaks'],
+    type: 'Reset Energetyczny',
+    duration: 15,
+    title: 'Stwórz coś kreatywnego',
+    content: 'Zrób coś, co lubisz. Narysuj coś, ułóż puzzle, złóż lego. Tworzenie czegoś to potężny sposób na regenerację mentalną.',
+  },
+  // Protokoły Ruchowe
+  {
+    id: 'protocol_morning_kickstarter',
+    triggerTags: ['Trening', 'Słaby sen'],
+    type: 'Protokół Ruchowy',
+    duration: 10,
+    title: 'Morning Kickstarter',
+    content: 'Zestaw ćwiczeń mobilizacyjnych na idealny początek dnia. Rozruszaj zastałe po nocy ciało i przygotuj je do działania.',
+    videoUrl: 'https://iframe.mediadelivery.net/embed/453818/69b26d16-7bf9-427d-9c09-07fc4599095d'
+  },
+  {
+    id: 'protocol_reboot_shake_it',
+    triggerTags: ['Spotkanie', 'Stres'],
+    type: 'Protokół Ruchowy',
+    duration: 5,
+    title: 'Energetyczny Reboot - Shake It',
+    content: 'Szybki i dynamiczny protokół, aby rozruszać ciało, pozbyć się napięcia i natychmiast podnieść poziom energii.',
+    videoUrl: 'https://iframe.mediadelivery.net/embed/453818/31750613-1230-439a-b088-27b46b1a3d57'
+  },
+  {
+    id: 'protocol_reboot_reset',
+    triggerTags: ['Praca głęboka', 'Posiłek'],
+    type: 'Protokół Ruchowy',
+    duration: 5,
+    title: 'Energetyczny Reboot - Reset',
+    content: 'Skoncentrowany na oddechu i delikatnym ruchu protokół, który pomaga zresetować układ nerwowy i odzyskać spokój.',
+    videoUrl: 'https://iframe.mediadelivery.net/embed/453818/6fd37434-bef0-4764-9569-84fa8beacaeb'
+  },
+  {
+    id: 'protocol_reboot_pumpfocus',
+    triggerTags: ['Praca głęboka', 'Trening'],
+    type: 'Protokół Ruchowy',
+    duration: 5,
+    title: 'Energetyczny Reboot - PumpFocus',
+    content: 'Intensywny protokół, który ma za zadanie maksymalnie dotlenić mózg i przygotować Cię do głębokiej pracy wymagającej skupienia.',
+    videoUrl: 'https://iframe.mediadelivery.net/embed/453818/fafd4831-60f8-4c14-a432-bb13aa352f1d'
+  }
+];
