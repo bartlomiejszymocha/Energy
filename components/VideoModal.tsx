@@ -13,24 +13,26 @@ export const VideoModal: React.FC<VideoModalProps> = ({ videoUrl, onClose }) => 
       onClick={onClose}
     >
       <div 
-        className="bg-space-900 rounded-xl shadow-2xl w-full max-w-3xl relative animate-fade-in-up aspect-video"
-        onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking on the video container
+        className="relative w-full max-w-5xl animate-fade-in-up"
+        onClick={(e) => e.stopPropagation()}
       >
         <button 
           onClick={onClose} 
-          className="absolute -top-3 -right-3 text-cloud-white bg-space-800 rounded-full p-1.5 hover:bg-space-700 transition z-10"
+          className="absolute -top-10 right-0 text-cloud-white bg-space-800/50 rounded-full p-1.5 hover:bg-space-700/70 transition z-10"
           aria-label="Zamknij wideo"
         >
           <XMarkIcon className="h-6 w-6" />
         </button>
-        <iframe
-          className="w-full h-full rounded-xl"
-          src={videoUrl}
-          title="Video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <div className="aspect-video bg-black rounded-xl overflow-hidden">
+          <iframe
+            className="w-full h-full"
+            src={videoUrl}
+            title="Video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
       </div>
       <style>{`
         @keyframes fade-in-up {
