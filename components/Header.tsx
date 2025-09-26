@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center gap-3">
-              <span className="text-2xl">🚀</span>
+              <span className="text-2xl">🎯</span>
               <div>
                 <span className="text-lg font-bold text-cloud-white tracking-tight">{title}</span>
                 <span className="block text-xs text-system-grey md:hidden">Bartłomiej Szymocha</span>

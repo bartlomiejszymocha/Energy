@@ -24,7 +24,7 @@ import { TidyCalModal } from './components/TidyCalModal';
 import { LoginScreen } from './components/LoginScreen';
 import { HistoryPage } from './components/HistoryPage';
 import { WorkoutModal } from './components/WorkoutPage';
-import { PlusIcon, CalendarDaysIcon } from './components/icons/Icons';
+import { PlusIcon, CalendarDaysIcon, ChartBarIcon } from './components/icons/Icons';
 
 function App() {
   const { user, loadingAuth, signInWithGoogle, signOut } = useAuth();
@@ -248,7 +248,7 @@ function App() {
                   onClick={() => setIsTidyCalModalOpen(true)}
                   className="inline-flex items-center gap-3 bg-electric-500 text-cloud-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95"
                 >
-                  <CalendarDaysIcon className="h-5 w-5" />
+                  <ChartBarIcon className="h-5 w-5" />
                   <span>Aplikuj na strategiczną konsultację</span>
                 </button>
               </div>
