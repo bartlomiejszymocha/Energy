@@ -18,3 +18,16 @@ View your app in AI Studio: https://ai.studio/apps/drive/1QS-jLtgur_0Yr9lvUYOA36
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Dokumentacja (PL)
+
+Szczegółowa dokumentacja publicznego API, komponentów i hooków znajduje się w katalogu `docs/`:
+
+- Dokumentacja główna: [`docs/README.pl.md`](docs/README.pl.md)
+- Typy: [`docs/01-Typy.md`](docs/01-Typy.md)
+- Hooki: [`docs/02-Haki.md`](docs/02-Haki.md)
+- Komponenty: [`docs/03-Komponenty.md`](docs/03-Komponenty.md)
+- Serwisy: [`docs/04-Serwisy.md`](docs/04-Serwisy.md)
+- Stałe: [`docs/05-Konstanty.md`](docs/05-Konstanty.md)
+- Firebase: [`docs/06-Firebase.md`](docs/06-Firebase.md)
+- Ikony: [`docs/07-Ikony.md`](docs/07-Ikony.md)
