@@ -1,0 +1,69 @@
+
+import React, { useState } from 'react';
+import { GoogleIcon } from './icons/GoogleIcon';
+import { XMarkIcon } from './icons/Icons';
+
+interface LoginScreenProps {
+    onSignIn: () => Promise<void>;
+    onClose: () => void;
+}
+
+export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn, onClose }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleSignInClick = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            await onSignIn();
+            // On success, the onAuthStateChanged listener in useAuth will handle the redirect.
+        } catch (e: any) {
+            console.error("Błąd podczas procesu logowania Google:", e);
+            setError(e.message || 'Wystąpił nieznany błąd podczas logowania.');
+            setIsLoading(false);
+        }
+    };
+    
+    return (
+        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-center p-4 relative">
+            <button
+                onClick={onClose}
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 text-system-grey hover:text-cloud-white transition p-2 rounded-full hover:bg-space-800"
+                aria-label="Wróć do aplikacji"
+            >
+                <XMarkIcon className="h-8 w-8" />
+            </button>
+            <main className="text-center w-full max-w-2xl">
+                <span className="text-6xl animate-fade-in-up">🚀</span>
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-cloud-white mt-4 animate-fade-in-up animation-delay-100">
+                    Witaj w Resetuj ENERGIĘ
+                </h1>
+                <p className="text-system-grey max-w-md mx-auto mt-4 text-lg animate-fade-in-up animation-delay-200">
+                    Odzyskaj kontrolę nad swoją energią, aby osiągać więcej bez wypalenia.
+                </p>
+                <div className="mt-10 animate-fade-in-up animation-delay-300">
+                    <button
+                        onClick={handleSignInClick}
+                        disabled={isLoading}
+                        className="inline-flex items-center justify-center gap-3 bg-cloud-white text-space-950 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95 text-lg disabled:bg-space-700 disabled:text-system-grey/70 disabled:cursor-wait disabled:scale-100"
+                    >
+                        <GoogleIcon className="h-6 w-6" />
+                        <span>{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
+                    </button>
+                    
+                    {error && (
+                        <p className="text-danger-red mt-4 text-sm animate-fade-in-up">
+                            {error}
+                        </p>
+                    )}
+                </div>
+            </main>
+            <footer className="absolute bottom-0 text-center py-6 px-4">
+                 <p className="text-sm text-system-grey animate-fade-in-up animation-delay-500">
+                    © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
+                </p>
+            </footer>
+        </div>
+    );
+};
