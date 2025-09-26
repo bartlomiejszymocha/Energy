@@ -1,0 +1,347 @@
+import React, { useMemo, useEffect } from 'react';
+import type { User } from 'firebase/auth';
+import type { ActionItem, EnrichedWorkoutStep, Exercise } from '../types';
+import { useWorkoutEngine } from '../hooks/useWorkoutEngine';
+import { XMarkIcon, PlayIcon, PauseIcon, ChevronLeftIcon, ChevronRightIcon, CheckCircleIcon } from './icons/Icons';
+
+
+const formatTime = (totalSeconds: number) => {
+    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+};
+
+// --- Dumb Presentational Components ---
+
+const ExerciseView: React.FC<{
+    engine: ReturnType<typeof useWorkoutEngine>;
+    action: ActionItem;
+}> = ({ engine, action }) => {
+    const { 
+        currentStep, timeLeftInStep, isPaused, progressPercentage, 
+        play, pause, skipToPrevious, skipToNext, 
+        totalTimeRemaining, currentStepInfo, nextStep 
+    } = engine;
+
+    if (currentStep.type !== 'exercise') return null;
+    
+    const getNextStepText = () => {
+        if (!nextStep) {
+            return "Koniec treningu";
+        }
+        if (nextStep.type === 'rest') {
+            return `Odpoczynek - ${nextStep.duration} sek.`;
+        }
+        return nextStep.name;
+    };
+
+    return (
+        <div className="flex flex-col h-full">
+            <header className="flex flex-col gap-4 items-center justify-between pb-4 border-b border-space-700/50 flex-shrink-0">
+                <div className="w-full flex items-start justify-between">
+                    <div>
+                        <div className="flex items-center gap-3">
+                            {action.icon && <span className="text-2xl -mt-1">{action.icon}</span>}
+                            <h1 className="text-xl font-bold text-cloud-white">{action.title}</h1>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-system-grey mt-1.5">
+                            <span>Ćwiczenie {currentStepInfo.number} z {currentStepInfo.total}</span>
+                             <span className="opacity-50">•</span>
+                            <span>Pozostało: <span className="font-mono tabular-nums">{formatTime(totalTimeRemaining)}</span></span>
+                        </div>
+                    </div>
+                    <button onClick={() => { pause(); (action as any).onClose(); }} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-space-800" aria-label="Zamknij trening">
+                        <XMarkIcon className="h-6 w-6" />
+                    </button>
+                </div>
+                <div className="w-full flex items-center gap-2">
+                    {Array.from({ length: currentStepInfo.total }).map((_, index) => {
+                         const isCompleted = index < currentStepInfo.number - 1;
+                         const isCurrent = index === currentStepInfo.number - 1;
+                         return(
+                            <div
+                                key={index}
+                                className={`flex-1 h-1.5 rounded-full transition-colors duration-300 ${
+                                    isCompleted ? 'bg-electric-500' : (isCurrent ? 'bg-electric-500/50' : 'bg-space-700')
+                                }`}
+                            >
+                              {isCurrent && (
+                                <div className="h-full rounded-full bg-electric-500" style={{ width: `${(1 - progressPercentage) * 100}%`, transition: 'width 1s linear' }} />
+                              )}
+                            </div>
+                        );
+                    })}
+                </div>
+            </header>
+            
+            <main className="flex-grow flex flex-col items-center justify-center pt-4 overflow-y-auto custom-scrollbar">
+                <div className="w-full aspect-video relative bg-black rounded-lg overflow-hidden shadow-lg mb-4">
+                    {currentStep.videoUrl ? (
+                        <div className="w-full h-full relative">
+                            <iframe
+                                key={currentStep.videoUrl}
+                                className={`w-full h-full transition-opacity duration-300 ${isPaused ? 'opacity-0' : 'opacity-100'}`}
+                                src={currentStep.videoUrl}
+                                title={currentStep.name}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                             {isPaused && (
+                                <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm">
+                                    <button onClick={play} className="text-white/80 hover:text-white transition-colors" aria-label="Wznów trening">
+                                        <PlayIcon className="h-20 w-20" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-space-800 p-4">
+                             <p className="text-xl text-system-grey text-center">{currentStep.name}</p>
+                        </div>
+                    )}
+                </div>
+
+                <div className="text-center my-4">
+                    <h2 className="text-3xl font-bold text-cloud-white">{currentStep.name}</h2>
+                    <p className="font-mono text-xl text-system-grey mt-2 tabular-nums">{formatTime(timeLeftInStep)}</p>
+                    {currentStep.note && (
+                        <p className="text-sm text-system-grey mt-3 max-w-md">
+                            {currentStep.note}
+                        </p>
+                    )}
+                </div>
+
+                <div className="flex items-center justify-center gap-8 my-4">
+                    <button
+                        onClick={skipToPrevious}
+                        disabled={currentStepInfo.number === 1}
+                        className="p-3 rounded-full bg-space-800 text-cloud-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-space-700 transition"
+                    >
+                        <ChevronLeftIcon className="h-7 w-7" />
+                    </button>
+                    
+                    <div className="relative w-24 h-24">
+                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" strokeWidth="6" className="text-space-800" />
+                            <circle
+                                cx="60"
+                                cy="60"
+                                r="54"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="6"
+                                strokeLinecap="round"
+                                strokeDasharray="339.292"
+                                strokeDashoffset={339.292 * (1 - progressPercentage)}
+                                className="text-electric-500"
+                                style={{ transition: 'stroke-dashoffset 1s linear' }}
+                            />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <button
+                                onClick={isPaused ? play : pause}
+                                className="w-20 h-20 rounded-full bg-space-800 text-cloud-white shadow-lg transform hover:scale-105 transition active:scale-95 flex items-center justify-center"
+                            >
+                                {isPaused ? <PlayIcon className="h-10 w-10 ml-1" /> : <PauseIcon className="h-10 w-10" />}
+                            </button>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={skipToNext}
+                        className="p-3 rounded-full bg-space-800 text-cloud-white hover:bg-space-700 transition"
+                    >
+                        <ChevronRightIcon className="h-7 w-7" />
+                    </button>
+                </div>
+            </main>
+            <footer className="w-full text-center pt-4 mt-auto flex-shrink-0 h-10">
+                <p className="text-sm text-system-grey animate-fade-in-up">
+                    Następne: <span className="font-semibold text-cloud-white/80">{getNextStepText()}</span>
+                </p>
+            </footer>
+        </div>
+    );
+};
+
+const RestView: React.FC<{
+    engine: ReturnType<typeof useWorkoutEngine>;
+    onClose: () => void;
+}> = ({ engine, onClose }) => {
+    const { timeLeftInStep, progressPercentage, skipToNext, nextStep, isPaused, play, pause } = engine;
+
+    return (
+        <div className="flex flex-col h-full w-full items-center justify-between">
+            <header className="w-full flex items-center justify-between flex-shrink-0">
+                <h1 className="text-xl font-bold text-cloud-white">Odpoczynek</h1>
+                <button onClick={onClose} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-space-800" aria-label="Zamknij trening">
+                    <XMarkIcon className="h-6 w-6" />
+                </button>
+            </header>
+            <div className="flex-grow flex flex-col items-center justify-center gap-8 w-full">
+                <div className="relative w-48 h-48">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" strokeWidth="4" className="text-space-800" />
+                        <circle
+                            cx="60"
+                            cy="60"
+                            r="54"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            strokeLinecap="round"
+                            strokeDasharray="339.292"
+                            strokeDashoffset={339.292 * (1 - progressPercentage)}
+                            className="text-alert-orange"
+                            style={{ transition: 'stroke-dashoffset 1s linear' }}
+                        />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <button
+                            onClick={isPaused ? play : pause}
+                            className="w-full h-full rounded-full flex items-center justify-center transition-transform hover:scale-105"
+                            aria-label={isPaused ? "Wznów przerwę" : "Wstrzymaj przerwę"}
+                        >
+                           {isPaused ?
+                                <PlayIcon className="h-16 w-16 text-cloud-white" /> :
+                                <span className="text-5xl font-mono font-bold text-cloud-white tabular-nums">
+                                    {formatTime(timeLeftInStep)}
+                                </span>
+                           }
+                        </button>
+                    </div>
+                </div>
+            </div>
+             <div className="text-center w-full max-w-xs mx-auto flex-shrink-0">
+                {nextStep && nextStep.type === 'exercise' && (
+                    <div className="bg-space-800/50 rounded-lg p-4 w-full mb-4">
+                        <p className="text-xs text-system-grey uppercase tracking-wider">Następnie:</p>
+                        <p className="text-lg font-bold text-cloud-white mt-1">{nextStep.name} - {nextStep.duration} sek.</p>
+                    </div>
+                )}
+                <button
+                    onClick={skipToNext}
+                    className="w-full text-center text-sm font-semibold text-electric-500 hover:text-electric-600 transition-colors"
+                >
+                    Pomiń przerwę i kontynuuj
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const CompletionView: React.FC<{ onFinish: () => void }> = ({ onFinish }) => (
+    <div className="flex-grow flex flex-col items-center justify-center text-center py-8">
+        <div className="animate-fade-in-up">
+            <CheckCircleIcon className="h-24 w-24 text-success-green mx-auto" />
+            <h2 className="text-3xl font-bold text-cloud-white mt-4">Trening ukończony!</h2>
+            <p className="text-system-grey mt-2">Dobra robota!</p>
+            <button
+                onClick={onFinish}
+                className="mt-8 w-full max-w-xs bg-electric-500 text-cloud-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-electric-600 transition-all duration-200"
+            >
+                Zakończ
+            </button>
+        </div>
+    </div>
+);
+
+
+// --- Main Modal Component ---
+
+interface WorkoutModalProps {
+    user: User | null;
+    action: ActionItem;
+    onClose: () => void;
+    onComplete: () => void;
+    exerciseLibrary: Record<string, Exercise>;
+}
+
+export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onComplete, exerciseLibrary }) => {
+    
+    const workoutPlaylist = useMemo((): EnrichedWorkoutStep[] => {
+        if (!action.workout) return [];
+
+        return action.workout.map(step => {
+            if (step.type === 'exercise') {
+                const exerciseDetails = exerciseLibrary[step.exerciseId];
+                 if (!exerciseDetails) {
+                    console.warn(`Exercise with id "${step.exerciseId}" not found in library.`);
+                    return null;
+                }
+                return {
+                    ...step,
+                    ...exerciseDetails,
+                    name: exerciseDetails.name || 'Nieznane ćwiczenie',
+                };
+            }
+            // 'rest' step
+            return {
+                ...step,
+                name: 'Odpoczynek',
+            };
+        }).filter(Boolean) as EnrichedWorkoutStep[];
+    }, [action.workout, exerciseLibrary]);
+
+    const engine = useWorkoutEngine(workoutPlaylist);
+    
+    if (workoutPlaylist.length === 0) {
+        return (
+             <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[100] p-4" onClick={onClose}>
+                <div className="bg-space-900 rounded-xl shadow-2xl w-full max-w-lg p-6 relative animate-fade-in-up text-center" onClick={e => e.stopPropagation()}>
+                    <p className="text-cloud-white">Nie znaleziono ćwiczeń dla tej akcji.</p>
+                     <button onClick={onClose} className="mt-4 bg-electric-500 text-cloud-white font-bold py-2 px-4 rounded-lg">Zamknij</button>
+                </div>
+             </div>
+        );
+    }
+    
+    // Pass onClose to the action prop for ExerciseView to use
+    const enrichedAction = {...action, onClose};
+
+    const renderContent = () => {
+        if (engine.isFinished) {
+            return <CompletionView onFinish={onComplete} />;
+        }
+        if (engine.currentStep.type === 'exercise') {
+            return <ExerciseView engine={engine} action={enrichedAction} />;
+        }
+        if (engine.currentStep.type === 'rest') {
+            return <RestView engine={engine} onClose={onClose} />;
+        }
+        return null;
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start justify-center z-[100] p-4 pt-12 sm:pt-4 overflow-y-auto" onClick={() => { engine.pause(); onClose(); }}>
+            <div 
+                className="bg-gradient-to-b from-space-900 to-black rounded-2xl shadow-2xl w-full max-w-lg p-6 relative animate-fade-in-up flex flex-col min-h-[720px] sm:max-h-[95dvh] sm:my-auto"
+                onClick={e => e.stopPropagation()}
+            >
+                {renderContent()}
+            </div>
+             <style>{`
+                @keyframes fade-in-up {
+                    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+                .animate-fade-in-up {
+                    animation: fade-in-up 0.3s ease-out forwards;
+                }
+                 .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #24324E;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #35456A;
+                }
+            `}</style>
+        </div>
+    );
+};

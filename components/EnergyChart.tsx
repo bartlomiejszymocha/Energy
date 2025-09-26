@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import type { EnergyLog, CompletedActionLog } from '../types';
 import { ACTION_LIBRARY } from '../constants/actions';
 
@@ -10,37 +10,64 @@ interface EnergyChartProps {
 
 const CustomDot = (props: any) => {
     const { cx, cy, payload } = props;
-    
-    switch (payload.markerType) {
-        case 'protocol': // Protokół Ruchowy
-            // Star shape for protocols (orange)
-            return <svg x={cx - 6} y={cy - 6} width="12" height="12" fill="#FF9500" viewBox="0 0 1024 1024">
-                <path d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00-7.6 36.2c1.6 7.3 5.1 14.1 10.2 19.5l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5.1-5.4 8.6-12.2 10.2-19.5a32.05 32.05 0 00-7.6-36.2c-4.9-5-11.3-8.3-18.3-9.3z"></path>
-            </svg>;
-        case 'reset': // Reset Energetyczny
-            // Diamond shape for resets (yellow)
-            return <svg x={cx - 6} y={cy - 6} width="12" height="12" fill="#FFCC00" viewBox="0 0 24 24">
-                <path d="M12 .587l11.413 11.413L12 23.413.587 12 12 .587z" />
-            </svg>;
-        case 'log': // Energy Log
-        default:
-            // Standard circle for energy logs (blue)
-            return <circle cx={cx} cy={cy} r={5} fill="#007AFF" />;
+    if (payload.isNoteOnly) {
+        return <circle cx={cx} cy={cy} r={5} fill="#FF9500" />; // alert-orange
     }
+    if (payload.isAction) {
+        return (
+            <text x={cx} y={cy} dy={5} textAnchor="middle" fontSize="16px" style={{ pointerEvents: 'none' }}>
+                {payload.icon}
+            </text>
+        );
+    }
+    return <circle cx={cx} cy={cy} r={4} fill="#007AFF" />;
 };
+
+const CustomActiveDot = (props: any) => {
+    const { cx, cy, payload } = props;
+     if (payload.isNoteOnly) {
+        return (
+            <g>
+                <circle cx={cx} cy={cy} r={8} stroke="#F4F6F8" strokeWidth={2} fill="#FF9500" />
+            </g>
+        );
+    }
+    if (payload.isAction) {
+        return (
+            <g>
+                <circle cx={cx} cy={cy} r={12} stroke="#F4F6F8" strokeWidth={1} fill="rgba(0,122,255,0.2)" />
+                <text x={cx} y={cy} dy={6} textAnchor="middle" fontSize="20px" fill="#F4F6F8">
+                    {payload.icon}
+                </text>
+            </g>
+        );
+    }
+    return <circle cx={cx} cy={cy} r={6} stroke="#F4F6F8" strokeWidth={2} fill="#007AFF" />;
+}
 
 const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
-        const data = payload[0].payload;
-        let content;
+        const pointData = payload[0].payload;
         const formattedTime = new Date(label).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
 
-        if (data.isAction) {
-            const actionType = data.markerType === 'reset' ? 'Reset' : 'Protokół';
-            const color = data.markerType === 'reset' ? '#FFCC00' : '#FF9500';
-            content = <p className="intro" style={{ color, fontWeight: 'bold' }}>{`Wykonano ${actionType}: ${data.title}`}</p>;
+        let content;
+        if (pointData.isAction) {
+            const { icon, title } = pointData;
+            content = <p className="intro text-cloud-white font-bold">{`${icon} ${title}`}</p>;
+        } else if (pointData.isNoteOnly) {
+             content = (
+                <>
+                    <p className="intro text-alert-orange font-bold">📝 Notatka</p>
+                    {pointData.note && <p className="desc text-system-grey mt-1 max-w-[200px] break-words">{pointData.note}</p>}
+                </>
+            );
         } else {
-            content = <p className="intro" style={{ color: '#007AFF', fontWeight: 'bold' }}>{`Poziom Energii: ${data['Poziom Energii']}`}</p>;
+            content = (
+                 <>
+                    <p className="intro text-electric-500 font-bold">{`Poziom Energii: ${pointData.rating}`}</p>
+                    {pointData.note && <p className="desc text-system-grey mt-1 max-w-[200px] break-words">{pointData.note}</p>}
+                 </>
+            );
         }
 
         return (
@@ -55,50 +82,62 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 
 export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions }) => {
-    const data = useMemo(() => {
+    const chartData = useMemo(() => {
         const today = new Date();
         const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
 
-        const todayLogs = logs
-            .filter(log => log.timestamp >= startOfToday)
-            .map(log => ({
-                markerType: 'log',
-                isAction: false,
-                timestamp: log.timestamp,
-                'Poziom Energii': log.rating,
-                title: `Energia: ${log.rating}`,
-            }));
+        const todayLogs = logs.filter(log => log.timestamp >= startOfToday);
+        const todayCompletedActions = completedActions.filter(log => log.timestamp >= startOfToday);
 
-        const todayCompletedActions = completedActions
-            .filter(log => log.timestamp >= startOfToday)
-            .map(action => {
-                const actionDetails = ACTION_LIBRARY.find(a => a.id === action.actionId);
-                const markerType = actionDetails?.type === 'Reset Energetyczny' ? 'reset' : 'protocol';
-                return {
-                    markerType,
-                    isAction: true,
-                    timestamp: action.timestamp,
-                    'Poziom Energii': null,
-                    title: actionDetails ? actionDetails.title : 'Wykonano',
-                };
-            });
+        const allEvents = [
+            ...todayLogs.map(log => ({ ...log, type: 'log' as const })),
+            ...todayCompletedActions.map(action => ({ ...action, type: 'action' as const }))
+        ].sort((a, b) => a.timestamp - b.timestamp);
 
-        const sortedCombined = [...todayLogs, ...todayCompletedActions].sort((a, b) => a.timestamp - b.timestamp);
+        let lastRating: number | null = null;
+        const processedData: any[] = [];
 
-        let lastEnergyLevel: number | null = null;
-        sortedCombined.forEach(item => {
-            if (!item.isAction) {
-                lastEnergyLevel = item['Poziom Energii'];
-            } else if (lastEnergyLevel !== null) {
-                item['Poziom Energii'] = lastEnergyLevel;
+        for (const event of allEvents) {
+            if (event.type === 'log') {
+                if (typeof event.rating === 'number') {
+                    lastRating = event.rating;
+                    processedData.push({
+                        timestamp: event.timestamp,
+                        rating: event.rating,
+                        note: event.note,
+                        isAction: false,
+                        isNoteOnly: false,
+                    });
+                } else { // Note-only log
+                    if (lastRating !== null) {
+                        processedData.push({
+                            timestamp: event.timestamp,
+                            rating: lastRating, // Carry over the last rating for the line
+                            note: event.note,
+                            isAction: false,
+                            isNoteOnly: true,
+                        });
+                    }
+                }
+            } else { // event.type === 'action'
+                if (lastRating !== null) {
+                    const actionDetails = ACTION_LIBRARY.find(a => a.id === event.actionId);
+                    processedData.push({
+                        timestamp: event.timestamp,
+                        rating: lastRating,
+                        isAction: true,
+                        isNoteOnly: false,
+                        title: actionDetails ? actionDetails.title : 'Wykonano',
+                        icon: actionDetails?.icon || '❓',
+                    });
+                }
             }
-        });
+        }
 
-        return sortedCombined.filter(item => item['Poziom Energii'] !== null);
-
+        return processedData;
     }, [logs, completedActions]);
 
-    if (data.length < 1) {
+    if (chartData.length === 0) {
         return (
             <div className="flex items-center justify-center h-full">
                 <p className="text-system-grey">Brak dzisiejszych wpisów do wyświetlenia na wykresie.</p>
@@ -109,28 +148,37 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
     const formatXAxis = (tickItem: number) => {
         return new Date(tickItem).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
     };
+    
+    const gridColor = '#35456A';
+    const textColor = '#8A94A6';
+    const cursorColor = '#F4F6F8';
 
     return (
         <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#35456A" />
+            <LineChart data={chartData} margin={{ top: 15, right: 20, left: -10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                 <XAxis 
                     dataKey="timestamp" 
                     type="number" 
                     domain={['dataMin', 'dataMax']}
                     tickFormatter={formatXAxis}
-                    stroke="#8A94A6"
+                    stroke={textColor}
+                    padding={{ left: 10, right: 10 }}
                 />
-                <YAxis domain={[0.5, 5.5]} ticks={[1, 2, 3, 4, 5]} stroke="#8A94A6" allowDecimals={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend wrapperStyle={{ color: '#F4F6F8' }} />
+                <YAxis domain={[0.5, 5.5]} ticks={[1, 2, 3, 4, 5]} stroke={textColor} allowDecimals={false} />
+                <Tooltip 
+                    content={<CustomTooltip />} 
+                    cursor={{ stroke: cursorColor, strokeWidth: 1 }}
+                />
                 <Line
                     type="monotone"
-                    dataKey="Poziom Energii"
+                    dataKey="rating"
                     stroke="#007AFF"
                     strokeWidth={3}
                     dot={<CustomDot />}
-                    activeDot={{ r: 8 }}
+                    activeDot={<CustomActiveDot />}
+                    connectNulls={false}
+                    name="Poziom Energii"
                 />
             </LineChart>
         </ResponsiveContainer>

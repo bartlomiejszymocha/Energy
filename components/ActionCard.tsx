@@ -1,103 +1,206 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { ActionItem } from '../types';
-import { ClockIcon, VideoCameraIcon, ChevronDownIcon, ChevronUpIcon, CheckCircleIcon } from './icons/Icons';
+import { ClockIcon, VideoCameraIcon, ChevronDownIcon, CheckCircleIcon, CircleIcon, StarIcon, ArrowPathCircularIcon, BoltIcon, ArrowsPointingOutIcon, WaveIcon } from './icons/Icons';
+import { BreathingTimer } from './BreathingTimer';
 
 interface ActionCardProps {
     action: ActionItem;
-    isCompact?: boolean;
-    onActionComplete?: (actionId: string) => void;
-    isCompleted?: boolean;
-    onPlayVideo?: (url: string) => void;
+    onComplete?: (actionId: string) => void;
+    completionCount?: number;
+    onPlayAction?: (action: ActionItem) => void;
+    isFavorite?: boolean;
+    onToggleFavorite?: (actionId: string) => void;
+    onOpenBreathingModal?: (action: ActionItem) => void;
+    isExpanded: boolean;
+    onToggleExpand: (actionId: string) => void;
+    isCompletedToday: boolean;
 }
 
-export const ActionCard: React.FC<ActionCardProps> = ({ action, isCompact = false, onActionComplete, isCompleted, onPlayVideo }) => {
-    const [isExpanded, setIsExpanded] = useState(!isCompact);
+const getCardBgClass = (type: ActionItem['type']): string => {
+    switch (type) {
+        case 'Protokół Ruchowy':
+            return 'bg-space-700'; // Lightest
+        case 'Reset Energetyczny':
+            return 'bg-space-800'; // Middle
+        case 'Technika oddechowa':
+            return 'bg-space-900'; // Darkest
+        default:
+            return 'bg-space-800';
+    }
+};
 
-    const handleComplete = () => {
-        if (onActionComplete && !isCompleted) {
-            onActionComplete(action.id);
+
+export const ActionCard: React.FC<ActionCardProps> = ({ 
+    action, 
+    onComplete, 
+    completionCount = 0, 
+    onPlayAction,
+    isFavorite,
+    onToggleFavorite,
+    onOpenBreathingModal,
+    isExpanded,
+    onToggleExpand,
+    isCompletedToday
+}) => {
+
+    const handleComplete = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onComplete) {
+            onComplete(action.id);
         }
     };
     
-    const handlePlayVideo = (e: React.MouseEvent) => {
+    const handleToggleFavorite = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (onPlayVideo && action.videoUrl) {
-            onPlayVideo(action.videoUrl);
+        if (onToggleFavorite) {
+            onToggleFavorite(action.id);
+        }
+    };
+    
+    const handlePlayAction = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onPlayAction) {
+            onPlayAction(action);
         }
     }
+    
+    const handleOpenModal = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onOpenBreathingModal) {
+            onOpenBreathingModal(action);
+        }
+    };
 
-    const cardBaseClasses = 'rounded-lg shadow-md border-l-4 transition-all duration-300';
-    const cardStateClasses = isCompleted
-        ? 'bg-success-green/10 border-success-green'
-        : 'bg-space-800 border-space-700';
+    const handleStopBreathingAndCollapse = () => {
+        onToggleExpand(action.id);
+    };
+
+    const titleColor = isCompletedToday ? 'text-success-green' : 'text-cloud-white';
+    const cardBgClass = getCardBgClass(action.type);
+    const borderClass = isCompletedToday
+        ? 'border-2 border-success-green'
+        : 'border-2 border-transparent';
+        
+    const renderTypeIcon = () => {
+        switch (action.type) {
+            case 'Protokół Ruchowy':
+                return <BoltIcon className="h-4 w-4 text-system-grey" />;
+            case 'Technika oddechowa':
+                return <WaveIcon className="h-4 w-4 text-system-grey" />;
+            case 'Reset Energetyczny':
+            default:
+                return <ArrowPathCircularIcon className="h-4 w-4 text-system-grey" />;
+        }
+    };
 
     return (
-        <div className={`${cardBaseClasses} ${cardStateClasses}`}>
-            <div className="p-4 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
-                <div className="flex justify-between items-start">
-                    <div className="pr-4">
-                        <h4 className="font-bold text-cloud-white text-lg">{action.title}</h4>
-                        <div className="flex items-center gap-2 text-sm text-system-grey mt-1">
-                             {action.type === 'Reset Energetyczny' ? '⚡' : '💪'}
-                            <span>{action.type}</span>
-                            <span className="text-system-grey/50">|</span>
-                            <ClockIcon className="h-4 w-4" />
-                            <span>{action.duration} min</span>
+        <div className={`${cardBgClass} ${borderClass} rounded-xl shadow-lg flex flex-col transition-colors duration-300`}>
+            {/* Clickable Header */}
+            <div className="p-4 cursor-pointer" onClick={() => onToggleExpand(action.id)}>
+                <div className="flex justify-between items-start gap-3 min-h-14">
+                    <div className="flex items-center gap-3 flex-grow min-w-0">
+                        {action.icon && <span className="text-2xl">{action.icon}</span>}
+                        <h4 className={`font-bold text-lg transition-colors duration-300 ${titleColor}`}>{action.title}</h4>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                         {action.workout && onPlayAction && (
+                            <button 
+                                onClick={handlePlayAction} 
+                                className="p-1.5 rounded-full text-system-grey bg-space-900/40 hover:bg-electric-500 hover:text-cloud-white transition-colors" 
+                                aria-label="Rozpocznij trening"
+                                title="Rozpocznij trening"
+                            >
+                                <BoltIcon className="h-5 w-5" />
+                            </button>
+                        )}
+                         {onToggleFavorite && (
+                            <button onClick={handleToggleFavorite} className="p-1.5 rounded-full text-system-grey hover:text-warning-yellow transition-colors" aria-label="Oznacz jako ulubione">
+                                <StarIcon className={`h-5 w-5 ${isFavorite ? 'fill-current text-warning-yellow' : ''}`} />
+                            </button>
+                         )}
+                         {completionCount > 0 && (
+                            <div 
+                              className="bg-alert-orange text-space-950 text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg"
+                              aria-label={`Wykonano ${completionCount} razy`}
+                            >
+                                x{completionCount}
+                            </div>
+                        )}
+                         {onComplete && (
+                            <button onClick={handleComplete} className="p-1 rounded-full text-system-grey hover:text-cloud-white transition-colors" aria-label="Oznacz jako wykonane">
+                                {isCompletedToday ? <CheckCircleIcon className="h-6 w-6 text-success-green" /> : <CircleIcon className="h-6 w-6" />}
+                            </button>
+                        )}
+                        <div className="transition-transform duration-300" style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                            <ChevronDownIcon className="h-6 w-6 text-system-grey" />
                         </div>
                     </div>
-                    <div className="flex-shrink-0">
-                        {isExpanded ? <ChevronUpIcon className="h-6 w-6 text-system-grey" /> : <ChevronDownIcon className="h-6 w-6 text-system-grey" />}
-                    </div>
                 </div>
-
-                {isExpanded && (
-                    <div className="mt-4 text-system-grey text-sm whitespace-pre-wrap animate-fade-in-up">
-                        {action.content}
-                    </div>
-                )}
+                 <div className="flex items-center gap-2 text-sm mt-1 text-system-grey">
+                    {renderTypeIcon()}
+                    <span>{action.type}</span>
+                    <span className="text-system-grey/50">|</span>
+                    <ClockIcon className="h-4 w-4" />
+                    <span>{action.duration} min</span>
+                </div>
             </div>
-            
-            {(isExpanded && (action.videoUrl || onActionComplete)) && (
-                <div className="border-t border-space-700 p-4 flex items-center justify-between gap-2">
-                    {action.videoUrl && onPlayVideo ? (
-                        <button 
-                            onClick={handlePlayVideo}
-                            className="flex items-center gap-2 text-sm font-semibold text-electric-500 hover:text-electric-500/80 transition"
-                        >
-                            <VideoCameraIcon className="h-5 w-5" />
-                            Obejrzyj wideo
-                        </button>
-                    ) : <div />} {/* empty div for spacing */}
 
-                    {onActionComplete && (
-                        <button
-                            onClick={handleComplete}
-                            disabled={isCompleted}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                                isCompleted
-                                    ? 'bg-success-green/20 text-success-green cursor-default'
-                                    : 'bg-electric-500 text-cloud-white hover:bg-electric-600'
-                            }`}
-                        >
-                            {isCompleted ? (
-                                <>
-                                    <CheckCircleIcon className="h-5 w-5" />
-                                    Wykonano
-                                </>
-                            ) : 'Oznacz jako wykonane'}
-                        </button>
-                    )}
+            {/* Expanded Content - Performance Optimized */}
+            <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                <div className="overflow-hidden">
+                    <div className="px-4 pb-4">
+                        <div className={`pt-2 border-t border-white/10`}>
+
+                            {action.breathingPattern && isExpanded && (
+                                <div className="relative">
+                                    <BreathingTimer
+                                      isExpanded={isExpanded}
+                                      pattern={action.breathingPattern}
+                                      onStopClick={handleStopBreathingAndCollapse}
+                                    />
+                                    <button
+                                      onClick={handleOpenModal}
+                                      className="absolute top-2 right-2 flex items-center gap-1.5 rounded-md border border-cloud-white/50 px-2 py-1 text-xs text-cloud-white/80 hover:bg-white/10 hover:text-cloud-white hover:border-cloud-white transition-all z-10"
+                                      aria-label="Powiększ timer oddechowy"
+                                    >
+                                      <ArrowsPointingOutIcon className="h-4 w-4" />
+                                      <span>Powiększ</span>
+                                    </button>
+                                </div>
+                            )}
+                            
+                            <div 
+                                className={`action-content text-sm whitespace-pre-wrap text-system-grey ${action.breathingPattern ? 'mt-4' : 'mt-2'}`}
+                                dangerouslySetInnerHTML={{ __html: action.content }}
+                            />
+                            
+                            {action.workout && action.workout.length > 0 && onPlayAction && (
+                                <div className="mt-4">
+                                    <button
+                                        onClick={handlePlayAction}
+                                        className="w-full flex justify-center items-center gap-2 text-sm font-bold bg-electric-500 text-cloud-white py-2 px-4 rounded-full shadow-md transition-transform duration-200 hover:scale-105 hover:bg-electric-600 active:scale-95"
+                                    >
+                                        <BoltIcon className="h-5 w-5" />
+                                        Rozpocznij trening
+                                    </button>
+                                </div>
+                            )}
+
+                            {action.videoUrl && onPlayAction && (
+                                <div className="mt-4">
+                                    <button 
+                                        onClick={handlePlayAction}
+                                        className="w-full flex justify-center items-center gap-2 text-sm font-bold bg-electric-500 text-cloud-white py-2 px-4 rounded-full shadow-md transition-transform duration-200 hover:scale-105 hover:bg-electric-600 active:scale-95"
+                                    >
+                                        <VideoCameraIcon className="h-5 w-5" />
+                                        Zaczynamy! (protokół wideo)
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
-            )}
-             <style>{`
-                @keyframes fade-in-up {
-                    from { opacity: 0; transform: translateY(5px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .animate-fade-in-up {
-                    animation: fade-in-up 0.3s ease-out forwards;
-                }
-            `}</style>
+            </div>
         </div>
     );
 };

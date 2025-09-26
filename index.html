@@ -2,20 +2,196 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#0E0F12" />
     <title>Energy Playbook</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      @keyframes fade-in-up {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes fade-in-out-quick {
+          0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+          15% { opacity: 1; transform: translateY(0) scale(1); }
+          85% { opacity: 1; transform: translateY(0) scale(1); }
+          100% { opacity: 0; transform: translateY(10px) scale(0.95); }
+      }
+      .animate-fade-in-up {
+          animation: fade-in-up 0.5s ease-out forwards;
+          opacity: 0; /* Start hidden */
+      }
+      .animate-fade-in-out-quick {
+          animation: fade-in-out-quick 3s ease-in-out forwards;
+      }
+      .animation-delay-100 { animation-delay: 100ms; }
+      .animation-delay-200 { animation-delay: 200ms; }
+      .animation-delay-300 { animation-delay: 300ms; }
+      .animation-delay-400 { animation-delay: 400ms; }
+      .animation-delay-500 { animation-delay: 500ms; }
+      .action-content a {
+        color: #007AFF; /* electric-500 */
+        text-decoration: underline;
+        text-decoration-color: rgba(0, 122, 255, 0.5);
+      }
+      .action-content a:hover {
+        text-decoration-color: #007AFF;
+      }
+      kbd {
+        background-color: #373A43; /* space-700 */
+        border: 1px solid #23252C; /* space-800 */
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.8em;
+        font-family: monospace;
+        color: #F4F6F8; /* cloud-white */
+      }
+      /* React Calendar Custom Styles */
+      .react-calendar {
+        width: 100%;
+        border: none;
+        background-color: transparent;
+        font-family: 'Inter', sans-serif;
+      }
+      .react-calendar__navigation {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .react-calendar__navigation button {
+        color: #F4F6F8; /* cloud-white */
+        background: none;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0.5rem; /* Reduced padding for icons */
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+        min-width: 44px; /* for accessibility */
+      }
+       .react-calendar__navigation button:enabled:hover,
+      .react-calendar__navigation button:enabled:focus {
+        background-color: #23252C; /* space-800 */
+      }
+      .react-calendar__navigation button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      .react-calendar__navigation__label {
+        flex-grow: 1; /* Make it grow and center */
+        text-align: center;
+        font-weight: 700;
+        text-transform: capitalize; /* Capitalize month name */
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+      }
+      .react-calendar__navigation__label:enabled:hover,
+      .react-calendar__navigation__label:enabled:focus {
+        background-color: #23252C; /* space-800 */
+      }
+      .react-calendar__month-view__weekdays {
+        text-align: center;
+        font-weight: 600;
+        color: #8A94A6; /* system-grey */
+        text-transform: capitalize;
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+      .react-calendar__month-view__days {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+      .react-calendar__month-view__weekdays__weekday abbr {
+        text-decoration: none;
+      }
+      .react-calendar__tile {
+        flex-basis: 14.2857%;
+        background: none;
+        border: 2px solid transparent; /* Prevents layout shift on active */
+        color: #F4F6F8; /* cloud-white */
+        border-radius: 9999px;
+        width: 36px;
+        height: 36px;
+        margin: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        position: relative;
+        font-size: 0.875rem;
+        padding: 0;
+      }
+      .react-calendar__tile:enabled:hover,
+      .react-calendar__tile:enabled:focus {
+        background-color: #23252C; /* space-800 */
+      }
+      .react-calendar__tile--now {
+        background-color: #373A43; /* space-700 */
+        border-color: #373A43;
+      }
+      .react-calendar__tile--active {
+        background-color: transparent;
+        border: 2px solid #A78BFA; /* Grape-like purple */
+        color: #F4F6F8; /* cloud-white */
+        font-weight: bold;
+      }
+      .react-calendar__tile--active:enabled:hover,
+      .react-calendar__tile--active:enabled:focus {
+        background-color: rgba(167, 139, 250, 0.1);
+      }
+      .react-calendar__tile--hasActive {
+        background-color: #007AFF; /* electric-500 */
+      }
+      /* Custom class for days with entries */
+      .day-with-entry::after {
+        content: '';
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: #007AFF; /* electric-500 */
+      }
+      /* Highlight the dot for today's date if it has an entry */
+      .react-calendar__tile--now.day-with-entry::after {
+        background-color: #F4F6F8; /* cloud-white */
+      }
+      /* Hide the dot for the selected date as it's already highlighted */
+      .react-calendar__tile--active.day-with-entry::after {
+        display: none;
+      }
+    </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Manrope', 'sans-serif'],
+            },
             colors: {
               'space': {
-                '950': '#121B2D', // Deep Space Navy (Main BG)
-                '900': '#1A253A', // Lighter for cards
-                '800': '#24324E', // Lighter for interactive elements
-                '700': '#35456A', // Borders, hovers
+                '950': '#0E0F12', // Almost Black (Main BG)
+                '900': '#181A1F', // Dark Charcoal (Cards)
+                '800': '#23252C', // Charcoal (Interactive elements)
+                '700': '#373A43', // Grey (Borders, hovers)
               },
               'electric': {
                 '500': '#007AFF', // Electric Cobalt (Accent)
@@ -28,7 +204,7 @@
                 'grey': '#8A94A6', // Secondary text
               },
               'success': {
-                'green': '#28A745', // Success
+                'green': '#10B981', // Success (Emerald)
               },
               'alert': {
                 'orange': '#FF9500', // Warning
@@ -38,7 +214,7 @@
               },
               'warning': {
                 'yellow': '#FFCC00', // Medium rating
-              }
+              },
             }
           }
         }
@@ -51,7 +227,10 @@
     "react/": "https://aistudiocdn.com/react@^19.1.1/",
     "react": "https://aistudiocdn.com/react@^19.1.1",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.2.1"
+    "recharts": "https://aistudiocdn.com/recharts@^3.2.1",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.3.0/",
+    "react-calendar": "https://aistudiocdn.com/react-calendar@^5.0.0",
+    "react-calendar/": "https://aistudiocdn.com/react-calendar@^5.0.0/"
   }
 }
 </script>

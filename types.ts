@@ -1,28 +1,52 @@
+import type React from 'react';
+
 export interface EnergyLog {
   id: string;
   timestamp: number;
-  rating: number; // 1-5
+  rating?: number; // 1-5
+  note?: string;
+  tags?: string[];
+}
+
+export type ActionType = 'Reset Energetyczny' | 'Protokół Ruchowy' | 'Technika oddechowa';
+
+export interface Exercise {
+  name: string;
+  videoUrl?: string;
   note?: string;
 }
 
-export type ActionType = 'Reset Energetyczny' | 'Protokół Ruchowy';
+export type WorkoutStep = {
+  type: 'exercise';
+  exerciseId: string;
+  duration: number; // in seconds
+} | {
+  type: 'rest';
+  duration: number; // in seconds
+};
+
+export type EnrichedWorkoutStep = ({
+  type: 'exercise';
+  exerciseId: string;
+} & Exercise & { duration: number }) | {
+  type: 'rest';
+  name: string;
+  duration: number;
+};
+
 
 export interface ActionItem {
-  id: string;
+  id:string;
   triggerTags: string[];
   type: ActionType;
   duration: number; // in minutes
   title: string;
   content: string;
   videoUrl?: string;
+  icon?: string;
+  breathingPattern?: '478' | '4784';
+  workout?: WorkoutStep[];
 }
-
-export interface Insight {
-  summary: string;
-  recommendedActionId: string | null;
-}
-
-export type AppView = 'dashboard' | 'actionHub';
 
 export interface CompletedActionLog {
   id: string;
@@ -30,5 +54,12 @@ export interface CompletedActionLog {
   actionId: string;
 }
 
-// FIX: Export the Tag type alias for string to resolve import errors.
 export type Tag = string;
+
+// FIX: Added missing UserSettings and Theme types.
+export type Theme = 'light' | 'dark';
+
+export interface UserSettings {
+  name: string;
+  theme: Theme;
+}

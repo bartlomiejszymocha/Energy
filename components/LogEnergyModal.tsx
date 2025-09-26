@@ -1,31 +1,29 @@
-
-
-import React, { useState } from 'react';
-import { DEFAULT_TAGS } from '../constants/tags';
-import type { Tag } from '../types';
+import React, { useState, useRef, useEffect } from 'react';
 import { XMarkIcon } from './icons/Icons';
 
 interface LogEnergyModalProps {
     onClose: () => void;
-    onSave: (rating: number, tags: Tag[]) => void;
+    onSave: (rating: number | undefined, note: string, timestamp: number) => void;
 }
 
 export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave }) => {
     const [rating, setRating] = useState<number>(0);
-    const [selectedTags, setSelectedTags] = useState<Set<Tag>>(new Set());
+    const [note, setNote] = useState('');
+    const [logDate, setLogDate] = useState(new Date());
+    const [isEditingTime, setIsEditingTime] = useState(false);
+    const noteInputRef = useRef<HTMLTextAreaElement>(null);
 
-    const handleTagClick = (tag: Tag) => {
-        setSelectedTags(prev => {
-            const newSet = new Set(prev);
-            if (newSet.has(tag)) {
-                newSet.delete(tag);
-            } else {
-                newSet.add(tag);
-            }
-            return newSet;
-        });
-    };
-    
+    // Automatically focus the textarea when the modal opens and reset state
+    useEffect(() => {
+        setLogDate(new Date());
+        const timer = setTimeout(() => {
+            noteInputRef.current?.focus();
+        }, 100); 
+
+        return () => clearTimeout(timer);
+    }, []);
+
+
     const RATING_CONFIG: { [key: number]: { color: string; label: string } } = {
         1: { color: 'bg-danger-red', label: 'Bardzo nisko' },
         2: { color: 'bg-alert-orange', label: 'Nisko' },
@@ -33,17 +31,49 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
         4: { color: 'bg-success-green/80', label: 'Wysoko' },
         5: { color: 'bg-success-green', label: 'Bardzo wysoko' },
     };
+    
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            if (rating > 0 || note.trim() !== '') {
+                onSave(rating > 0 ? rating : undefined, note, logDate.getTime());
+            }
+            return;
+        }
 
+        if (note === '' && ['1', '2', '3', '4', '5'].includes(event.key)) {
+            event.preventDefault();
+            setRating(Number(event.key));
+        }
+    };
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const [hours, minutes] = e.target.value.split(':');
+        const newDate = new Date(logDate);
+        if (hours) newDate.setHours(parseInt(hours, 10));
+        if (minutes) newDate.setMinutes(parseInt(minutes, 10));
+        setLogDate(newDate);
+    };
+
+    const isSaveDisabled = rating === 0 && note.trim() === '';
+    const formattedTime = logDate.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+    const timeForInput = `${String(logDate.getHours()).padStart(2, '0')}:${String(logDate.getMinutes()).padStart(2, '0')}`;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-            <div className="bg-space-900 rounded-xl shadow-2xl w-full max-w-md p-6 relative animate-fade-in-up">
+        <div 
+            className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
+            onClick={onClose}
+        >
+            <div 
+                className="bg-space-900 rounded-xl shadow-2xl w-full max-w-md p-6 relative animate-fade-in-up"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <button onClick={onClose} className="absolute top-4 right-4 text-system-grey hover:text-cloud-white transition">
                     <XMarkIcon className="h-6 w-6" />
                 </button>
 
                 <h2 className="text-2xl font-bold text-cloud-white text-center mb-2">Jak Twoja energia?</h2>
-                <p className="text-center text-system-grey mb-6">Oceń swój obecny poziom energii w skali 1-5.</p>
+                <p className="text-center text-system-grey mb-6">Oceń swój obecny poziom energii lub dodaj notatkę.</p>
                 
                 <div className="flex justify-center items-center gap-3 sm:gap-4 mb-6">
                     {[1, 2, 3, 4, 5].map(level => (
@@ -57,29 +87,54 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
                         </button>
                     ))}
                 </div>
-                {rating > 0 && <p className="text-center font-semibold mb-6" style={{color: `var(--tw-color-opacity, 1) solid ${RATING_CONFIG[rating].color.replace('bg-','')}`}}>{RATING_CONFIG[rating].label}</p>}
-
+                
                 {rating > 0 && (
-                    <div className="border-t border-space-700 pt-6">
-                        <h3 className="text-lg font-semibold text-cloud-white text-center mb-4">Pora dnia</h3>
-                        <div className="flex flex-wrap justify-center gap-2">
-                            {DEFAULT_TAGS.map(tag => (
-                                <button
-                                    key={tag}
-                                    onClick={() => handleTagClick(tag)}
-                                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTags.has(tag) ? 'bg-electric-500 text-cloud-white' : 'bg-space-800 text-system-grey hover:bg-space-700'}`}
-                                >
-                                    {tag}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                    <p className="text-center font-semibold mb-6 transition-opacity duration-300" 
+                       style={{ color: RATING_CONFIG[rating].color.startsWith('bg-') ? `var(--tw-color-${RATING_CONFIG[rating].color.substring(3).replace('/', '-')})` : RATING_CONFIG[rating].color }}>
+                        {RATING_CONFIG[rating].label}
+                    </p>
                 )}
+
+                <div className="border-t border-space-700 pt-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-cloud-white">Dodaj notatkę</h3>
+                         {isEditingTime ? (
+                            <input
+                                type="time"
+                                value={timeForInput}
+                                onChange={handleTimeChange}
+                                onBlur={() => setIsEditingTime(false)}
+                                autoFocus
+                                className="bg-space-800 text-cloud-white rounded-lg p-2 text-base font-mono focus:ring-2 focus:ring-electric-500 focus:outline-none transition"
+                            />
+                        ) : (
+                            <button
+                                onClick={() => setIsEditingTime(true)}
+                                className="text-base font-mono text-system-grey bg-space-800 hover:bg-space-700 py-2 px-3 rounded-lg transition-colors"
+                                title="Zmień godzinę wpisu"
+                            >
+                                {formattedTime}
+                            </button>
+                        )}
+                    </div>
+                    <textarea
+                        ref={noteInputRef}
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Tutaj wpisz swoje notatki..."
+                        className="w-full bg-space-800 text-cloud-white rounded-lg p-3 text-base focus:ring-2 focus:ring-electric-500 focus:outline-none transition"
+                        rows={3}
+                    />
+                    <p className="hidden sm:block text-xs text-system-grey text-right mt-2">
+                        Naciśnij <kbd>1-5</kbd> aby ocenić, potem <kbd>Enter</kbd> aby zapisać.
+                    </p>
+                </div>
 
                 <div className="mt-8">
                     <button
-                        onClick={() => onSave(rating, Array.from(selectedTags))}
-                        disabled={rating === 0}
+                        onClick={() => onSave(rating > 0 ? rating : undefined, note, logDate.getTime())}
+                        disabled={isSaveDisabled}
                         className="w-full bg-electric-500 text-cloud-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-electric-600 transition-colors disabled:bg-space-700 disabled:text-system-grey/50 disabled:cursor-not-allowed"
                     >
                         Zapisz
