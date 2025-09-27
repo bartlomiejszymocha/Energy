@@ -74,8 +74,8 @@ const ExerciseView: React.FC<{
                 </div>
             </header>
             
-            <main className="flex-grow flex flex-col items-center justify-start pt-4 overflow-y-auto custom-scrollbar">
-                <div className="w-full aspect-video relative bg-black rounded-lg overflow-hidden shadow-lg mb-4 flex-shrink-0" style={{ minHeight: '300px' }}>
+            <main className="flex-grow flex flex-col items-center justify-start pt-2 overflow-y-auto custom-scrollbar">
+                <div className="w-full aspect-video relative bg-black rounded-lg overflow-hidden shadow-lg mb-3 flex-shrink-0" style={{ minHeight: '280px' }}>
                     {currentStep.videoUrl ? (
                         <div className="w-full h-full relative">
                             <iframe
@@ -102,17 +102,17 @@ const ExerciseView: React.FC<{
                     )}
                 </div>
 
-                <div className="text-center my-4 flex-shrink-0">
-                    <h2 className="text-3xl font-bold text-cloud-white">{currentStep.name}</h2>
-                    <p className="font-mono text-xl text-system-grey mt-2 tabular-nums">{formatTime(timeLeftInStep)}</p>
+                <div className="text-center my-3 flex-shrink-0">
+                    <h2 className="text-2xl font-bold text-cloud-white">{currentStep.name}</h2>
+                    <p className="font-mono text-lg text-system-grey mt-1 tabular-nums">{formatTime(timeLeftInStep)}</p>
                     {currentStep.note && (
-                        <p className="text-sm text-system-grey mt-3 max-w-md mx-auto leading-relaxed">
+                        <p className="text-xs text-system-grey mt-2 max-w-md mx-auto leading-relaxed">
                             {currentStep.note}
                         </p>
                     )}
                 </div>
 
-                <div className="flex items-center justify-center gap-8 my-4 flex-shrink-0">
+                <div className="flex items-center justify-center gap-6 my-3 flex-shrink-0">
                     <button
                         onClick={skipToPrevious}
                         disabled={currentStepInfo.number === 1}
