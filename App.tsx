@@ -203,7 +203,7 @@ function App() {
         user={user}
         onSignOut={signOut}
         onLoginClick={() => setIsLoginScreenVisible(true)}
-        title="Resetuj ENERGIĘ" 
+        title="Energy Playbook" 
         streak={streak} 
         onOpenNotifications={() => setIsNotificationsModalOpen(true)}
       />

@@ -50,7 +50,7 @@ const ExerciseView: React.FC<{
                             <span>Pozostało: <span className="font-mono tabular-nums">{formatTime(totalTimeRemaining)}</span></span>
                         </div>
                     </div>
-                    <button onClick={() => { pause(); (action as any).onClose(); }} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-space-800" aria-label="Zamknij trening">
+                    <button onClick={() => { pause(); action.onClose?.(); }} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-space-800" aria-label="Zamknij trening">
                         <XMarkIcon className="h-6 w-6" />
                     </button>
                 </div>
@@ -172,14 +172,14 @@ const RestView: React.FC<{
     const { timeLeftInStep, progressPercentage, skipToNext, nextStep, isPaused, play, pause } = engine;
 
     return (
-        <div className="flex flex-col h-full w-full items-center justify-between">
-            <header className="w-full flex items-center justify-between flex-shrink-0">
+        <div className="grid grid-rows-[auto_1fr_auto] h-full w-full">
+            <header className="row-start-1 w-full flex items-center justify-between">
                 <h1 className="text-xl font-bold text-cloud-white">Odpoczynek</h1>
                 <button onClick={onClose} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-space-800" aria-label="Zamknij trening">
                     <XMarkIcon className="h-6 w-6" />
                 </button>
             </header>
-            <div className="flex-grow flex flex-col items-center justify-center gap-8 w-full">
+            <div className="row-start-2 flex items-center justify-center gap-8 w-full py-4">
                 <div className="relative w-48 h-48">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
                         <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" strokeWidth="4" className="text-space-800" />
@@ -213,7 +213,7 @@ const RestView: React.FC<{
                     </div>
                 </div>
             </div>
-             <div className="text-center w-full max-w-xs mx-auto flex-shrink-0">
+            <div className="row-start-3 text-center w-full max-w-xs mx-auto pb-2">
                 {nextStep && nextStep.type === 'exercise' && (
                     <div className="bg-space-800/50 rounded-lg p-4 w-full mb-4">
                         <p className="text-xs text-system-grey uppercase tracking-wider">Następnie:</p>
@@ -314,12 +314,14 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
     };
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start justify-center z-[100] p-4 pt-12 sm:pt-4 overflow-y-auto" onClick={() => { engine.pause(); onClose(); }}>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto" onClick={() => { engine.pause(); onClose(); }}>
             <div 
-                className="bg-gradient-to-b from-space-900 to-black rounded-2xl shadow-2xl w-full max-w-lg p-6 relative animate-fade-in-up flex flex-col min-h-[720px] sm:max-h-[95dvh] sm:my-auto"
+                className="bg-gradient-to-b from-space-900 to-black rounded-2xl shadow-2xl w-full max-w-lg p-4 sm:p-6 relative animate-fade-in-up flex flex-col h-[520px] sm:h-[60vh] max-h-[90vh] my-auto"
                 onClick={e => e.stopPropagation()}
             >
-                {renderContent()}
+                <div className="flex-1 flex flex-col">
+                    {renderContent()}
+                </div>
             </div>
              <style>{`
                 @keyframes fade-in-up {

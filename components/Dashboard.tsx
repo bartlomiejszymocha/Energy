@@ -277,7 +277,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                             >
                                 <span className="sm:hidden">Zacznij tutaj!</span>
                                 <span className="hidden sm:inline">
-                                    Jak korzystać z Resetuj ENERGIĘ?
+                                    Jak korzystać z Energy Playbook?
                                 </span>
                             </button>
                             <button
@@ -293,7 +293,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                         </div>
                     </div>
                     <div className="flex-grow h-52 sm:h-72">
-                        <EnergyChart logs={logs} completedActions={completedActions} />
+                        {(() => {
+                            const today = new Date();
+                            const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+                            const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999).getTime();
+                            const chartLogs = logs.filter(l => l.timestamp >= startOfToday && l.timestamp <= endOfToday);
+                            const chartActions = completedActions.filter(a => a.timestamp >= startOfToday && a.timestamp <= endOfToday);
+                            return <EnergyChart logs={chartLogs} completedActions={chartActions} />;
+                        })()}
                     </div>
                     <div className="flex items-center justify-center gap-4 text-xs text-system-grey pt-4 flex-shrink-0 flex-wrap">
                         <div className="flex items-center gap-2">

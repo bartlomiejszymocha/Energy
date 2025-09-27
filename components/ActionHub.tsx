@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 import type { ActionItem, ActionType } from '../types';
 import { ActionCard } from './ActionCard';
 import { ACTION_LIBRARY } from '../constants/actions';
-import { ArrowPathCircularIcon, BoltIcon, BreathingIcon } from './icons/Icons';
+import { ArrowPathCircularIcon, BoltIcon, BreathingIcon, StarIcon } from './icons/Icons';
 
 interface ActionHubProps {
     onCompleteAction: (actionId: string) => void;
@@ -15,7 +15,7 @@ interface ActionHubProps {
     todayCompletedActionIds: Set<string>;
 }
 
-type FilterType = 'all' | 'reset' | 'movement' | 'breath';
+type FilterType = 'all' | 'reset' | 'movement' | 'breath' | 'favorites';
 
 export const ActionHub: React.FC<ActionHubProps> = ({ 
     onCompleteAction, 
@@ -48,6 +48,8 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                     return action.type === 'Protokół Ruchowy';
                 case 'breath':
                     return action.type === 'Technika oddechowa';
+                case 'favorites':
+                    return favoriteActionIds.has(action.id);
                 case 'all':
                 default:
                     return true;
@@ -72,6 +74,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
         { key: 'movement' as FilterType, label: 'Ruch', icon: BoltIcon },
         { key: 'breath' as FilterType, label: 'Oddech', icon: BreathingIcon },
         { key: 'reset' as FilterType, label: 'Reset', icon: ArrowPathCircularIcon },
+        { key: 'favorites' as FilterType, label: 'Ulubione', icon: StarIcon },
     ];
 
     const handleDurationInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

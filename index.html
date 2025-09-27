@@ -5,7 +5,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#0E0F12" />
-    <title>Resetuj ENERGIĘ</title>
+    <title>Energy Playbook</title>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -102,6 +102,7 @@
         background-color: #23252C; /* space-800 */
       }
       .react-calendar__month-view__weekdays {
+        display: flex;
         text-align: center;
         font-weight: 600;
         color: #8A94A6; /* system-grey */
@@ -109,23 +110,18 @@
         font-size: 0.75rem;
         margin-bottom: 0.5rem;
       }
-      .react-calendar__month-view__days {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-      }
+      .react-calendar__month-view__weekdays__weekday { flex: 0 0 calc(100% / 7); }
       .react-calendar__month-view__weekdays__weekday abbr {
         text-decoration: none;
       }
+      .react-calendar__month-view__days { display: flex; flex-wrap: wrap; }
       .react-calendar__tile {
-        flex-basis: 14.2857%;
         background: none;
         border: 2px solid transparent; /* Prevents layout shift on active */
         color: #F4F6F8; /* cloud-white */
         border-radius: 9999px;
-        width: 36px;
-        height: 36px;
-        margin: 2px;
+        flex: 0 0 calc(100% / 7);
+        aspect-ratio: 1 / 1;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -144,13 +140,13 @@
       }
       .react-calendar__tile--active {
         background-color: transparent;
-        border: 2px solid #A78BFA; /* Grape-like purple */
+        border: 2px solid #007AFF; /* electric-500 */
         color: #F4F6F8; /* cloud-white */
         font-weight: bold;
       }
       .react-calendar__tile--active:enabled:hover,
       .react-calendar__tile--active:enabled:focus {
-        background-color: rgba(167, 139, 250, 0.1);
+        background-color: rgba(0, 122, 255, 0.12);
       }
       .react-calendar__tile--hasActive {
         background-color: #007AFF; /* electric-500 */
@@ -169,7 +165,7 @@
       }
       /* Highlight the dot for today's date if it has an entry */
       .react-calendar__tile--now.day-with-entry::after {
-        background-color: #F4F6F8; /* cloud-white */
+        background-color: #007AFF; /* electric-500 */
       }
       /* Hide the dot for the selected date as it's already highlighted */
       .react-calendar__tile--active.day-with-entry::after {
@@ -226,7 +222,6 @@
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
     "react/": "https://aistudiocdn.com/react@^19.1.1/",
     "react": "https://aistudiocdn.com/react@^19.1.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
     "recharts": "https://aistudiocdn.com/recharts@^3.2.1",
     "firebase/": "https://aistudiocdn.com/firebase@^12.3.0/",
     "react-calendar": "https://aistudiocdn.com/react-calendar@^5.0.0",

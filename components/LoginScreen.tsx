@@ -36,9 +36,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn, onClose }) =
             </button>
             <main className="text-center w-full max-w-2xl">
                 <span className="text-6xl animate-fade-in-up">🎯</span>
-                <h1 className="text-4xl sm:text-5xl font-extrabold text-cloud-white mt-4 animate-fade-in-up animation-delay-100">
-                    Witaj w Resetuj ENERGIĘ
-                </h1>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-cloud-white mt-4 animate-fade-in-up animation-delay-100">
+            Witaj w Energy Playbook
+          </h1>
                 <p className="text-system-grey max-w-md mx-auto mt-4 text-lg animate-fade-in-up animation-delay-200">
                     Odzyskaj kontrolę nad swoją energią, aby osiągać więcej bez wypalenia.
                 </p>

@@ -46,6 +46,8 @@ export interface ActionItem {
   icon?: string;
   breathingPattern?: '478' | '4784';
   workout?: WorkoutStep[];
+  // used in Workout modal to inject close handler
+  onClose?: () => void;
 }
 
 export interface CompletedActionLog {
@@ -62,4 +64,15 @@ export type Theme = 'light' | 'dark';
 export interface UserSettings {
   name: string;
   theme: Theme;
+}
+
+// Chart types
+export interface ChartPoint {
+  timestamp: number;
+  rating: number;
+  isAction: boolean;
+  isNoteOnly: boolean;
+  note?: string;
+  title?: string;
+  icon?: string;
 }

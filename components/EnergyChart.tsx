@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import type { EnergyLog, CompletedActionLog } from '../types';
+import type { EnergyLog, CompletedActionLog, ChartPoint } from '../types';
 import { ACTION_LIBRARY } from '../constants/actions';
 
 interface EnergyChartProps {
@@ -8,7 +8,7 @@ interface EnergyChartProps {
     completedActions: CompletedActionLog[];
 }
 
-const CustomDot = (props: any) => {
+const CustomDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
     const { cx, cy, payload } = props;
     if (payload.isNoteOnly) {
         return <circle cx={cx} cy={cy} r={5} fill="#FF9500" />; // alert-orange
@@ -23,7 +23,7 @@ const CustomDot = (props: any) => {
     return <circle cx={cx} cy={cy} r={4} fill="#007AFF" />;
 };
 
-const CustomActiveDot = (props: any) => {
+const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
     const { cx, cy, payload } = props;
      if (payload.isNoteOnly) {
         return (
@@ -45,9 +45,9 @@ const CustomActiveDot = (props: any) => {
     return <circle cx={cx} cy={cy} r={6} stroke="#F4F6F8" strokeWidth={2} fill="#007AFF" />;
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { payload: ChartPoint }[]; label?: number }) => {
     if (active && payload && payload.length) {
-        const pointData = payload[0].payload;
+        const pointData = payload[0].payload as ChartPoint;
         const formattedTime = new Date(label).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
 
         let content;
@@ -82,20 +82,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 
 export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions }) => {
-    const chartData = useMemo(() => {
-        const today = new Date();
-        const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-
-        const todayLogs = logs.filter(log => log.timestamp >= startOfToday);
-        const todayCompletedActions = completedActions.filter(log => log.timestamp >= startOfToday);
-
+    const chartData = useMemo<ChartPoint[]>(() => {
         const allEvents = [
-            ...todayLogs.map(log => ({ ...log, type: 'log' as const })),
-            ...todayCompletedActions.map(action => ({ ...action, type: 'action' as const }))
+            ...logs.map(log => ({ ...log, type: 'log' as const })),
+            ...completedActions.map(action => ({ ...action, type: 'action' as const }))
         ].sort((a, b) => a.timestamp - b.timestamp);
 
         let lastRating: number | null = null;
-        const processedData: any[] = [];
+        const processedData: ChartPoint[] = [];
 
         for (const event of allEvents) {
             if (event.type === 'log') {
@@ -108,18 +102,18 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
                         isAction: false,
                         isNoteOnly: false,
                     });
-                } else { // Note-only log
+                } else {
                     if (lastRating !== null) {
                         processedData.push({
                             timestamp: event.timestamp,
-                            rating: lastRating, // Carry over the last rating for the line
+                            rating: lastRating,
                             note: event.note,
                             isAction: false,
                             isNoteOnly: true,
                         });
                     }
                 }
-            } else { // event.type === 'action'
+            } else {
                 if (lastRating !== null) {
                     const actionDetails = ACTION_LIBRARY.find(a => a.id === event.actionId);
                     processedData.push({

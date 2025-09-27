@@ -40,7 +40,7 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, on
                     <XMarkIcon className="h-6 w-6" />
                 </button>
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-cloud-white">Jak korzystać z Resetuj ENERGIĘ?</h2>
+                    <h2 className="text-2xl font-bold text-cloud-white">Jak korzystać z Energy Playbook?</h2>
                     <p className="text-system-grey mt-1">Szybki przewodnik po kluczowych funkcjach.</p>
                 </div>
                 

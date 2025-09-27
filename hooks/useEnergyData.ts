@@ -63,17 +63,21 @@ export const useEnergyData = (uid: string | null) => {
 
         const logsQuery = query(collection(db, USERS_COLLECTION, uid, LOGS_COLLECTION));
         const unsubscribeLogs = onSnapshot(logsQuery, (querySnapshot) => {
-            const userLogs: EnergyLog[] = querySnapshot.docs.map(doc => ({
-                id: doc.id, ...doc.data(), timestamp: (doc.data().timestamp as Timestamp).toMillis()
-            } as EnergyLog));
+            const userLogs: EnergyLog[] = querySnapshot.docs.map(d => ({
+                id: d.id,
+                ...(d.data() as Omit<EnergyLog, 'id' | 'timestamp'> & { timestamp: Timestamp }),
+                timestamp: (d.data().timestamp as Timestamp).toMillis(),
+            }));
             setLogs(userLogs.sort((a, b) => a.timestamp - b.timestamp));
         });
 
         const actionsQuery = query(collection(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION));
         const unsubscribeActions = onSnapshot(actionsQuery, (querySnapshot) => {
-            const userActions: CompletedActionLog[] = querySnapshot.docs.map(doc => ({
-                id: doc.id, ...doc.data(), timestamp: (doc.data().timestamp as Timestamp).toMillis()
-            } as CompletedActionLog));
+            const userActions: CompletedActionLog[] = querySnapshot.docs.map(d => ({
+                id: d.id,
+                ...(d.data() as Omit<CompletedActionLog, 'id' | 'timestamp'> & { timestamp: Timestamp }),
+                timestamp: (d.data().timestamp as Timestamp).toMillis(),
+            }));
             setCompletedActions(userActions);
         });
 
@@ -127,7 +131,10 @@ export const useEnergyData = (uid: string | null) => {
   const addLog = useCallback(async (rating: number | undefined, note: string, tags: string[], timestamp: number) => {
     const logData = { rating, note, tags, timestamp };
     const trimmedNote = note.trim();
-    const logToWrite: any = { timestamp: Timestamp.fromMillis(timestamp), tags };
+    const logToWrite: { timestamp: Timestamp; tags: string[]; note?: string; rating?: number } = {
+      timestamp: Timestamp.fromMillis(timestamp),
+      tags,
+    };
     if (trimmedNote.length > 0) logToWrite.note = trimmedNote;
     if (typeof rating === 'number' && rating > 0) logToWrite.rating = rating;
 

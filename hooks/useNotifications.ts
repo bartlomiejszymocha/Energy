@@ -104,7 +104,7 @@ export const useNotifications = () => {
             if (settings.mode === 'fixed') {
                  const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
                  if (settings.times.includes(currentTime)) {
-                    new Notification('Resetuj ENERGIĘ', {
+                    new Notification('Energy Playbook', {
                         body: 'Jak Twoja energia? Czas na ocenę!',
                         icon: '/vite.svg',
                         tag: 'energy-check-in'
@@ -115,7 +115,7 @@ export const useNotifications = () => {
                 if (minutes === 0) { // Check only on the hour
                     const [endQuietHour] = settings.quietHours.end.split(':').map(Number);
                     if ((now.getHours() - endQuietHour) % settings.interval === 0) {
-                         new Notification('Resetuj ENERGIĘ', {
+                         new Notification('Energy Playbook', {
                             body: 'Jak Twoja energia? Czas na ocenę!',
                             icon: '/vite.svg',
                             tag: 'energy-check-in'

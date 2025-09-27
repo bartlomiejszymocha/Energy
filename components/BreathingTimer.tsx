@@ -106,7 +106,8 @@ export const BreathingTimer: React.FC<BreathingTimerProps> = ({ isExpanded, size
         // Create AudioContext on user interaction to comply with browser policies
         if (!audioContextRef.current) {
             try {
-                audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+                const win = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
+                audioContextRef.current = new (win.AudioContext || win.webkitAudioContext!)();
             } catch (e) {
                 console.error("Web Audio API is not supported in this browser");
             }

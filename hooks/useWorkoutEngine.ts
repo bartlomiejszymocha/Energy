@@ -13,7 +13,8 @@ export const useWorkoutEngine = (steps: EnrichedWorkoutStep[]) => {
     useEffect(() => {
         if (!audioContextRef.current) {
             try {
-                audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+                const win = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
+                audioContextRef.current = new (win.AudioContext || win.webkitAudioContext!)();
             } catch (e) { console.error("Web Audio API is not supported."); }
         }
         return () => {
