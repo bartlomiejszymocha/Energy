@@ -15,10 +15,10 @@ export default async function handler(req, res) {
   const API_KEY = process.env.CONVERTKIT_API_KEY;
   
   // App notifications list (confirmed immediately)
-  const APP_FORM_ID = '2506447'; // Nowości o aplikacji
+  const APP_FORM_ID = '8608142'; // Powiadomienia o aplikacji - POPRAWNY FORM ID
   
-  // Newsletter list (requires confirmation) 
-  const NEWSLETTER_FORM_ID = '2500809'; // Tips o produktywności
+  // Newsletter list (requires confirmation)
+  const NEWSLETTER_FORM_ID = '8608137'; // Newsletter z tipami - POPRAWNY FORM ID
   
   console.log('🔍 ConvertKit API setup:', {
     API_KEY: API_KEY ? `${API_KEY.substring(0, 10)}...` : 'MISSING',
