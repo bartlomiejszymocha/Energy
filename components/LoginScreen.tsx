@@ -45,7 +45,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     };
     
     return (
-        <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden bg-gradient-to-br from-[#0D0C22] via-[#1E1C3A] to-[#0D0C22]">
+        <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden bg-[#101113]">
             {/* Background gradient overlay */}
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1E1C3A]/80 via-transparent to-[#1E1C3A]/50 z-0"></div>
             
@@ -64,7 +64,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     <button
                         onClick={handleSignInClick}
                         disabled={isLoading}
-                        className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white/10 border border-white/20 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-wait"
+                        className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-[#259dff] border border-[#259dff] rounded-xl hover:bg-[#1a7acc] transition-colors disabled:opacity-50 disabled:cursor-wait"
                     >
                         <GoogleIcon className="w-6 h-6" />
                         <span className="text-base font-medium text-white">{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
@@ -73,34 +73,34 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     {/* Email consent checkboxes */}
                     <div className="mt-10 space-y-6">
                         {/* App notifications (required) */}
-                        <div className="flex items-start p-4 rounded-xl bg-white/5 border border-white/10">
+                        <div className="flex items-start p-5 sm:p-4 rounded-xl bg-white/5 border border-white/10 min-h-[80px] sm:min-h-auto">
                             <input
                                 type="checkbox"
                                 id="email-consent"
                                 checked={isEmailConsentChecked}
                                 onChange={(e) => setIsEmailConsentChecked(e.target.checked)}
-                                className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#8E4DFF] focus:ring-[#8E4DFF] focus:ring-2 mt-0.5"
+                                className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#259dff] focus:ring-[#259dff] focus:ring-2 mt-0.5 flex-shrink-0"
                             />
-                            <label htmlFor="email-consent" className="ml-4 text-sm text-[#A1A1AA] cursor-pointer">
-                                <span className="text-[#8E4DFF] font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
-                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
+                            <label htmlFor="email-consent" className="ml-4 text-sm sm:text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
+                                <span className="text-[#259dff] font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
+                                <span className="block mt-2 text-xs text-[#A1A1AA]/70">
                                     Zawsze możesz się wypisać jednym kliknięciem. 📧
                                 </span>
                             </label>
                         </div>
 
                         {/* Newsletter (optional) */}
-                        <div className="flex items-start p-4 rounded-xl bg-white/5 border border-white/10">
+                        <div className="flex items-start p-5 sm:p-4 rounded-xl bg-white/5 border border-white/10 min-h-[80px] sm:min-h-auto">
                             <input
                                 type="checkbox"
                                 id="newsletter-consent"
                                 checked={subscribeToNewsletter}
                                 onChange={(e) => setSubscribeToNewsletter(e.target.checked)}
-                                className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#8E4DFF] focus:ring-[#8E4DFF] focus:ring-2 mt-0.5"
+                                className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#259dff] focus:ring-[#259dff] focus:ring-2 mt-0.5 flex-shrink-0"
                             />
-                            <label htmlFor="newsletter-consent" className="ml-4 text-sm text-[#A1A1AA] cursor-pointer">
+                            <label htmlFor="newsletter-consent" className="ml-4 text-sm sm:text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
                                 <span className="font-semibold text-white">✅ Zapisz się na 14 hacków energetycznych.</span> Odzyskaj 2h produktywności każdego dnia!
-                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
+                                <span className="block mt-2 text-xs text-[#A1A1AA]/70">
                                     Wymaga potwierdzenia emailem. ✨
                                 </span>
                             </label>
