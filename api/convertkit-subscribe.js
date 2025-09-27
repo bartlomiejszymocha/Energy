@@ -19,6 +19,14 @@ export default async function handler(req, res) {
   
   // Newsletter list (requires confirmation) 
   const NEWSLETTER_FORM_ID = '2500809'; // Tips o produktywności
+  
+  console.log('🔍 ConvertKit API setup:', {
+    API_KEY: API_KEY ? `${API_KEY.substring(0, 10)}...` : 'MISSING',
+    APP_FORM_ID,
+    NEWSLETTER_FORM_ID,
+    email,
+    subscribeToNewsletter
+  });
 
   if (!API_KEY) {
     console.error('ConvertKit API key not configured');
@@ -49,9 +57,14 @@ export default async function handler(req, res) {
     results.push({ list: 'app_notifications', success: appResponse.ok, data: appData });
 
     if (!appResponse.ok) {
-      console.error('App notifications subscription failed:', appData);
+      console.error('❌ App notifications subscription failed:', {
+        status: appResponse.status,
+        statusText: appResponse.statusText,
+        data: appData,
+        formId: APP_FORM_ID
+      });
     } else {
-      console.log('App notifications success:', appData);
+      console.log('✅ App notifications success:', appData);
     }
 
     // 2. Optionally add to newsletter (requires confirmation)
@@ -76,9 +89,14 @@ export default async function handler(req, res) {
       results.push({ list: 'newsletter', success: newsletterResponse.ok, data: newsletterData });
 
       if (!newsletterResponse.ok) {
-        console.error('Newsletter subscription failed:', newsletterData);
+        console.error('❌ Newsletter subscription failed:', {
+          status: newsletterResponse.status,
+          statusText: newsletterResponse.statusText,
+          data: newsletterData,
+          formId: NEWSLETTER_FORM_ID
+        });
       } else {
-        console.log('Newsletter success (confirmation required):', newsletterData);
+        console.log('✅ Newsletter success (confirmation required):', newsletterData);
       }
     }
 
