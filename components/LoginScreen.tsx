@@ -89,7 +89,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                             />
                             <label htmlFor="email-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
                                 <span className="text-[#259dff] font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
-                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
+                                <span className="block mt-1 text-xs text-[#A1A1AA]/50">
                                     Zawsze możesz się wypisać jednym kliknięciem. 📧
                                 </span>
                             </label>
@@ -106,7 +106,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                             />
                             <label htmlFor="newsletter-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
                                 <span className="font-semibold text-white">✅ Odbierz 14 prostych hacków energetycznych,</span> które możesz wdrożyć już dziś, by jutro mieć energię na to, co naprawdę ważne.
-                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
+                                <span className="block mt-1 text-xs text-[#A1A1AA]/50">
                                     Wymaga potwierdzenia emailem. ✨
                                 </span>
                             </label>
