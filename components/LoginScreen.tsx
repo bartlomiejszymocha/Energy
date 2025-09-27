@@ -14,7 +14,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
 
     const handleSignInClick = async () => {
         if (!isEmailConsentChecked) {
-            setError('Musisz wyrazić zgodę na otrzymywanie emaili marketingowych, aby kontynuować. 📧');
+            setError('Zgoda na wysyłanie emaili związanych z aktualizacjami narzędzia jest wymagana');
             return;
         }
         
@@ -70,6 +70,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                         <span className="text-base font-medium text-white">{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
                     </button>
                     
+                    {error && (
+                        <p className="text-red-400 mt-4 text-sm animate-fade-in-up">
+                            {error}
+                        </p>
+                    )}
+                    
                     {/* Email consent checkboxes */}
                     <div className="mt-10 space-y-6">
                         {/* App notifications (required) */}
@@ -106,12 +112,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                             </label>
                         </div>
                     </div>
-                    
-                    {error && (
-                        <p className="text-red-400 mt-4 text-sm animate-fade-in-up">
-                            {error}
-                        </p>
-                    )}
                     
                     <div className="text-center mt-12">
                         <p className="text-xs text-gray-500">© 2025 Energy Playbook | Wszelkie prawa zastrzeżone</p>
