@@ -47,7 +47,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden bg-[#101113]">
             {/* Background gradient overlay */}
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1E3A8A]/40 via-transparent to-[#1E40AF]/20 z-0"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1E3A8A]/60 via-transparent to-[#1E40AF]/40 z-0"></div>
             
             {/* Stardust pattern background */}
             <div className="absolute inset-0 z-[-1] opacity-20" style={{
