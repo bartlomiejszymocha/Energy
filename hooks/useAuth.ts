@@ -35,7 +35,8 @@ export const useAuth = () => {
                         
                         const result = await addSubscriber(currentUser.email, firstName, {
                             tags: ['Energy Playbook User', 'Google Login'],
-                            fields: { 'login_method': 'Google', 'signup_date': new Date().toISOString() }
+                            fields: { 'login_method': 'Google', 'signup_date': new Date().toISOString() },
+                            subscribeToNewsletter: false // Default to app notifications only
                         });
                         
                         console.log('✅ ConvertKit result:', result);

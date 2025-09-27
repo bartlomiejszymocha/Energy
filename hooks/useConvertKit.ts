@@ -9,6 +9,7 @@ export const useConvertKit = () => {
       useForm?: boolean;
       tags?: string[];
       fields?: Record<string, string>;
+      subscribeToNewsletter?: boolean;
     }
   ) => {
     if (!email) {
@@ -20,7 +21,8 @@ export const useConvertKit = () => {
       email,
       first_name: firstName,
       tags: options?.tags || ['Energy Playbook User'],
-      fields: options?.fields || {}
+      fields: options?.fields || {},
+      subscribeToNewsletter: options?.subscribeToNewsletter || false
     };
 
     try {

@@ -3,6 +3,7 @@ interface ConvertKitSubscriber {
   first_name?: string;
   fields?: Record<string, string>;
   tags?: string[];
+  subscribeToNewsletter?: boolean;
 }
 
 interface ConvertKitResponse {
@@ -43,6 +44,7 @@ class ConvertKitService {
           firstName: subscriber.first_name,
           tags: subscriber.tags,
           fields: subscriber.fields,
+          subscribeToNewsletter: subscriber.subscribeToNewsletter || false,
         }),
       });
 

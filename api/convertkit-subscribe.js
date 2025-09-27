@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, firstName, tags, fields } = req.body;
+  const { email, firstName, tags, fields, subscribeToNewsletter = false } = req.body;
 
   // Validate required fields
   if (!email) {
@@ -13,8 +13,12 @@ export default async function handler(req, res) {
   }
 
   const API_KEY = process.env.CONVERTKIT_API_KEY;
-  const SEQUENCE_ID = process.env.CONVERTKIT_SEQUENCE_ID;
-  const FORM_ID = process.env.CONVERTKIT_FORM_ID;
+  
+  // App notifications list (confirmed immediately)
+  const APP_FORM_ID = '2506447'; // Nowości o aplikacji
+  
+  // Newsletter list (requires confirmation) 
+  const NEWSLETTER_FORM_ID = '2500809'; // Tips o produktywności
 
   if (!API_KEY) {
     console.error('ConvertKit API key not configured');
@@ -22,59 +26,76 @@ export default async function handler(req, res) {
   }
 
   try {
-    let endpoint, payload;
+    const results = [];
 
-    // ConvertKit API v3 endpoints
-    if (SEQUENCE_ID) {
-      endpoint = `https://api.convertkit.com/v3/sequences/${SEQUENCE_ID}/subscribe`;
-    } else if (FORM_ID) {
-      endpoint = `https://api.convertkit.com/v3/forms/${FORM_ID}/subscribe`;
-    } else {
-      console.error('No ConvertKit Sequence ID or Form ID configured');
-      return res.status(500).json({ error: 'ConvertKit not properly configured' });
-    }
-
-    // API v3 payload structure
-    payload = {
-      api_secret: API_KEY, // Using API secret for v3
+    // 1. Always add to app notifications (confirmed immediately)
+    const appPayload = {
+      api_secret: API_KEY,
       email,
       first_name: firstName || '',
-      tags: tags || ['Energy Playbook User'],
+      tags: tags || ['Energy Playbook User', 'App Notifications'],
       fields: fields || {}
     };
 
-    console.log('ConvertKit API call:', { endpoint, email, firstName });
+    console.log('Adding to app notifications:', { email, firstName });
 
-    // API v3 uses standard headers with api_secret in body
-    const response = await fetch(endpoint, {
+    const appResponse = await fetch(`https://api.convertkit.com/v3/forms/${APP_FORM_ID}/subscribe`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(appPayload),
     });
 
-    const data = await response.json();
+    const appData = await appResponse.json();
+    results.push({ list: 'app_notifications', success: appResponse.ok, data: appData });
 
-    if (!response.ok) {
-      console.error('ConvertKit API error:', data);
-      return res.status(response.status).json({ 
-        error: data.message || 'ConvertKit API error',
-        details: data
-      });
+    if (!appResponse.ok) {
+      console.error('App notifications subscription failed:', appData);
+    } else {
+      console.log('App notifications success:', appData);
     }
 
-    console.log('ConvertKit success:', data);
-    return res.status(200).json({ 
-      success: true, 
-      data: data,
-      message: 'Successfully subscribed to email list'
+    // 2. Optionally add to newsletter (requires confirmation)
+    if (subscribeToNewsletter) {
+      const newsletterPayload = {
+        api_secret: API_KEY,
+        email,
+        first_name: firstName || '',
+        tags: tags || ['Energy Playbook User', 'Newsletter Subscriber'],
+        fields: fields || {}
+      };
+
+      console.log('Adding to newsletter (with confirmation):', { email, firstName });
+
+      const newsletterResponse = await fetch(`https://api.convertkit.com/v3/forms/${NEWSLETTER_FORM_ID}/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newsletterPayload),
+      });
+
+      const newsletterData = await newsletterResponse.json();
+      results.push({ list: 'newsletter', success: newsletterResponse.ok, data: newsletterData });
+
+      if (!newsletterResponse.ok) {
+        console.error('Newsletter subscription failed:', newsletterData);
+      } else {
+        console.log('Newsletter success (confirmation required):', newsletterData);
+      }
+    }
+
+    const allSuccessful = results.every(r => r.success);
+    
+    return res.status(allSuccessful ? 200 : 207).json({ 
+      success: allSuccessful, 
+      results,
+      message: allSuccessful 
+        ? 'Successfully subscribed to email lists'
+        : 'Partial success - some subscriptions failed'
     });
 
   } catch (error) {
     console.error('ConvertKit request failed:', error);
     return res.status(500).json({ 
-      error: 'Failed to subscribe to email list',
+      error: 'Failed to subscribe to email lists',
       details: error.message
     });
   }
