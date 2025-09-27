@@ -86,15 +86,15 @@ export const ActionCard: React.FC<ActionCardProps> = ({
     };
 
     return (
-        <div className={`${cardBgClass} ${borderClass} rounded-xl shadow-lg flex flex-col transition-all duration-300 hover:bg-white/10 hover:border-white/20`}>
+        <div className={`${cardBgClass} ${borderClass} rounded-xl shadow-lg flex flex-col transition-all duration-300 hover:bg-white/10 hover:border-white/20 h-full`}>
             {/* Clickable Header */}
             <div className="p-4 cursor-pointer" onClick={() => onToggleExpand(action.id)}>
-                <div className="flex justify-between items-start gap-3 min-h-14">
-                    <div className="flex items-center gap-3 flex-grow min-w-0">
-                        {action.icon && <span className="text-2xl">{action.icon}</span>}
-                        <h4 className={`font-bold text-lg transition-colors duration-300 ${titleColor}`}>{action.title}</h4>
+                <div className="flex justify-between items-start gap-3 min-h-16">
+                    <div className="flex items-center gap-3 flex-grow min-w-0 pr-2">
+                        {action.icon && <span className="text-2xl flex-shrink-0">{action.icon}</span>}
+                        <h4 className={`font-bold text-lg transition-colors duration-300 ${titleColor} leading-tight break-words`}>{action.title}</h4>
                     </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
                          {action.workout && onPlayAction && (
                             <button 
                                 onClick={handlePlayAction} 
