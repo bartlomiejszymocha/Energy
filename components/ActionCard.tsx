@@ -17,16 +17,8 @@ interface ActionCardProps {
 }
 
 const getCardBgClass = (type: ActionItem['type']): string => {
-    switch (type) {
-        case 'Protokół Ruchowy':
-            return 'bg-space-700'; // Lightest
-        case 'Reset Energetyczny':
-            return 'bg-space-800'; // Middle
-        case 'Technika oddechowa':
-            return 'bg-space-900'; // Darkest
-        default:
-            return 'bg-space-800';
-    }
+    // All cards now use glassmorphism design for consistency
+    return 'bg-white/5 border border-white/10 backdrop-blur-sm';
 };
 
 
@@ -79,7 +71,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
     const cardBgClass = getCardBgClass(action.type);
     const borderClass = isCompletedToday
         ? 'border-2 border-success-green'
-        : 'border-2 border-transparent';
+        : ''; // Default border is now handled by getCardBgClass
         
     const renderTypeIcon = () => {
         switch (action.type) {
@@ -94,7 +86,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
     };
 
     return (
-        <div className={`${cardBgClass} ${borderClass} rounded-xl shadow-lg flex flex-col transition-colors duration-300`}>
+        <div className={`${cardBgClass} ${borderClass} rounded-xl shadow-lg flex flex-col transition-all duration-300 hover:bg-white/10 hover:border-white/20`}>
             {/* Clickable Header */}
             <div className="p-4 cursor-pointer" onClick={() => onToggleExpand(action.id)}>
                 <div className="flex justify-between items-start gap-3 min-h-14">
@@ -106,7 +98,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
                          {action.workout && onPlayAction && (
                             <button 
                                 onClick={handlePlayAction} 
-                                className="p-1.5 rounded-full text-system-grey bg-space-900/40 hover:bg-electric-500 hover:text-cloud-white transition-colors" 
+                                className="p-1.5 rounded-full text-system-grey bg-white/5 hover:bg-electric-500 hover:text-cloud-white transition-all duration-200" 
                                 aria-label="Rozpocznij trening"
                                 title="Rozpocznij trening"
                             >
@@ -114,7 +106,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
                             </button>
                         )}
                          {onToggleFavorite && (
-                            <button onClick={handleToggleFavorite} className="p-1.5 rounded-full text-system-grey hover:text-warning-yellow transition-colors" aria-label="Oznacz jako ulubione">
+                            <button onClick={handleToggleFavorite} className="p-1.5 rounded-full text-system-grey bg-white/5 hover:bg-warning-yellow/10 hover:text-warning-yellow transition-all duration-200" aria-label="Oznacz jako ulubione">
                                 <StarIcon className={`h-5 w-5 ${isFavorite ? 'fill-current text-warning-yellow' : ''}`} />
                             </button>
                          )}
@@ -127,7 +119,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
                             </div>
                         )}
                          {onComplete && (
-                            <button onClick={handleComplete} className="p-1 rounded-full text-system-grey hover:text-cloud-white transition-colors" aria-label="Oznacz jako wykonane">
+                            <button onClick={handleComplete} className="p-1 rounded-full text-system-grey bg-white/5 hover:bg-success-green/10 hover:text-success-green transition-all duration-200" aria-label="Oznacz jako wykonane">
                                 {isCompletedToday ? <CheckCircleIcon className="h-6 w-6 text-success-green" /> : <CircleIcon className="h-6 w-6" />}
                             </button>
                         )}
@@ -160,7 +152,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
                                     />
                                     <button
                                       onClick={handleOpenModal}
-                                      className="absolute top-2 right-2 flex items-center gap-1.5 rounded-md border border-cloud-white/50 px-2 py-1 text-xs text-cloud-white/80 hover:bg-white/10 hover:text-cloud-white hover:border-cloud-white transition-all z-10"
+                                      className="absolute top-2 right-2 flex items-center gap-1.5 rounded-md bg-white/10 border border-white/20 px-2 py-1 text-xs text-cloud-white/80 hover:bg-white/20 hover:text-cloud-white hover:border-white/40 transition-all z-10 backdrop-blur-sm"
                                       aria-label="Powiększ timer oddechowy"
                                     >
                                       <ArrowsPointingOutIcon className="h-4 w-4" />
