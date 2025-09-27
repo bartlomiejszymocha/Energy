@@ -9,8 +9,14 @@ interface LoginScreenProps {
 export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isEmailConsentChecked, setIsEmailConsentChecked] = useState(false);
 
     const handleSignInClick = async () => {
+        if (!isEmailConsentChecked) {
+            setError('Musisz wyrazić zgodę na otrzymywanie emaili marketingowych, aby kontynuować. 📧');
+            return;
+        }
+        
         setIsLoading(true);
         setError(null);
         try {
@@ -34,6 +40,21 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     Odzyskaj kontrolę nad swoją energią, aby osiągać więcej bez wypalenia.
                 </p>
                 <div className="mt-10 animate-fade-in-up animation-delay-300">
+                    {/* Email consent checkbox */}
+                    <div className="mb-6 flex items-start gap-3 text-left max-w-md mx-auto">
+                        <input
+                            type="checkbox"
+                            id="email-consent"
+                            checked={isEmailConsentChecked}
+                            onChange={(e) => setIsEmailConsentChecked(e.target.checked)}
+                            className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
+                        />
+                        <label htmlFor="email-consent" className="text-sm text-system-grey cursor-pointer">
+                            Wyrażam zgodę na otrzymywanie emaili marketingowych z najnowszymi poradami energetycznymi, 
+                            ekskluzywnym contentem i ofertami specjalnymi od Bartłomieja Szymochy. 📧✨
+                        </label>
+                    </div>
+                    
                     <button
                         onClick={handleSignInClick}
                         disabled={isLoading}
