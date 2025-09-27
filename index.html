@@ -228,6 +228,20 @@
     "react-calendar/": "https://aistudiocdn.com/react-calendar@^5.0.0/"
   }
 }
+
+/* Shimmer animation on page load */
+@keyframes shimmer-on-load {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer-on-load {
+  animation: shimmer-on-load 1.5s ease-in-out 2s;
+}
 </script>
 </head>
   <body class="bg-space-950 text-cloud-white">
