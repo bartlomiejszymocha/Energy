@@ -74,7 +74,7 @@ const ExerciseView: React.FC<{
                 </div>
             </header>
             
-            <main className="flex-grow flex flex-col items-center justify-center pt-4 overflow-y-auto custom-scrollbar">
+            <main className="flex-grow flex flex-col items-center justify-start pt-4 overflow-y-auto custom-scrollbar">
                 <div className="w-full aspect-video relative bg-black rounded-lg overflow-hidden shadow-lg mb-4 flex-shrink-0" style={{ minHeight: '300px' }}>
                     {currentStep.videoUrl ? (
                         <div className="w-full h-full relative">
@@ -102,17 +102,17 @@ const ExerciseView: React.FC<{
                     )}
                 </div>
 
-                <div className="text-center my-4">
+                <div className="text-center my-4 flex-shrink-0">
                     <h2 className="text-3xl font-bold text-cloud-white">{currentStep.name}</h2>
                     <p className="font-mono text-xl text-system-grey mt-2 tabular-nums">{formatTime(timeLeftInStep)}</p>
                     {currentStep.note && (
-                        <p className="text-sm text-system-grey mt-3 max-w-md">
+                        <p className="text-sm text-system-grey mt-3 max-w-md mx-auto leading-relaxed">
                             {currentStep.note}
                         </p>
                     )}
                 </div>
 
-                <div className="flex items-center justify-center gap-8 my-4">
+                <div className="flex items-center justify-center gap-8 my-4 flex-shrink-0">
                     <button
                         onClick={skipToPrevious}
                         disabled={currentStepInfo.number === 1}
@@ -314,12 +314,12 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
     };
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto" onClick={() => { engine.pause(); onClose(); }}>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4" onClick={() => { engine.pause(); onClose(); }}>
             <div 
-                className="bg-white/5 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl p-4 sm:p-6 relative animate-fade-in-up flex flex-col h-[85vh] min-h-[600px] max-h-[95vh] my-auto backdrop-blur-sm"
+                className="bg-white/5 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl p-4 sm:p-6 relative animate-fade-in-up flex flex-col h-[85vh] min-h-[600px] max-h-[95vh] backdrop-blur-sm overflow-y-auto"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col min-h-0">
                     {renderContent()}
                 </div>
             </div>
