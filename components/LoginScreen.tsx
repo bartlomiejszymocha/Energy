@@ -18,6 +18,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
             return;
         }
         
+        // Store newsletter preference in localStorage for useAuth to read
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('pendingNewsletterSubscription', subscribeToNewsletter.toString());
+        }
+        
         setIsLoading(true);
         setError(null);
         try {
@@ -27,6 +32,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
             console.error("Błąd podczas procesu logowania Google:", e);
             setError(e.message || 'Wystąpił nieznany błąd podczas logowania.');
             setIsLoading(false);
+            // Clear localStorage on error
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('pendingNewsletterSubscription');
+            }
         }
     };
     

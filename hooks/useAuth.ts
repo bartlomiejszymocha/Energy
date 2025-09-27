@@ -27,19 +27,27 @@ export const useAuth = () => {
                 try {
                     if (addSubscriber && currentUser.email) {
                         const firstName = currentUser.displayName?.split(' ')[0] || '';
+                        
+                        // Read newsletter preference from localStorage
+                        const wantsNewsletter = localStorage.getItem('pendingNewsletterSubscription') === 'true';
+                        
                         console.log('🔍 Attempting to add to ConvertKit:', {
                             email: currentUser.email,
                             firstName,
-                            hasAddSubscriber: !!addSubscriber
+                            hasAddSubscriber: !!addSubscriber,
+                            subscribeToNewsletter: wantsNewsletter
                         });
                         
                         const result = await addSubscriber(currentUser.email, firstName, {
                             tags: ['Energy Playbook User', 'Google Login'],
                             fields: { 'login_method': 'Google', 'signup_date': new Date().toISOString() },
-                            subscribeToNewsletter: false // Default to app notifications only
+                            subscribeToNewsletter: wantsNewsletter
                         });
                         
                         console.log('✅ ConvertKit result:', result);
+                        
+                        // Clear localStorage after successful subscription
+                        localStorage.removeItem('pendingNewsletterSubscription');
                     } else {
                         console.warn('⚠️ ConvertKit add failed:', {
                             hasAddSubscriber: !!addSubscriber,
