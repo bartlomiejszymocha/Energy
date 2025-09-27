@@ -52,7 +52,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
             Witaj w Energy Playbook
           </h1>
                 <p className="text-system-grey max-w-md mx-auto mt-4 text-lg animate-fade-in-up animation-delay-200">
-                    Zacznij skutecznie resetować poziom swojej energii, osiągaj więcej i poczuj kontrolę.
+                    Opanuj proste, sprawdzone narzędzie, które podwoi Twoją energię i skupienie w mniej niż 30 dni.
                 </p>
                 <div className="mt-8 animate-fade-in-up animation-delay-300">
                     <p className="text-system-grey max-w-md mx-auto mb-4 text-sm">
