@@ -6,45 +6,36 @@ import {
     type User
 } from 'firebase/auth';
 import { auth, googleAuthProvider } from '../firebase';
-import { useConvertKit } from './useConvertKit';
+// import { useConvertKit } from './useConvertKit';
 
 export const useAuth = () => {
     const [user, setUser] = useState<User | null>(null);
     const [loadingAuth, setLoadingAuth] = useState(true);
-    const { addSubscriber } = useConvertKit();
+    // const { addSubscriber } = useConvertKit();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            // If user just logged in (currentUser exists and previous user was null)
-            if (currentUser && !user) {
-                // Add to ConvertKit only for new logins (safely)
-                try {
-                    if (addSubscriber && currentUser.email) {
-                        const firstName = currentUser.displayName?.split(' ')[0] || '';
-                        await addSubscriber(
-                            currentUser.email, 
-                            firstName,
-                            {
-                                tags: ['Energy Playbook User', 'Google Login'],
-                                fields: {
-                                    'login_method': 'Google',
-                                    'signup_date': new Date().toISOString()
-                                }
-                            }
-                        );
-                        console.log('User successfully added to ConvertKit');
-                    }
-                } catch (error) {
-                    console.error('Failed to add user to ConvertKit:', error);
-                    // Don't prevent login if ConvertKit fails
-                }
-            }
+            // ConvertKit integration temporarily disabled for debugging
+            // if (currentUser && !user) {
+            //     try {
+            //         if (addSubscriber && currentUser.email) {
+            //             const firstName = currentUser.displayName?.split(' ')[0] || '';
+            //             await addSubscriber(currentUser.email, firstName, {
+            //                 tags: ['Energy Playbook User', 'Google Login'],
+            //                 fields: { 'login_method': 'Google', 'signup_date': new Date().toISOString() }
+            //             });
+            //             console.log('User successfully added to ConvertKit');
+            //         }
+            //     } catch (error) {
+            //         console.error('Failed to add user to ConvertKit:', error);
+            //     }
+            // }
             
             setUser(currentUser);
             setLoadingAuth(false);
         });
         return () => unsubscribe();
-    }, [user, addSubscriber]);
+    }, [user]);
 
     const signInWithGoogle = async (): Promise<void> => {
         try {
