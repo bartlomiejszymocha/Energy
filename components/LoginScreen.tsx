@@ -45,16 +45,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     };
     
     return (
-        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-start sm:justify-center p-4 pt-6 sm:pt-4">
+        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-start sm:justify-center p-4 pt-4 sm:pt-4">
             <main className="text-center w-full max-w-2xl">
                 <span className="text-4xl sm:text-6xl animate-fade-in-up">🚀</span>
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-cloud-white mt-1 sm:mt-4 animate-fade-in-up animation-delay-100">
             Witaj w Energy Playbook!
           </h1>
-                <p className="text-system-grey max-w-md mx-auto mt-3 sm:mt-4 text-base sm:text-lg animate-fade-in-up animation-delay-200">
+                <p className="text-system-grey max-w-md mx-auto mt-2 sm:mt-4 text-base sm:text-lg animate-fade-in-up animation-delay-200">
                     Opanuj proste, sprawdzone narzędzie, które podwoi Twoją energię i skupienie w mniej niż 30 dni.
                 </p>
-                <div className="mt-5 sm:mt-8 animate-fade-in-up animation-delay-300">
+                <div className="mt-3 sm:mt-8 animate-fade-in-up animation-delay-300">
                     <p className="text-system-grey max-w-md mx-auto mb-4 sm:mb-4 text-xs sm:text-sm">
                         Zaloguj się, by zacząć używać narzędzia Energy Playbook
                     </p>
