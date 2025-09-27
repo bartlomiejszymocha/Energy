@@ -107,12 +107,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                         </div>
                     </div>
                     
-                        {error && (
-                            <p className="text-red-400 mt-4 text-sm animate-fade-in-up">
-                                {error}
-                            </p>
-                        )}
-                    </div>
+                    {error && (
+                        <p className="text-red-400 mt-4 text-sm animate-fade-in-up">
+                            {error}
+                        </p>
+                    )}
                     
                     <div className="text-center mt-12">
                         <p className="text-xs text-gray-500">© 2025 Energy Playbook | Wszelkie prawa zastrzeżone</p>
