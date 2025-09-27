@@ -244,6 +244,17 @@
 .animate-shimmer-on-load {
   animation: shimmer-on-load 1.5s ease-in-out 2s;
 }
+
+/* Fix for backdrop-blur rendering issues during fast scrolling */
+.sticky {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Improve backdrop-blur performance */
+.backdrop-blur-sm {
+  will-change: backdrop-filter;
+}
 </style>
 </head>
   <body class="bg-space-950 text-cloud-white">

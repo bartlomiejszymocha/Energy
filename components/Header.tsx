@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
     : 'Wykonaj dziś akcję, aby rozpocząć passę!';
 
   return (
-    <header className="bg-white/5 border-b border-white/10 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+    <header className="bg-white/5 border-b border-white/10 backdrop-blur-sm shadow-lg sticky top-0 z-50" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
