@@ -73,7 +73,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     {/* Email consent checkboxes */}
                     <div className="mt-10 space-y-6">
                         {/* App notifications (required) */}
-                        <div className="flex items-start p-5 sm:p-4 rounded-xl bg-white/5 border border-white/10 min-h-[80px] sm:min-h-auto">
+                        <div className="flex items-start p-4 rounded-xl bg-white/5 border border-white/10">
                             <input
                                 type="checkbox"
                                 id="email-consent"
@@ -81,16 +81,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                                 onChange={(e) => setIsEmailConsentChecked(e.target.checked)}
                                 className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#259dff] focus:ring-[#259dff] focus:ring-2 mt-0.5 flex-shrink-0"
                             />
-                            <label htmlFor="email-consent" className="ml-4 text-sm sm:text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
+                            <label htmlFor="email-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
                                 <span className="text-[#259dff] font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
-                                <span className="block mt-2 text-xs text-[#A1A1AA]/70">
+                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
                                     Zawsze możesz się wypisać jednym kliknięciem. 📧
                                 </span>
                             </label>
                         </div>
 
                         {/* Newsletter (optional) */}
-                        <div className="flex items-start p-5 sm:p-4 rounded-xl bg-white/5 border border-white/10 min-h-[80px] sm:min-h-auto">
+                        <div className="flex items-start p-4 rounded-xl bg-white/5 border border-white/10">
                             <input
                                 type="checkbox"
                                 id="newsletter-consent"
@@ -98,9 +98,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                                 onChange={(e) => setSubscribeToNewsletter(e.target.checked)}
                                 className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#259dff] focus:ring-[#259dff] focus:ring-2 mt-0.5 flex-shrink-0"
                             />
-                            <label htmlFor="newsletter-consent" className="ml-4 text-sm sm:text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
+                            <label htmlFor="newsletter-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
                                 <span className="font-semibold text-white">✅ Zapisz się na 14 hacków energetycznych.</span> Odzyskaj 2h produktywności każdego dnia!
-                                <span className="block mt-2 text-xs text-[#A1A1AA]/70">
+                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
                                     Wymaga potwierdzenia emailem. ✨
                                 </span>
                             </label>
