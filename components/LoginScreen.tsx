@@ -76,7 +76,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                    className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
                />
                <label htmlFor="email-consent" className="text-sm text-system-grey cursor-pointer">
-                   Otrzymywanie powiadomień o aktualizacjach aplikacji Energy Playbook.
+                   <span className="text-electric-500 font-medium">(*)</span> Otrzymywanie powiadomień o aktualizacjach aplikacji Energy Playbook.
                    <span className="block mt-1 text-xs text-system-grey/70">
                        Zawsze możesz się wypisać jednym kliknięciem. 📧
                    </span>
@@ -93,7 +93,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                    className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
                />
                <label htmlFor="newsletter-consent" className="text-sm text-system-grey cursor-pointer">
-                   <span className="text-warning-yellow font-medium">⭐ Opcjonalne:</span> Newsletter z tipami o produktywności i zarządzaniu energią.
+                   <span className="text-success-green font-medium">✅ Opcjonalne:</span> Newsletter z tipami o produktywności i zarządzaniu energią.
                    <span className="block mt-1 text-xs text-system-grey/70">
                        Wymaga potwierdzenia emailem. ✨
                    </span>
