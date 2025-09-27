@@ -11,10 +11,7 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react()],
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.CONVERTKIT_API_KEY': JSON.stringify(env.VITE_CONVERTKIT_API_KEY || env.CONVERTKIT_API_KEY),
-        'process.env.CONVERTKIT_FORM_ID': JSON.stringify(env.VITE_CONVERTKIT_FORM_ID || env.CONVERTKIT_FORM_ID),
-        'process.env.CONVERTKIT_SEQUENCE_ID': JSON.stringify(env.VITE_CONVERTKIT_SEQUENCE_ID || env.CONVERTKIT_SEQUENCE_ID)
+        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY)
       },
       resolve: {
         alias: {

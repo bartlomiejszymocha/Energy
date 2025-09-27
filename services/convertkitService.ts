@@ -20,102 +20,54 @@ interface ConvertKitResponse {
 }
 
 class ConvertKitService {
-  private apiKey: string;
-  private baseUrl = 'https://api.convertkit.com/v3';
+  private baseUrl = '/api';
 
   constructor() {
-    try {
-      this.apiKey = process.env.CONVERTKIT_API_KEY || '';
-      console.log('🔍 ConvertKit init:', {
-        hasApiKey: !!this.apiKey,
-        apiKeyLength: this.apiKey.length,
-        hasSequenceId: !!process.env.CONVERTKIT_SEQUENCE_ID,
-        hasFormId: !!process.env.CONVERTKIT_FORM_ID
-      });
-      
-      if (!this.apiKey) {
-        console.warn('⚠️ ConvertKit API key not found. Email automation will be disabled.');
-      }
-    } catch (error) {
-      console.warn('❌ ConvertKit initialization failed:', error);
-      this.apiKey = '';
-    }
+    console.log('🔍 ConvertKit init: Using secure API endpoint');
   }
 
   /**
-   * Add subscriber to a form
+   * Add subscriber using secure API endpoint
    */
+  async addSubscriber(subscriber: ConvertKitSubscriber): Promise<ConvertKitResponse | null> {
+    try {
+      console.log('🔍 Calling secure ConvertKit API:', subscriber.email);
+
+      const response = await fetch(`${this.baseUrl}/convertkit-subscribe`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: subscriber.email,
+          firstName: subscriber.first_name,
+          tags: subscriber.tags,
+          fields: subscriber.fields,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('ConvertKit API error:', data);
+        return { error: data.error || 'Failed to add subscriber' };
+      }
+
+      console.log('✅ ConvertKit API success:', data);
+      return data;
+    } catch (error) {
+      console.error('ConvertKit request failed:', error);
+      return { error: 'Network error' };
+    }
+  }
+
+  // Legacy methods (unused but kept for compatibility)
   async addToForm(formId: string, subscriber: ConvertKitSubscriber): Promise<ConvertKitResponse | null> {
-    if (!this.apiKey) {
-      console.warn('ConvertKit API key missing');
-      return null;
-    }
-
-    try {
-      const response = await fetch(`${this.baseUrl}/forms/${formId}/subscribe`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          api_key: this.apiKey,
-          email: subscriber.email,
-          first_name: subscriber.first_name,
-          fields: subscriber.fields,
-          tags: subscriber.tags,
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok) {
-        console.error('ConvertKit API error:', data);
-        return { error: data.message || 'Failed to add subscriber' };
-      }
-
-      return data;
-    } catch (error) {
-      console.error('ConvertKit request failed:', error);
-      return { error: 'Network error' };
-    }
+    return this.addSubscriber(subscriber);
   }
 
-  /**
-   * Add subscriber to a sequence
-   */
   async addToSequence(sequenceId: string, subscriber: ConvertKitSubscriber): Promise<ConvertKitResponse | null> {
-    if (!this.apiKey) {
-      console.warn('ConvertKit API key missing');
-      return null;
-    }
-
-    try {
-      const response = await fetch(`${this.baseUrl}/sequences/${sequenceId}/subscribe`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          api_key: this.apiKey,
-          email: subscriber.email,
-          first_name: subscriber.first_name,
-          fields: subscriber.fields,
-          tags: subscriber.tags,
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok) {
-        console.error('ConvertKit API error:', data);
-        return { error: data.message || 'Failed to add subscriber' };
-      }
-
-      return data;
-    } catch (error) {
-      console.error('ConvertKit request failed:', error);
-      return { error: 'Network error' };
-    }
+    return this.addSubscriber(subscriber);
   }
 
   /**

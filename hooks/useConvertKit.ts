@@ -26,14 +26,8 @@ export const useConvertKit = () => {
     try {
       let result;
       
-      if (options?.useForm && process.env.CONVERTKIT_FORM_ID) {
-        result = await convertkitService.addToForm(process.env.CONVERTKIT_FORM_ID, subscriber);
-      } else if (process.env.CONVERTKIT_SEQUENCE_ID) {
-        result = await convertkitService.addToSequence(process.env.CONVERTKIT_SEQUENCE_ID, subscriber);
-      } else {
-        console.warn('No ConvertKit Form ID or Sequence ID configured');
-        return { success: false, error: 'ConvertKit not properly configured' };
-      }
+      // Use the new secure API endpoint
+      result = await convertkitService.addSubscriber(subscriber);
 
       if (result?.error) {
         console.error('ConvertKit subscription failed:', result.error);
