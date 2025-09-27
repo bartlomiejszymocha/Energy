@@ -178,7 +178,7 @@ export const BreathingTimer: React.FC<BreathingTimerProps> = ({ isExpanded, size
     };
 
     return (
-        <div className={`mt-4 flex flex-col items-center justify-center text-center ${size === 'normal' ? 'bg-space-900 rounded-lg' : ''} ${config.container}`}>
+        <div className={`mt-4 flex flex-col items-center justify-center text-center ${size === 'normal' ? 'bg-white/5 border border-white/10 rounded-lg backdrop-blur-sm' : ''} ${config.container}`}>
             <div 
                 className={`relative ${config.circle} rounded-full border-4 border-electric-500 flex items-center justify-center mb-4 transform transition-transform ease-linear ${transition} ${isActive ? scale : 'scale-100'}`}
             >
@@ -192,16 +192,16 @@ export const BreathingTimer: React.FC<BreathingTimerProps> = ({ isExpanded, size
             
             <div className={`${config.buttonContainer} flex items-center justify-center`}>
                 {!isActive ? (
-                     <button onClick={startTimer} className={`bg-electric-500 text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-electric-600 transition-transform duration-200 hover:scale-105 active:scale-95`}>
+                     <button onClick={startTimer} className={`bg-electric-500 text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm`}>
                         Zacznij oddychać
                     </button>
                 ) : (
                     <div className="flex items-center gap-4">
-                        <button onClick={handleStopClick} className={`bg-danger-red text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-danger-red/80 transition-transform duration-200 hover:scale-105 active:scale-95`}>
+                        <button onClick={handleStopClick} className={`bg-danger-red text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-danger-red/80 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm`}>
                             Stop
                         </button>
                         {onCompleteClick && (
-                             <button onClick={onCompleteClick} className={`bg-success-green text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-success-green/90 transition-transform duration-200 hover:scale-105 active:scale-95`}>
+                             <button onClick={onCompleteClick} className={`bg-success-green text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-success-green/90 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm`}>
                                 Zrobione
                             </button>
                         )}
