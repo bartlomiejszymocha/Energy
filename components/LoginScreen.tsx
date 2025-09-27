@@ -45,17 +45,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     };
     
     return (
-        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-start sm:justify-center p-4 pt-8 sm:pt-4">
+        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-start sm:justify-center p-4 pt-6 sm:pt-4">
             <main className="text-center w-full max-w-2xl">
-                <span className="text-5xl sm:text-6xl animate-fade-in-up">🚀</span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-cloud-white mt-2 sm:mt-4 animate-fade-in-up animation-delay-100">
+                <span className="text-4xl sm:text-6xl animate-fade-in-up">🚀</span>
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-cloud-white mt-1 sm:mt-4 animate-fade-in-up animation-delay-100">
             Witaj w Energy Playbook!
           </h1>
                 <p className="text-system-grey max-w-md mx-auto mt-3 sm:mt-4 text-base sm:text-lg animate-fade-in-up animation-delay-200">
                     Opanuj proste, sprawdzone narzędzie, które podwoi Twoją energię i skupienie w mniej niż 30 dni.
                 </p>
-                <div className="mt-6 sm:mt-8 animate-fade-in-up animation-delay-300">
-                    <p className="text-system-grey max-w-md mx-auto mb-3 sm:mb-4 text-xs sm:text-sm">
+                <div className="mt-5 sm:mt-8 animate-fade-in-up animation-delay-300">
+                    <p className="text-system-grey max-w-md mx-auto mb-4 sm:mb-4 text-xs sm:text-sm">
                         Zaloguj się, by zacząć używać narzędzia Energy Playbook
                     </p>
                     <button
@@ -68,7 +68,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     </button>
                     
                     {/* Email consent checkboxes */}
-                    <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 max-w-md mx-auto">
+                    <div className="mt-6 sm:mt-6 space-y-4 sm:space-y-4 max-w-md mx-auto">
            {/* App notifications (required) */}
            <div className="flex items-start gap-3 text-left">
                <input
@@ -111,7 +111,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     )}
                 </div>
             </main>
-            <footer className="mt-6 sm:mt-8 text-center py-2 sm:py-6 px-4">
+            <footer className="mt-8 sm:mt-8 text-center py-3 sm:py-6 px-4">
                  <p className="text-xs sm:text-sm text-system-grey animate-fade-in-up animation-delay-500">
                     © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
                  </p>
