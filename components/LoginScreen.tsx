@@ -45,17 +45,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     };
     
     return (
-        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-start sm:justify-center p-4 pt-8 sm:pt-4">
             <main className="text-center w-full max-w-2xl">
-                <span className="text-6xl animate-fade-in-up">🚀</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-cloud-white mt-4 animate-fade-in-up animation-delay-100">
+                <span className="text-5xl sm:text-6xl animate-fade-in-up">🚀</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-cloud-white mt-2 sm:mt-4 animate-fade-in-up animation-delay-100">
             Witaj w Energy Playbook!
           </h1>
-                <p className="text-system-grey max-w-md mx-auto mt-4 text-lg animate-fade-in-up animation-delay-200">
+                <p className="text-system-grey max-w-md mx-auto mt-3 sm:mt-4 text-base sm:text-lg animate-fade-in-up animation-delay-200">
                     Opanuj proste, sprawdzone narzędzie, które podwoi Twoją energię i skupienie w mniej niż 30 dni.
                 </p>
-                <div className="mt-8 animate-fade-in-up animation-delay-300">
-                    <p className="text-system-grey max-w-md mx-auto mb-4 text-sm">
+                <div className="mt-6 sm:mt-8 animate-fade-in-up animation-delay-300">
+                    <p className="text-system-grey max-w-md mx-auto mb-3 sm:mb-4 text-xs sm:text-sm">
                         Zaloguj się, by zacząć używać narzędzia Energy Playbook
                     </p>
                     <button
@@ -68,7 +68,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     </button>
                     
                     {/* Email consent checkboxes */}
-                    <div className="mt-6 space-y-4 max-w-md mx-auto">
+                    <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 max-w-md mx-auto">
            {/* App notifications (required) */}
            <div className="flex items-start gap-3 text-left">
                <input
@@ -78,7 +78,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                    onChange={(e) => setIsEmailConsentChecked(e.target.checked)}
                    className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
                />
-               <label htmlFor="email-consent" className="text-sm text-system-grey cursor-pointer">
+               <label htmlFor="email-consent" className="text-xs sm:text-sm text-system-grey cursor-pointer">
                    <span className="text-electric-500 font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
                    <span className="block mt-1 text-xs text-system-grey/70">
                        Zawsze możesz się wypisać jednym kliknięciem. 📧
@@ -95,7 +95,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                    onChange={(e) => setSubscribeToNewsletter(e.target.checked)}
                    className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
                />
-               <label htmlFor="newsletter-consent" className="text-sm text-system-grey cursor-pointer">
+               <label htmlFor="newsletter-consent" className="text-xs sm:text-sm text-system-grey cursor-pointer">
                    <span className="text-success-green font-medium">✅ Zapisz się:</span> Poznaj 14 hacków energetycznych dzięki którym odzyskasz 2h produktywności każdego dnia. Osiągaj więcej dzięki skutecznej kontroli energii!
                    <span className="block mt-1 text-xs text-system-grey/70">
                        Wymaga potwierdzenia emailem. ✨
@@ -105,16 +105,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     </div>
                     
                     {error && (
-                        <p className="text-danger-red mt-4 text-sm animate-fade-in-up">
+                        <p className="text-danger-red mt-3 sm:mt-4 text-xs sm:text-sm animate-fade-in-up">
                             {error}
                         </p>
                     )}
                 </div>
             </main>
-            <footer className="absolute bottom-0 text-center py-6 px-4">
-                 <p className="text-sm text-system-grey animate-fade-in-up animation-delay-500">
+            <footer className="mt-6 sm:mt-8 text-center py-2 sm:py-6 px-4">
+                 <p className="text-xs sm:text-sm text-system-grey animate-fade-in-up animation-delay-500">
                     © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
-                </p>
+                 </p>
             </footer>
         </div>
     );
