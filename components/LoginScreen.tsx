@@ -1,14 +1,12 @@
 
 import React, { useState } from 'react';
 import { GoogleIcon } from './icons/GoogleIcon';
-import { XMarkIcon } from './icons/Icons';
 
 interface LoginScreenProps {
     onSignIn: () => Promise<void>;
-    onClose: () => void;
 }
 
-export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn, onClose }) => {
+export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -26,14 +24,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn, onClose }) =
     };
     
     return (
-        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-center p-4 relative">
-            <button
-                onClick={onClose}
-                className="absolute top-4 right-4 sm:top-6 sm:right-6 text-system-grey hover:text-cloud-white transition p-2 rounded-full hover:bg-space-800"
-                aria-label="Wróć do aplikacji"
-            >
-                <XMarkIcon className="h-8 w-8" />
-            </button>
+        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-center p-4">
             <main className="text-center w-full max-w-2xl">
                 <span className="text-6xl animate-fade-in-up">🎯</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-cloud-white mt-4 animate-fade-in-up animation-delay-100">

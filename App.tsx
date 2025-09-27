@@ -47,7 +47,6 @@ function App() {
 
   // State
   const [view, setView] = useState<'dashboard' | 'history'>('dashboard');
-  const [isLoginScreenVisible, setIsLoginScreenVisible] = useState(false);
   const [isLogEnergyModalOpen, setIsLogEnergyModalOpen] = useState(false);
   const [isInstructionsModalOpen, setIsInstructionsModalOpen] = useState(false);
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
@@ -95,10 +94,7 @@ function App() {
         if (localStorage.getItem('energy_os_logs_anonymous') || localStorage.getItem('energy_os_actions_anonymous')) {
             migrateLocalToFirestore(user.uid).then(() => {
                 showToast("Dane zsynchronizowane z Twoim kontem!");
-                setIsLoginScreenVisible(false);
             });
-        } else {
-            setIsLoginScreenVisible(false);
         }
     }
     userRef.current = user;
@@ -122,7 +118,6 @@ function App() {
         else if (isNotificationsModalOpen) setIsNotificationsModalOpen(false);
         else if (isResetDataModalOpen) setIsResetDataModalOpen(false);
         else if (isUserSettingsModalOpen) setIsUserSettingsModalOpen(false);
-        else if (isLoginScreenVisible) setIsLoginScreenVisible(false);
         else if (view === 'history') setView('dashboard');
       }
     };
@@ -131,7 +126,7 @@ function App() {
   }, [
       isTidyCalModalOpen, selectedActionForVideo, breathingAction, isLogEnergyModalOpen, 
       isFullSummaryModalOpen, isInstructionsModalOpen, isNotificationsModalOpen, 
-      isResetDataModalOpen, isUserSettingsModalOpen, isLoginScreenVisible, view, workoutAction
+      isResetDataModalOpen, isUserSettingsModalOpen, view, workoutAction
   ]);
 
   const completionCounts = useMemo(() => completedActions.reduce((acc, action) => {
@@ -193,8 +188,9 @@ function App() {
     );
   }
 
-  if (isLoginScreenVisible && !user) {
-    return <LoginScreen onSignIn={signInWithGoogle} onClose={() => setIsLoginScreenVisible(false)} />;
+  // Always show login screen if user is not authenticated
+  if (!user) {
+    return <LoginScreen onSignIn={signInWithGoogle} />;
   }
 
   return (
@@ -202,7 +198,7 @@ function App() {
       <Header 
         user={user}
         onSignOut={signOut}
-        onLoginClick={() => setIsLoginScreenVisible(true)}
+        onLoginClick={() => {}} 
         title="Energy Playbook" 
         streak={streak} 
         onOpenNotifications={() => setIsNotificationsModalOpen(true)}
