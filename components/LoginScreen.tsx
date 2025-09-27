@@ -14,7 +14,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
 
     const handleSignInClick = async () => {
         if (!isEmailConsentChecked) {
-            setError('Proszę zaznaczyć zgodę – jest ona niezbędna do otrzymywania kluczowych aktualizacji i pełnego wykorzystania narzędzia.');
+            setError('Proszę zaznaczyć zgodę (*) – jest ona niezbędna do otrzymywania kluczowych aktualizacji i pełnego wykorzystania narzędzia.');
             return;
         }
         
