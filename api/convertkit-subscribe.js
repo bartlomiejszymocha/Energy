@@ -24,30 +24,32 @@ export default async function handler(req, res) {
   try {
     let endpoint, payload;
 
-    // Try sequence first, then form
+    // ConvertKit API v4 uses different endpoints and authentication
     if (SEQUENCE_ID) {
-      endpoint = `https://api.convertkit.com/v3/sequences/${SEQUENCE_ID}/subscribe`;
+      endpoint = `https://api.convertkit.com/v4/sequences/${SEQUENCE_ID}/subscriptions`;
     } else if (FORM_ID) {
-      endpoint = `https://api.convertkit.com/v3/forms/${FORM_ID}/subscribe`;
+      endpoint = `https://api.convertkit.com/v4/forms/${FORM_ID}/subscriptions`;
     } else {
       console.error('No ConvertKit Sequence ID or Form ID configured');
       return res.status(500).json({ error: 'ConvertKit not properly configured' });
     }
 
+    // API v4 uses different payload structure
     payload = {
-      api_key: API_KEY,
-      email,
+      email_address: email,
       first_name: firstName || '',
       tags: tags || ['Energy Playbook User'],
-      fields: fields || {}
+      custom_fields: fields || {}
     };
 
     console.log('ConvertKit API call:', { endpoint, email, firstName });
 
+    // API v4 uses Authorization header instead of api_key in body
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`
       },
       body: JSON.stringify(payload),
     });
