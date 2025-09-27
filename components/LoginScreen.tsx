@@ -91,7 +91,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                             <label htmlFor="email-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
                                 <span className="text-[#259dff] font-medium">(*)</span> Informacje o nowych funkcjach, żebyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
                                 <span className="block mt-1 text-xs text-[#A1A1AA]/50">
-                                    Możesz się wypisać jednym kliknięciem. 📧
+                                    Możesz się wypisać jednym kliknięciem.
                                 </span>
                             </label>
                         </div>
