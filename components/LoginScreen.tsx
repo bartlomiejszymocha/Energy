@@ -107,8 +107,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                             />
                             <label htmlFor="newsletter-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
                                 <span className="font-semibold text-white">🧠 Wyślij mi 6 prostych hacków energetycznych,</span> które możesz wdrożyć już dziś, by jutro pokonać prokrastynację i robić to co chcesz.
-                                <span className="block mt-1 text-[0.65rem] text-[#A1A1AA]/50">
-                                    🚨 (ważne) Sprawdź e-mail, by potwierdzić zapis.
+                                <span className="block mt-1 text-[0.7rem] text-[#A1A1AA]/70">
+                                    🚨 Sprawdź e-mail, by potwierdzić zapis.
                                 </span>
                             </label>
                         </div>
