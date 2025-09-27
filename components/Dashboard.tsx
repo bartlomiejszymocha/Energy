@@ -57,7 +57,7 @@ const DailySummary: React.FC<{
 
     return (
         <div 
-            className="bg-space-900 rounded-xl shadow-lg p-4 sm:p-6 lg:h-full flex flex-col cursor-pointer lg:cursor-default"
+            className="bg-white/5 border border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:h-full flex flex-col cursor-pointer lg:cursor-default backdrop-blur-sm"
             onClick={handleCardClick}
         >
             <div className="flex items-center justify-between gap-3 mb-4 flex-shrink-0">
@@ -68,14 +68,14 @@ const DailySummary: React.FC<{
                  <div className="flex items-center gap-2">
                     <button
                         onClick={(e) => { e.stopPropagation(); onOpenModal(); }}
-                        className="hidden lg:flex bg-space-800 hover:bg-space-700 text-cloud-white font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 items-center"
+                        className="hidden lg:flex bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/40 text-cloud-white font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 items-center backdrop-blur-sm"
                         title="Powiększ podsumowanie"
                     >
                         <ArrowsPointingOutIcon className="h-5 w-5" />
                     </button>
                     <button
                         onClick={(e) => { e.stopPropagation(); onResetDataClick(); }}
-                        className="bg-space-800 hover:bg-danger-red/20 text-danger-red/80 font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 text-sm"
+                        className="bg-white/10 border border-white/20 hover:bg-danger-red/20 hover:border-danger-red/40 text-danger-red/80 font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 text-sm backdrop-blur-sm"
                         title="Resetuj wszystkie dane"
                     >
                         <TrashIcon className="h-5 w-5" />
@@ -86,8 +86,8 @@ const DailySummary: React.FC<{
                             if (isCopied) return;
                             onCopySummary();
                         }}
-                        className={`font-bold py-2 px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center text-sm
-                            ${isCopied ? 'bg-success-green text-cloud-white cursor-default' : 'bg-space-800 hover:bg-space-700 text-cloud-white'}`
+                        className={`font-bold py-2 px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center text-sm backdrop-blur-sm
+                            ${isCopied ? 'bg-success-green text-cloud-white cursor-default' : 'bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/40 text-cloud-white'}`
                         }
                         title="Kopiuj Podsumowanie Dnia"
                     >
@@ -118,7 +118,7 @@ const DailySummary: React.FC<{
                             <h4 className="font-bold text-system-grey mb-2 text-sm uppercase tracking-wider">Wpisy Energii</h4>
                             <div className="space-y-3">
                                 {todayLogs.map(log => (
-                                    <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-space-800 rounded-lg">
+                                    <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-white/5 border border-white/10 rounded-lg backdrop-blur-sm">
                                         {log.rating ? (
                                             <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg text-space-950 ${RATING_CONFIG[log.rating].color}`}>
                                                 {log.rating}
@@ -147,7 +147,7 @@ const DailySummary: React.FC<{
                                         </div>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onRemoveLog(log.id); }}
-                                            className="absolute top-1/2 right-2 -translate-y-1/2 p-1 rounded-full bg-space-700 text-system-grey hover:bg-danger-red hover:text-cloud-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                            className="absolute top-1/2 right-2 -translate-y-1/2 p-1 rounded-full bg-white/10 border border-white/20 text-system-grey hover:bg-danger-red hover:text-cloud-white opacity-0 group-hover:opacity-100 transition-all duration-200 backdrop-blur-sm"
                                             aria-label={`Usuń wpis`}
                                         >
                                             <XMarkIcon className="h-4 w-4" />
@@ -165,7 +165,7 @@ const DailySummary: React.FC<{
                                     const actionDetails = ACTION_LIBRARY.find(a => a.id === actionLog.actionId);
                                     if (!actionDetails) return null;
                                     return (
-                                        <div key={actionLog.id} className="group relative flex items-center gap-3 p-2.5 bg-space-800 rounded-lg">
+                                        <div key={actionLog.id} className="group relative flex items-center gap-3 p-2.5 bg-white/5 border border-white/10 rounded-lg backdrop-blur-sm">
                                              <div className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center bg-space-700 text-lg">
                                                 {renderSummaryIcon(actionDetails.type)}
                                              </div>
@@ -177,7 +177,7 @@ const DailySummary: React.FC<{
                                              </div>
                                              <button
                                                 onClick={(e) => { e.stopPropagation(); onRemoveCompletedAction(actionLog.id); }}
-                                                className="absolute top-1/2 right-2 -translate-y-1/2 p-1 rounded-full bg-space-700 text-system-grey hover:bg-danger-red hover:text-cloud-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                                className="absolute top-1/2 right-2 -translate-y-1/2 p-1 rounded-full bg-white/10 border border-white/20 text-system-grey hover:bg-danger-red hover:text-cloud-white opacity-0 group-hover:opacity-100 transition-all duration-200 backdrop-blur-sm"
                                                 aria-label={`Usuń wpis ${actionDetails.title}`}
                                              >
                                                 <XMarkIcon className="h-4 w-4" />
@@ -193,7 +193,7 @@ const DailySummary: React.FC<{
             <div className="mt-auto pt-4 flex-shrink-0">
                 <button 
                     onClick={(e) => { e.stopPropagation(); onShowHistory(); }}
-                    className="w-full text-center text-sm font-semibold text-electric-500 hover:text-electric-600 bg-electric-500/10 hover:bg-electric-500/20 py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full text-center text-sm font-semibold text-electric-500 hover:text-electric-600 bg-electric-500/10 hover:bg-electric-500/20 py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 backdrop-blur-sm border border-electric-500/20 hover:border-electric-500/40"
                 >
                     <ArchiveBoxIcon className="h-5 w-5" />
                     <span>Zobacz historię</span>
@@ -267,13 +267,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="bg-space-900 rounded-xl shadow-lg p-4 sm:p-6 lg:col-span-2 flex flex-col">
+                <div className="bg-white/5 border border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm">
                     <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between sm:items-start">
                         <h3 className="text-lg font-medium text-cloud-white/80 text-left">📊 Wykres energii na dziś</h3>
                         <div className="flex items-center justify-center flex-wrap gap-2">
                              <button
                                 onClick={onInstructionsClick}
-                                className="bg-space-800 hover:bg-space-700 text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2"
+                                className="bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/40 text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2 backdrop-blur-sm"
                             >
                                 <span className="sm:hidden">Zacznij tutaj!</span>
                                 <span className="hidden sm:inline md:hidden">
@@ -285,7 +285,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                             </button>
                             <button
                                 onClick={onLogEnergyClick}
-                                className="bg-alert-orange hover:bg-alert-orange/90 text-space-950 font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-1 md:gap-2 text-xs md:text-sm"
+                                className="bg-alert-orange hover:bg-alert-orange/90 text-space-950 font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-1 md:gap-2 text-xs md:text-sm backdrop-blur-sm"
                             >
                                 <PlusIcon className="h-3.5 w-3.5 md:h-5 md:w-5" />
                                 <span>
