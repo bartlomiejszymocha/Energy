@@ -50,7 +50,7 @@ const ExerciseView: React.FC<{
                             <span>Pozostało: <span className="font-mono tabular-nums">{formatTime(totalTimeRemaining)}</span></span>
                         </div>
                     </div>
-                    <button onClick={() => { pause(); action.onClose?.(); }} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-space-800" aria-label="Zamknij trening">
+                    <button onClick={() => { pause(); action.onClose?.(); }} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-white/10 backdrop-blur-sm" aria-label="Zamknij trening">
                         <XMarkIcon className="h-6 w-6" />
                     </button>
                 </div>
@@ -116,7 +116,7 @@ const ExerciseView: React.FC<{
                     <button
                         onClick={skipToPrevious}
                         disabled={currentStepInfo.number === 1}
-                        className="p-3 rounded-full bg-space-800 text-cloud-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-space-700 transition"
+                        className="p-3 rounded-full bg-white/10 border border-white/20 text-cloud-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/20 hover:border-white/40 transition-all duration-200 backdrop-blur-sm"
                     >
                         <ChevronLeftIcon className="h-7 w-7" />
                     </button>
@@ -141,7 +141,7 @@ const ExerciseView: React.FC<{
                         <div className="absolute inset-0 flex items-center justify-center">
                             <button
                                 onClick={isPaused ? play : pause}
-                                className="w-20 h-20 rounded-full bg-space-800 text-cloud-white shadow-lg transform hover:scale-105 transition active:scale-95 flex items-center justify-center"
+                                className="w-20 h-20 rounded-full bg-white/10 border border-white/20 text-cloud-white shadow-lg transform hover:scale-105 hover:bg-white/20 hover:border-white/40 transition-all duration-200 active:scale-95 flex items-center justify-center backdrop-blur-sm"
                             >
                                 {isPaused ? <PlayIcon className="h-10 w-10 ml-1" /> : <PauseIcon className="h-10 w-10" />}
                             </button>
@@ -150,7 +150,7 @@ const ExerciseView: React.FC<{
 
                     <button
                         onClick={skipToNext}
-                        className="p-3 rounded-full bg-space-800 text-cloud-white hover:bg-space-700 transition"
+                        className="p-3 rounded-full bg-white/10 border border-white/20 text-cloud-white hover:bg-white/20 hover:border-white/40 transition-all duration-200 backdrop-blur-sm"
                     >
                         <ChevronRightIcon className="h-7 w-7" />
                     </button>
@@ -175,7 +175,7 @@ const RestView: React.FC<{
         <div className="grid grid-rows-[auto_1fr_auto] h-full w-full">
             <header className="row-start-1 w-full flex items-center justify-between">
                 <h1 className="text-xl font-bold text-cloud-white">Odpoczynek</h1>
-                <button onClick={onClose} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-space-800" aria-label="Zamknij trening">
+                <button onClick={onClose} className="text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-white/10 backdrop-blur-sm" aria-label="Zamknij trening">
                     <XMarkIcon className="h-6 w-6" />
                 </button>
             </header>
@@ -200,7 +200,7 @@ const RestView: React.FC<{
                     <div className="absolute inset-0 flex items-center justify-center">
                         <button
                             onClick={isPaused ? play : pause}
-                            className="w-full h-full rounded-full flex items-center justify-center transition-transform hover:scale-105"
+                            className="w-full h-full rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 bg-white/5 backdrop-blur-sm"
                             aria-label={isPaused ? "Wznów przerwę" : "Wstrzymaj przerwę"}
                         >
                            {isPaused ?
@@ -239,7 +239,7 @@ const CompletionView: React.FC<{ onFinish: () => void }> = ({ onFinish }) => (
             <p className="text-system-grey mt-2">Dobra robota!</p>
             <button
                 onClick={onFinish}
-                className="mt-8 w-full max-w-xs bg-electric-500 text-cloud-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-electric-600 transition-all duration-200"
+                className="mt-8 w-full max-w-xs bg-electric-500 text-cloud-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-electric-600 transition-all duration-200 backdrop-blur-sm"
             >
                 Zakończ
             </button>
@@ -288,10 +288,10 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
     
     if (workoutPlaylist.length === 0) {
         return (
-             <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[100] p-4" onClick={onClose}>
-                <div className="bg-space-900 rounded-xl shadow-2xl w-full max-w-lg p-6 relative animate-fade-in-up text-center" onClick={e => e.stopPropagation()}>
+             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4" onClick={onClose}>
+                <div className="bg-white/5 border border-white/10 rounded-xl shadow-2xl w-full max-w-lg p-6 relative animate-fade-in-up text-center backdrop-blur-sm" onClick={e => e.stopPropagation()}>
                     <p className="text-cloud-white">Nie znaleziono ćwiczeń dla tej akcji.</p>
-                     <button onClick={onClose} className="mt-4 bg-electric-500 text-cloud-white font-bold py-2 px-4 rounded-lg">Zamknij</button>
+                     <button onClick={onClose} className="mt-4 bg-electric-500 hover:bg-electric-600 text-cloud-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">Zamknij</button>
                 </div>
              </div>
         );
@@ -316,7 +316,7 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
     return (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto" onClick={() => { engine.pause(); onClose(); }}>
             <div 
-                className="bg-gradient-to-b from-space-900 to-black rounded-2xl shadow-2xl w-full max-w-lg p-4 sm:p-6 relative animate-fade-in-up flex flex-col h-[520px] sm:h-[60vh] max-h-[90vh] my-auto"
+                className="bg-white/5 border border-white/10 rounded-2xl shadow-2xl w-full max-w-lg p-4 sm:p-6 relative animate-fade-in-up flex flex-col h-[520px] sm:h-[60vh] max-h-[90vh] my-auto backdrop-blur-sm"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="flex-1 flex flex-col">
