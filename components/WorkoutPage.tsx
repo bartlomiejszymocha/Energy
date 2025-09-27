@@ -75,7 +75,7 @@ const ExerciseView: React.FC<{
             </header>
             
             <main className="flex-grow flex flex-col items-center justify-start pt-2 overflow-y-auto custom-scrollbar">
-                <div className="w-full aspect-video relative bg-black rounded-lg overflow-hidden shadow-lg mb-3 flex-shrink-0" style={{ minHeight: '280px' }}>
+                <div className="w-full relative bg-black rounded-lg overflow-hidden shadow-lg mb-3 flex-shrink-0" style={{ height: '180px' }}>
                     {currentStep.videoUrl ? (
                         <div className="w-full h-full relative">
                             <iframe
@@ -104,9 +104,9 @@ const ExerciseView: React.FC<{
 
                 <div className="text-center my-3 flex-shrink-0">
                     <h2 className="text-2xl font-bold text-cloud-white">{currentStep.name}</h2>
-                    <p className="font-mono text-lg text-system-grey mt-1 tabular-nums">{formatTime(timeLeftInStep)}</p>
+                    <p className="font-mono text-xl text-system-grey mt-1 tabular-nums">{formatTime(timeLeftInStep)}</p>
                     {currentStep.note && (
-                        <p className="text-xs text-system-grey mt-2 max-w-md mx-auto leading-relaxed">
+                        <p className="text-sm text-system-grey mt-2 max-w-md mx-auto leading-relaxed">
                             {currentStep.note}
                         </p>
                     )}
