@@ -218,13 +218,13 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                 }
             `}</style>
 
-            <div className="bg-space-900 rounded-xl p-2">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-2 backdrop-blur-sm">
                 <div className="flex items-center justify-center gap-1 md:gap-2 flex-wrap">
                     {filterButtons.map(({ key, label, icon: Icon }) => (
                          <button 
                             key={key}
                             onClick={() => setFilter(key)}
-                            className={`px-1.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold flex items-center gap-1 md:gap-2 transition-colors duration-200 ${filter === key ? 'bg-electric-500 text-cloud-white' : 'bg-transparent text-system-grey hover:bg-space-800'}`}
+                            className={`px-1.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold flex items-center gap-1 md:gap-2 transition-all duration-200 ${filter === key ? 'bg-electric-500 text-cloud-white' : 'bg-white/10 border border-white/20 text-system-grey hover:bg-white/20 hover:border-white/40 backdrop-blur-sm'}`}
                         >
                             {Icon && <Icon className="h-3.5 w-3.5 md:h-5 md:w-5" />}
                             <span className="hidden sm:inline">{label}</span>
