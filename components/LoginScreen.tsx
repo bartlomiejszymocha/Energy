@@ -40,8 +40,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     Odzyskaj kontrolę nad swoją energią, aby osiągać więcej bez wypalenia.
                 </p>
                 <div className="mt-10 animate-fade-in-up animation-delay-300">
+                    <button
+                        onClick={handleSignInClick}
+                        disabled={isLoading}
+                        className="inline-flex items-center justify-center gap-3 bg-cloud-white text-space-950 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95 text-lg disabled:bg-space-700 disabled:text-system-grey/70 disabled:cursor-wait disabled:scale-100"
+                    >
+                        <GoogleIcon className="h-6 w-6" />
+                        <span>{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
+                    </button>
+                    
                     {/* Email consent checkbox */}
-                    <div className="mb-6 flex items-start gap-3 text-left max-w-md mx-auto">
+                    <div className="mt-6 flex items-start gap-3 text-left max-w-md mx-auto">
                         <input
                             type="checkbox"
                             id="email-consent"
@@ -51,18 +60,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                         />
                         <label htmlFor="email-consent" className="text-sm text-system-grey cursor-pointer">
                             Wyrażam zgodę na otrzymywanie emaili marketingowych z najnowszymi poradami energetycznymi, 
-                            ekskluzywnym contentem i ofertami specjalnymi od Bartłomieja Szymochy. 📧✨
+                            ekskluzywnym contentem i ofertami specjalnymi od Bartłomieja Szymochy. 
+                            <span className="block mt-1 text-xs text-system-grey/70">
+                                Zawsze możesz się wypisać jednym kliknięciem. 📧✨
+                            </span>
                         </label>
                     </div>
-                    
-                    <button
-                        onClick={handleSignInClick}
-                        disabled={isLoading}
-                        className="inline-flex items-center justify-center gap-3 bg-cloud-white text-space-950 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95 text-lg disabled:bg-space-700 disabled:text-system-grey/70 disabled:cursor-wait disabled:scale-100"
-                    >
-                        <GoogleIcon className="h-6 w-6" />
-                        <span>{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
-                    </button>
                     
                     {error && (
                         <p className="text-danger-red mt-4 text-sm animate-fade-in-up">
