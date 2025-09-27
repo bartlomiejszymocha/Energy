@@ -26,11 +26,18 @@ class ConvertKitService {
   constructor() {
     try {
       this.apiKey = process.env.CONVERTKIT_API_KEY || '';
+      console.log('🔍 ConvertKit init:', {
+        hasApiKey: !!this.apiKey,
+        apiKeyLength: this.apiKey.length,
+        hasSequenceId: !!process.env.CONVERTKIT_SEQUENCE_ID,
+        hasFormId: !!process.env.CONVERTKIT_FORM_ID
+      });
+      
       if (!this.apiKey) {
-        console.warn('ConvertKit API key not found. Email automation will be disabled.');
+        console.warn('⚠️ ConvertKit API key not found. Email automation will be disabled.');
       }
     } catch (error) {
-      console.warn('ConvertKit initialization failed:', error);
+      console.warn('❌ ConvertKit initialization failed:', error);
       this.apiKey = '';
     }
   }
