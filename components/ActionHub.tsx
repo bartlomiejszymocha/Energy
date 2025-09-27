@@ -224,9 +224,9 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                          <button 
                             key={key}
                             onClick={() => setFilter(key)}
-                            className={`px-2 md:px-4 py-2 rounded-lg text-xs md:text-sm font-bold flex items-center gap-1 md:gap-2 transition-colors duration-200 ${filter === key ? 'bg-electric-500 text-cloud-white' : 'bg-transparent text-system-grey hover:bg-space-800'}`}
+                            className={`px-1.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold flex items-center gap-1 md:gap-2 transition-colors duration-200 ${filter === key ? 'bg-electric-500 text-cloud-white' : 'bg-transparent text-system-grey hover:bg-space-800'}`}
                         >
-                            {Icon && <Icon className="h-4 w-4 md:h-5 md:w-5" />}
+                            {Icon && <Icon className="h-3.5 w-3.5 md:h-5 md:w-5" />}
                             <span className="hidden sm:inline">{label}</span>
                             <span className="sm:hidden">{label.split(' ')[0]}</span>
                         </button>

@@ -273,7 +273,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                         <div className="flex items-center justify-center flex-wrap gap-2">
                              <button
                                 onClick={onInstructionsClick}
-                                className="bg-space-800 hover:bg-space-700 text-cloud-white font-bold py-2 px-2 md:px-3 rounded-lg shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2"
+                                className="bg-space-800 hover:bg-space-700 text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2"
                             >
                                 <span className="sm:hidden">Zacznij tutaj!</span>
                                 <span className="hidden sm:inline md:hidden">
@@ -285,9 +285,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                             </button>
                             <button
                                 onClick={onLogEnergyClick}
-                                className="bg-alert-orange hover:bg-alert-orange/90 text-space-950 font-bold py-2 px-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-1 md:gap-2 text-xs md:text-sm"
+                                className="bg-alert-orange hover:bg-alert-orange/90 text-space-950 font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-1 md:gap-2 text-xs md:text-sm"
                             >
-                                <PlusIcon className="h-4 w-4 md:h-5 md:w-5" />
+                                <PlusIcon className="h-3.5 w-3.5 md:h-5 md:w-5" />
                                 <span>
                                     Dodaj wpis
                                     <span className="hidden sm:inline font-normal text-space-950/80">&nbsp;(⌘+K)</span>
