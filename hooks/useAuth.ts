@@ -16,6 +16,14 @@ export const useAuth = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             // ConvertKit integration with enhanced debugging
+            console.log('🔍 Auth state change:', {
+                hasCurrentUser: !!currentUser,
+                currentUserEmail: currentUser?.email,
+                hasUser: !!user,
+                userEmail: user?.email,
+                isNewLogin: !!(currentUser && !user)
+            });
+            
             if (currentUser && !user) {
                 console.log('🔍 New user login detected:', currentUser.email);
                 console.log('🔍 Environment check:', {
@@ -30,6 +38,13 @@ export const useAuth = () => {
                         
                         // Read newsletter preference from localStorage
                         const wantsNewsletter = localStorage.getItem('pendingNewsletterSubscription') === 'true';
+                        const storedValue = localStorage.getItem('pendingNewsletterSubscription');
+                        
+                        console.log('🔍 Newsletter preference check:', {
+                            storedValue,
+                            wantsNewsletter,
+                            localStorageKeys: Object.keys(localStorage)
+                        });
                         
                         console.log('🔍 Attempting to add to ConvertKit:', {
                             email: currentUser.email,
@@ -51,7 +66,8 @@ export const useAuth = () => {
                     } else {
                         console.warn('⚠️ ConvertKit add failed:', {
                             hasAddSubscriber: !!addSubscriber,
-                            hasEmail: !!currentUser.email
+                            hasEmail: !!currentUser.email,
+                            addSubscriber: addSubscriber
                         });
                     }
                 } catch (error) {

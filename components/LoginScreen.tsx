@@ -20,6 +20,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
         
         // Store newsletter preference in localStorage for useAuth to read
         if (typeof window !== 'undefined') {
+            console.log('🔍 LoginScreen: Storing newsletter preference:', {
+                subscribeToNewsletter,
+                isEmailConsentChecked,
+                stringValue: subscribeToNewsletter.toString()
+            });
             localStorage.setItem('pendingNewsletterSubscription', subscribeToNewsletter.toString());
         }
         
