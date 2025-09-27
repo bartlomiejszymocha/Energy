@@ -208,7 +208,7 @@ function App() {
         completedActionIds={todayCompletedActionIds}
         onActionClick={handlePlayAction}
       />
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+      <main className="max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
         {view === 'dashboard' ? (
           <>
             <Dashboard 

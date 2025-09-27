@@ -76,12 +76,12 @@ export const ActionCard: React.FC<ActionCardProps> = ({
     const renderTypeIcon = () => {
         switch (action.type) {
             case 'Protokół Ruchowy':
-                return <BoltIcon className="h-4 w-4 text-system-grey" />;
+                return <BoltIcon className="h-3.5 w-3.5 text-system-grey" />;
             case 'Technika oddechowa':
-                return <BreathingIcon className="h-4 w-4 text-system-grey" />;
+                return <BreathingIcon className="h-3.5 w-3.5 text-system-grey" />;
             case 'Reset Energetyczny':
             default:
-                return <ArrowPathCircularIcon className="h-4 w-4 text-system-grey" />;
+                return <ArrowPathCircularIcon className="h-3.5 w-3.5 text-system-grey" />;
         }
     };
 
@@ -128,11 +128,11 @@ export const ActionCard: React.FC<ActionCardProps> = ({
                         </div>
                     </div>
                 </div>
-                 <div className="flex items-center gap-2 text-sm mt-1 text-system-grey">
+                 <div className="flex items-center gap-2 text-xs mt-1 text-system-grey">
                     {renderTypeIcon()}
                     <span>{action.type}</span>
                     <span className="text-system-grey/50">|</span>
-                    <ClockIcon className="h-4 w-4" />
+                    <ClockIcon className="h-3.5 w-3.5" />
                     <span>{action.duration} min</span>
                 </div>
             </div>
