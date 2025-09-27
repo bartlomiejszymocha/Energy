@@ -59,7 +59,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                 <div className="text-center">
                     <div className="text-5xl sm:text-7xl mb-4 sm:mb-6 text-white animate-pulse">🚀</div>
                     <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 sm:mb-3">Poznaj Energy Playbook!</h1>
-                    <p className="text-sm sm:text-lg text-gray-300 mb-6 sm:mb-8">Proste i sprawdzone narzędzie, dzięki któremu <span className="font-bold underline decoration-2 decoration-[#FF6B35]/80 underline-offset-2">odzyskasz 2h produktywności</span> dziennie. Przejmij kontrolę nad swoją energią już dziś!</p>
+                    <p className="text-sm sm:text-lg text-gray-300 mb-6 sm:mb-8">Proste i sprawdzone narzędzie,<br className="sm:hidden" /> dzięki któremu <span className="font-bold underline decoration-2 decoration-[#FF6B35]/80 underline-offset-2">odzyskasz 2h produktywności</span> dziennie. Przejmij kontrolę nad swoją energią już dziś!</p>
                     
                     <button
                         onClick={handleSignInClick}
