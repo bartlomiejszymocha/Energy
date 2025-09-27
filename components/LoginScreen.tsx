@@ -58,7 +58,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
             <div className="w-full max-w-md mx-auto z-10">
                 <div className="text-center">
                     <div className="text-6xl sm:text-7xl mb-5 sm:mb-6 text-white">🚀</div>
-                        <h1 className="text-2xl sm:text-3xl text-white mb-3 sm:mb-3">Sprawdź <span className="font-bold">Energy Playbook</span>!</h1>
+                        <h1 className="text-3xl sm:text-4xl text-white mb-3 sm:mb-3">Sprawdź <span className="font-bold">Energy Playbook</span>!</h1>
                     <p className="text-base sm:text-lg text-gray-300 mb-7 sm:mb-8">Proste i sprawdzone narzędzie, dzięki któremu <span className="font-bold underline decoration-2 decoration-[#FF6B35]/80 underline-offset-2">odzyskasz 2h produktywności</span> dziennie.<br className="hidden sm:block" /> Przejmij kontrolę nad swoją energią już dziś!</p>
                     
                     <button
