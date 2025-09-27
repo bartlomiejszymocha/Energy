@@ -79,7 +79,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                    className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
                />
                <label htmlFor="email-consent" className="text-sm text-system-grey cursor-pointer">
-                   <span className="text-electric-500 font-medium">(*)</span> Narzędzie jest ciągle aktualizowane. Dam Ci znać o każdej nowości, żeby nic Cię nie ominęło.
+                   <span className="text-electric-500 font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
                    <span className="block mt-1 text-xs text-system-grey/70">
                        Zawsze możesz się wypisać jednym kliknięciem. 📧
                    </span>
