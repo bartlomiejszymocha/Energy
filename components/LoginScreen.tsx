@@ -64,10 +64,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                     <button
                         onClick={handleSignInClick}
                         disabled={isLoading}
-                        className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-gradient-to-r from-white/10 to-white/5 border-2 border-[#259dff]/80 rounded-xl backdrop-blur-sm hover:from-white/20 hover:to-white/10 transition-all duration-200 disabled:opacity-50 disabled:cursor-wait shadow-lg hover:shadow-xl"
+                        className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-white/10 border-2 border-[#259dff]/80 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-wait relative overflow-hidden group"
                     >
-                        <GoogleIcon className="w-6 h-6" />
-                        <span className="text-base font-medium text-white">{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                        <GoogleIcon className="w-6 h-6 relative z-10" />
+                        <span className="text-base font-medium text-white relative z-10">{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
                     </button>
                     
                     {error && (
