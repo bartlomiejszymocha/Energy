@@ -264,7 +264,7 @@ function App() {
       {view === 'dashboard' && (
         <button
           onClick={() => setIsLogEnergyModalOpen(true)}
-          className="fixed bottom-6 right-6 bg-electric-500 sm:bg-space-800 text-cloud-white font-bold shadow-lg hover:bg-electric-600 sm:hover:bg-space-700 transition-all duration-200 hover:scale-105 active:scale-95 z-40 flex items-center justify-center animate-fade-in-up animation-delay-500 rounded-full w-14 h-14 sm:w-auto sm:h-auto sm:rounded-lg sm:px-4 sm:py-2"
+          className="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-electric-500 sm:bg-space-800 text-cloud-white font-bold shadow-lg hover:bg-electric-600 sm:hover:bg-space-700 transition-all duration-200 hover:scale-105 active:scale-95 z-40 flex items-center justify-center animate-fade-in-up animation-delay-500 rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-auto md:h-auto md:rounded-lg md:px-4 md:py-2"
           aria-label="Oceń poziom energii"
           title="Oceń poziom energii (Cmd/Ctrl + K)"
         >
