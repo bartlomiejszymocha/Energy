@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
     : 'Wykonaj dziś akcję, aby rozpocząć passę!';
 
   return (
-    <header className="bg-space-900/95 shadow-lg sticky top-0 z-50">
+    <header className="bg-white/5 border-b border-white/10 backdrop-blur-sm shadow-lg sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
           </div>
           <div className="flex items-center gap-4">
             <div 
-              className="flex items-center gap-2 bg-space-800 px-3 py-1.5 rounded-full animate-fade-in-up"
+              className="flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 rounded-full animate-fade-in-up backdrop-blur-sm"
               title={streakTitle}
             >
               <span className="text-lg transition-all duration-300">🔥</span>
@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
             </div>
              <button
               onClick={onOpenNotifications}
-              className="hidden sm:block p-2 rounded-full bg-space-800 text-system-grey hover:bg-space-700 hover:text-cloud-white transition-colors"
+              className="hidden sm:block p-2 rounded-full bg-white/10 border border-white/20 text-system-grey hover:bg-white/20 hover:border-white/40 hover:text-cloud-white transition-all duration-200 backdrop-blur-sm"
               title="Ustawienia powiadomień"
               aria-label="Otwórz ustawienia powiadomień"
             >
