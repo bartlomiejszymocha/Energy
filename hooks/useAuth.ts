@@ -21,57 +21,71 @@ export const useAuth = () => {
                 currentUserEmail: currentUser?.email,
                 hasUser: !!user,
                 userEmail: user?.email,
-                isNewLogin: !!(currentUser && !user)
+                isNewLogin: !!(currentUser && !user),
+                userChanged: currentUser !== user
             });
             
-            if (currentUser && !user) {
-                console.log('🔍 New user login detected:', currentUser.email);
-                console.log('🔍 Environment check:', {
-                    hasApiKey: !!process.env.CONVERTKIT_API_KEY,
-                    hasSequenceId: !!process.env.CONVERTKIT_SEQUENCE_ID,
-                    hasFormId: !!process.env.CONVERTKIT_FORM_ID
+            // Check if we should add user to ConvertKit
+            if (currentUser && currentUser.email) {
+                const convertKitKey = `convertkit_added_${currentUser.email}`;
+                const alreadyAdded = localStorage.getItem(convertKitKey);
+                const hasPendingSubscription = localStorage.getItem('pendingNewsletterSubscription');
+                
+                console.log('🔍 ConvertKit check:', {
+                    userEmail: currentUser.email,
+                    alreadyAdded: !!alreadyAdded,
+                    hasPendingSubscription: !!hasPendingSubscription,
+                    shouldProcess: !alreadyAdded && hasPendingSubscription
                 });
                 
-                try {
-                    if (addSubscriber && currentUser.email) {
-                        const firstName = currentUser.displayName?.split(' ')[0] || '';
-                        
-                        // Read newsletter preference from localStorage
-                        const wantsNewsletter = localStorage.getItem('pendingNewsletterSubscription') === 'true';
-                        const storedValue = localStorage.getItem('pendingNewsletterSubscription');
-                        
-                        console.log('🔍 Newsletter preference check:', {
-                            storedValue,
-                            wantsNewsletter,
-                            localStorageKeys: Object.keys(localStorage)
-                        });
-                        
-                        console.log('🔍 Attempting to add to ConvertKit:', {
-                            email: currentUser.email,
-                            firstName,
-                            hasAddSubscriber: !!addSubscriber,
-                            subscribeToNewsletter: wantsNewsletter
-                        });
-                        
-                        const result = await addSubscriber(currentUser.email, firstName, {
-                            tags: ['Energy Playbook User', 'Google Login'],
-                            fields: { 'login_method': 'Google', 'signup_date': new Date().toISOString() },
-                            subscribeToNewsletter: wantsNewsletter
-                        });
-                        
-                        console.log('✅ ConvertKit result:', result);
-                        
-                        // Clear localStorage after successful subscription
-                        localStorage.removeItem('pendingNewsletterSubscription');
-                    } else {
-                        console.warn('⚠️ ConvertKit add failed:', {
-                            hasAddSubscriber: !!addSubscriber,
-                            hasEmail: !!currentUser.email,
-                            addSubscriber: addSubscriber
-                        });
+                // Only process if user hasn't been added before AND we have a pending subscription
+                if (!alreadyAdded && hasPendingSubscription) {
+                    console.log('🔍 Processing ConvertKit subscription for:', currentUser.email);
+                    
+                    try {
+                        if (addSubscriber && currentUser.email) {
+                            const firstName = currentUser.displayName?.split(' ')[0] || '';
+                            
+                            // Read newsletter preference from localStorage
+                            const wantsNewsletter = localStorage.getItem('pendingNewsletterSubscription') === 'true';
+                            const storedValue = localStorage.getItem('pendingNewsletterSubscription');
+                            
+                            console.log('🔍 Newsletter preference check:', {
+                                storedValue,
+                                wantsNewsletter,
+                                localStorageKeys: Object.keys(localStorage)
+                            });
+                            
+                            console.log('🔍 Attempting to add to ConvertKit:', {
+                                email: currentUser.email,
+                                firstName,
+                                hasAddSubscriber: !!addSubscriber,
+                                subscribeToNewsletter: wantsNewsletter
+                            });
+                            
+                            const result = await addSubscriber(currentUser.email, firstName, {
+                                tags: ['Energy Playbook User', 'Google Login'],
+                                fields: { 'login_method': 'Google', 'signup_date': new Date().toISOString() },
+                                subscribeToNewsletter: wantsNewsletter
+                            });
+                            
+                            console.log('✅ ConvertKit result:', result);
+                            
+                            // Mark user as added to ConvertKit
+                            localStorage.setItem(convertKitKey, 'true');
+                            
+                            // Clear pending subscription
+                            localStorage.removeItem('pendingNewsletterSubscription');
+                        } else {
+                            console.warn('⚠️ ConvertKit add failed:', {
+                                hasAddSubscriber: !!addSubscriber,
+                                hasEmail: !!currentUser.email,
+                                addSubscriber: addSubscriber
+                            });
+                        }
+                    } catch (error) {
+                        console.error('❌ ConvertKit error:', error);
                     }
-                } catch (error) {
-                    console.error('❌ ConvertKit error:', error);
                 }
             }
             
