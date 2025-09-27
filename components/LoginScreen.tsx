@@ -14,7 +14,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
 
     const handleSignInClick = async () => {
         if (!isEmailConsentChecked) {
-            setError('Zgoda na wysyłanie emaili związanych z aktualizacjami narzędzia jest wymagana');
+            setError('Zgoda na otrzymywanie aktualizacji narzędzia jest wymagana.');
             return;
         }
         
