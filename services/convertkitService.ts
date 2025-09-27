@@ -24,9 +24,14 @@ class ConvertKitService {
   private baseUrl = 'https://api.convertkit.com/v3';
 
   constructor() {
-    this.apiKey = process.env.CONVERTKIT_API_KEY || '';
-    if (!this.apiKey) {
-      console.warn('ConvertKit API key not found. Email automation will be disabled.');
+    try {
+      this.apiKey = process.env.CONVERTKIT_API_KEY || '';
+      if (!this.apiKey) {
+        console.warn('ConvertKit API key not found. Email automation will be disabled.');
+      }
+    } catch (error) {
+      console.warn('ConvertKit initialization failed:', error);
+      this.apiKey = '';
     }
   }
 

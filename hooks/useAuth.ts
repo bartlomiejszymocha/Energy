@@ -17,21 +17,23 @@ export const useAuth = () => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             // If user just logged in (currentUser exists and previous user was null)
             if (currentUser && !user) {
-                // Add to ConvertKit only for new logins
+                // Add to ConvertKit only for new logins (safely)
                 try {
-                    const firstName = currentUser.displayName?.split(' ')[0] || '';
-                    await addSubscriber(
-                        currentUser.email || '', 
-                        firstName,
-                        {
-                            tags: ['Energy Playbook User', 'Google Login'],
-                            fields: {
-                                'login_method': 'Google',
-                                'signup_date': new Date().toISOString()
+                    if (addSubscriber && currentUser.email) {
+                        const firstName = currentUser.displayName?.split(' ')[0] || '';
+                        await addSubscriber(
+                            currentUser.email, 
+                            firstName,
+                            {
+                                tags: ['Energy Playbook User', 'Google Login'],
+                                fields: {
+                                    'login_method': 'Google',
+                                    'signup_date': new Date().toISOString()
+                                }
                             }
-                        }
-                    );
-                    console.log('User successfully added to ConvertKit');
+                        );
+                        console.log('User successfully added to ConvertKit');
+                    }
                 } catch (error) {
                     console.error('Failed to add user to ConvertKit:', error);
                     // Don't prevent login if ConvertKit fails

@@ -6,11 +6,10 @@ interface LoginScreenProps {
     onSignIn: () => Promise<void>;
 }
 
-export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn, onUserAuthenticated }) => {
+export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isEmailConsentChecked, setIsEmailConsentChecked] = useState(false);
-    const { addSubscriber } = useConvertKit();
 
     const handleSignInClick = async () => {
         if (!isEmailConsentChecked) {
