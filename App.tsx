@@ -194,8 +194,18 @@ function App() {
   }
 
   return (
-    <div className="bg-space-950 text-cloud-white min-h-screen font-sans">
-      <Header 
+    <div className="relative bg-space-950 text-cloud-white min-h-screen font-sans">
+      {/* Background gradient overlay */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1E3A8A]/60 via-transparent to-[#1E40AF]/40 z-0"></div>
+      
+      {/* Stardust pattern background */}
+      <div className="absolute inset-0 z-[-1] opacity-20" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundSize: '60px 60px'
+      }}></div>
+      
+      <div className="relative z-10">
+        <Header 
         user={user}
         onSignOut={signOut}
         onLoginClick={() => {}} 
@@ -231,7 +241,7 @@ function App() {
               onOpenBreathingModal={(action) => setBreathingAction(action)}
               todayCompletedActionIds={todayCompletedActionIds}
             />
-            <div className="bg-space-900 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400">
+            <div className="bg-white/5 border border-white/10 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400 backdrop-blur-sm">
               <h2 className="text-2xl font-bold text-cloud-white">Gotowy na prawdziwą transformację?</h2>
               <p className="text-system-grey mt-3 max-w-2xl mx-auto">
                 Ten playbook to fundament. Prawdziwa transformacja wymaga wdrożenia, personalizacji i konsekwencji w chaosie codziennych obowiązków.
@@ -242,7 +252,7 @@ function App() {
               <div className="mt-6">
                 <button
                   onClick={() => setIsTidyCalModalOpen(true)}
-                  className="inline-flex items-center gap-3 bg-electric-500 text-cloud-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-3 bg-electric-500 text-cloud-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
                 >
                   <ChartBarIcon className="h-5 w-5" />
                   <span>Aplikuj na strategiczną konsultację</span>
@@ -288,11 +298,12 @@ function App() {
       {isUserSettingsModalOpen && <UserSettingsModal isOpen={isUserSettingsModalOpen} onClose={() => setIsUserSettingsModalOpen(false)} onSave={saveSettings} currentSettings={settings} />}
       {workoutAction && exerciseLibrary && <WorkoutModal user={user} action={workoutAction} onClose={() => setWorkoutAction(null)} onComplete={() => { if (workoutAction) { handleCompleteAction(workoutAction.id); setWorkoutAction(null); } }} exerciseLibrary={exerciseLibrary} />}
       
-      <footer className="text-center py-6 px-4">
-        <p className="text-sm text-system-grey">
-          © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
-        </p>
-      </footer>
+        <footer className="text-center py-6 px-4">
+          <p className="text-sm text-system-grey">
+            © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
+          </p>
+        </footer>
+      </div>
     </div>
   );
 }
