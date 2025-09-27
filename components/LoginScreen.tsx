@@ -67,7 +67,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                         className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-[#259dff] border border-[#259dff] rounded-xl hover:bg-[#1a7acc] transition-colors disabled:opacity-50 disabled:cursor-wait"
                     >
                         <GoogleIcon className="w-6 h-6" />
-                        <span className="text-base font-medium text-white">{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
+                        <span className="text-base font-medium text-black">{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
                     </button>
                     
                     {error && (
