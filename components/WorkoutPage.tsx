@@ -75,7 +75,7 @@ const ExerciseView: React.FC<{
             </header>
             
             <main className="flex-grow flex flex-col items-center justify-center pt-4 overflow-y-auto custom-scrollbar">
-                <div className="w-full aspect-video relative bg-black rounded-lg overflow-hidden shadow-lg mb-4">
+                <div className="w-full aspect-video relative bg-black rounded-lg overflow-hidden shadow-lg mb-4 flex-shrink-0" style={{ minHeight: '300px' }}>
                     {currentStep.videoUrl ? (
                         <div className="w-full h-full relative">
                             <iframe
@@ -316,7 +316,7 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
     return (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto" onClick={() => { engine.pause(); onClose(); }}>
             <div 
-                className="bg-white/5 border border-white/10 rounded-2xl shadow-2xl w-full max-w-lg p-4 sm:p-6 relative animate-fade-in-up flex flex-col h-[520px] sm:h-[60vh] max-h-[90vh] my-auto backdrop-blur-sm"
+                className="bg-white/5 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl p-4 sm:p-6 relative animate-fade-in-up flex flex-col h-[85vh] min-h-[600px] max-h-[95vh] my-auto backdrop-blur-sm"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="flex-1 flex flex-col">
