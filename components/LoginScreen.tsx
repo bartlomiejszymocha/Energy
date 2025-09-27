@@ -58,7 +58,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
             <div className="w-full max-w-md mx-auto z-10">
                 <div className="text-center">
                     <div className="text-6xl sm:text-7xl mb-5 sm:mb-6 text-white">🚀</div>
-                    <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-3">Poznaj Energy Playbook!</h1>
+                    <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-3">Sprawdź Energy Playbook!</h1>
                     <p className="text-base sm:text-lg text-gray-300 mb-7 sm:mb-8">Proste i sprawdzone narzędzie, dzięki któremu <span className="font-bold underline decoration-2 decoration-[#FF6B35]/80 underline-offset-2">odzyskasz 2h produktywności</span> dziennie.<br className="hidden sm:block" /> Przejmij kontrolę nad swoją energią już dziś!</p>
                     
                     <button
@@ -106,7 +106,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                                 className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#259dff] focus:ring-[#259dff] focus:ring-2 mt-0.5 flex-shrink-0"
                             />
                             <label htmlFor="newsletter-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
-                                <span className="font-semibold text-white">✅ Wyślij mi 14 prostych hacków energetycznych,</span> które możesz wdrożyć już dziś, by jutro mieć energię na to, co naprawdę ważne.
+                                <span className="font-semibold text-white">✅ Wyślij mi 14 prostych hacków energetycznych,</span> które możesz wdrożyć już dziś, by jutro pokonać prokrastynację i robić to co chcesz.
                                 <span className="block mt-1 text-xs text-[#A1A1AA]/50">
                                     Wymaga potwierdzenia emailem. ✨
                                 </span>
