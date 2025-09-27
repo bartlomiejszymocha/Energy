@@ -45,77 +45,80 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
     };
     
     return (
-        <div className="bg-space-950 min-h-screen flex flex-col items-center justify-start sm:justify-center p-4 pt-4 sm:pt-4">
-            <main className="text-center w-full max-w-2xl">
-                <span className="text-4xl sm:text-6xl animate-fade-in-up">🚀</span>
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-cloud-white mt-1 sm:mt-4 animate-fade-in-up animation-delay-100">
-            Witaj w Energy Playbook!
-          </h1>
-                <p className="text-system-grey max-w-md mx-auto mt-2 sm:mt-4 text-base sm:text-lg animate-fade-in-up animation-delay-200">
-                    Opanuj proste, sprawdzone narzędzie, które podwoi Twoją energię i skupienie w mniej niż 30 dni.
-                </p>
-                <div className="mt-3 sm:mt-8 animate-fade-in-up animation-delay-300">
-                    <p className="text-system-grey max-w-md mx-auto mb-4 sm:mb-4 text-xs sm:text-sm">
-                        Zaloguj się, by zacząć używać narzędzia Energy Playbook
-                    </p>
+        <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden bg-gradient-to-br from-[#0D0C22] via-[#1E1C3A] to-[#0D0C22]">
+            {/* Background gradient overlay */}
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1E1C3A]/80 via-transparent to-[#1E1C3A]/50 z-0"></div>
+            
+            {/* Stardust pattern background */}
+            <div className="absolute inset-0 z-[-1] opacity-20" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                backgroundSize: '60px 60px'
+            }}></div>
+            
+            <div className="w-full max-w-md mx-auto z-10">
+                <div className="text-center">
+                    <div className="text-7xl mb-6 text-white animate-pulse">🚀</div>
+                    <h1 className="text-4xl font-bold text-white mb-3">Witaj w Energy Playbook!</h1>
+                    <p className="text-lg text-gray-300 mb-8">Opanuj proste, sprawdzone narzędzie, które podwoi Twoją energię i skupienie w mniej niż 30 dni.</p>
+                    
                     <button
                         onClick={handleSignInClick}
                         disabled={isLoading}
-                        className="inline-flex items-center justify-center gap-3 bg-cloud-white text-space-950 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95 text-lg disabled:bg-space-700 disabled:text-system-grey/70 disabled:cursor-wait disabled:scale-100"
+                        className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white/10 border border-white/20 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-wait"
                     >
-                        <GoogleIcon className="h-6 w-6" />
-                        <span>{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
+                        <GoogleIcon className="w-6 h-6" />
+                        <span className="text-base font-medium text-white">{isLoading ? 'Logowanie...' : 'Zaloguj się z Google'}</span>
                     </button>
                     
                     {/* Email consent checkboxes */}
-                    <div className="mt-6 sm:mt-6 space-y-4 sm:space-y-4 max-w-md mx-auto">
-           {/* App notifications (required) */}
-           <div className="flex items-start gap-3 text-left">
-               <input
-                   type="checkbox"
-                   id="email-consent"
-                   checked={isEmailConsentChecked}
-                   onChange={(e) => setIsEmailConsentChecked(e.target.checked)}
-                   className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
-               />
-               <label htmlFor="email-consent" className="text-xs sm:text-sm text-system-grey cursor-pointer">
-                   <span className="text-electric-500 font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
-                   <span className="block mt-1 text-xs text-system-grey/70">
-                       Zawsze możesz się wypisać jednym kliknięciem. 📧
-                   </span>
-               </label>
-           </div>
+                    <div className="mt-10 space-y-6">
+                        {/* App notifications (required) */}
+                        <div className="flex items-start p-4 rounded-xl bg-white/5 border border-white/10">
+                            <input
+                                type="checkbox"
+                                id="email-consent"
+                                checked={isEmailConsentChecked}
+                                onChange={(e) => setIsEmailConsentChecked(e.target.checked)}
+                                className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#8E4DFF] focus:ring-[#8E4DFF] focus:ring-2 mt-0.5"
+                            />
+                            <label htmlFor="email-consent" className="ml-4 text-sm text-[#A1A1AA] cursor-pointer">
+                                <span className="text-[#8E4DFF] font-medium">(*)</span> Będę Cię informować o nowych funkcjach, abyś był zawsze na bieżąco i mógł w pełni wykorzystać narzędzie.
+                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
+                                    Zawsze możesz się wypisać jednym kliknięciem. 📧
+                                </span>
+                            </label>
+                        </div>
 
-           {/* Newsletter (optional) */}
-           <div className="flex items-start gap-3 text-left">
-               <input
-                   type="checkbox"
-                   id="newsletter-consent"
-                   checked={subscribeToNewsletter}
-                   onChange={(e) => setSubscribeToNewsletter(e.target.checked)}
-                   className="mt-1 h-4 w-4 text-electric-500 bg-space-800 border-space-600 rounded focus:ring-electric-500 focus:ring-2"
-               />
-               <label htmlFor="newsletter-consent" className="text-xs sm:text-sm text-system-grey cursor-pointer">
-                   <span className="text-success-green font-medium">✅ Zapisz się:</span> Poznaj 14 hacków energetycznych dzięki którym odzyskasz 2h produktywności każdego dnia. Osiągaj więcej dzięki skutecznej kontroli energii!
-                   <span className="block mt-1 text-xs text-system-grey/70">
-                       Wymaga potwierdzenia emailem. ✨
-                   </span>
-               </label>
-           </div>
+                        {/* Newsletter (optional) */}
+                        <div className="flex items-start p-4 rounded-xl bg-white/5 border border-white/10">
+                            <input
+                                type="checkbox"
+                                id="newsletter-consent"
+                                checked={subscribeToNewsletter}
+                                onChange={(e) => setSubscribeToNewsletter(e.target.checked)}
+                                className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#8E4DFF] focus:ring-[#8E4DFF] focus:ring-2 mt-0.5"
+                            />
+                            <label htmlFor="newsletter-consent" className="ml-4 text-sm text-[#A1A1AA] cursor-pointer">
+                                <span className="font-semibold text-white">✅ Zapisz się na 14 hacków energetycznych.</span> Odzyskaj 2h produktywności każdego dnia!
+                                <span className="block mt-1 text-xs text-[#A1A1AA]/70">
+                                    Wymaga potwierdzenia emailem. ✨
+                                </span>
+                            </label>
+                        </div>
                     </div>
                     
-                    {error && (
-                        <p className="text-danger-red mt-3 sm:mt-4 text-xs sm:text-sm animate-fade-in-up">
-                            {error}
-                        </p>
-                    )}
+                        {error && (
+                            <p className="text-red-400 mt-4 text-sm animate-fade-in-up">
+                                {error}
+                            </p>
+                        )}
+                    </div>
+                    
+                    <div className="text-center mt-12">
+                        <p className="text-xs text-gray-500">© 2025 Energy Playbook | Wszelkie prawa zastrzeżone</p>
+                    </div>
                 </div>
-            </main>
-            <footer className="mt-8 sm:mt-8 text-center py-3 sm:py-6 px-4">
-                 <p className="text-xs sm:text-sm text-system-grey animate-fade-in-up animation-delay-500">
-                    © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
-                 </p>
-            </footer>
+            </div>
         </div>
     );
 };
