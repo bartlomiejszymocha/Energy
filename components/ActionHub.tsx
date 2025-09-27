@@ -218,6 +218,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                 }
             `}</style>
 
+            {/* ActionHub with darker glassmorphism styling */}
             <div className="bg-white/10 border border-white/20 rounded-xl p-2 backdrop-blur-sm">
                 <div className="flex items-center justify-center gap-1 md:gap-2 flex-wrap">
                     {filterButtons.map(({ key, label, icon: Icon }) => (
