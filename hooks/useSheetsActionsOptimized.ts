@@ -86,7 +86,7 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
       }
 
       // Production: use working API endpoint
-      const apiEndpoint = 'https://resetujenergie.pl/api/sheets-to-actions-optimized';
+      const apiEndpoint = 'https://www.resetujenergie.pl/api/sheets-to-actions-optimized';
       
       const response = await fetch(apiEndpoint, {
         headers: {
