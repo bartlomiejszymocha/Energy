@@ -48,31 +48,12 @@ export const ActionHub: React.FC<ActionHubProps> = ({
     const filteredActions = useMemo(() => {
         const actualDuration = isNaN(duration) || duration < 1 ? 1 : duration > 15 ? 15 : duration;
         
-        // Debug: sprawdź stan
-        console.log('ActionHub Debug:', {
-            sheetsLoading,
-            sheetsError,
-            sheetsActionsLength: sheetsActions.length,
-            sheetsActions: sheetsActions,
-            permissionsLoading,
-            userRole: role,
-            ACTION_LIBRARYLength: 0 // Usunięto ACTION_LIBRARY
-        });
-        
         // Używamy tylko akcji z Google Sheets
         const actionsSource = sheetsActions;
-        
-        console.log('Using actionsSource:', actionsSource.length, 'actions');
         
         const filtered = actionsSource.filter(action => {
             // 1. Check permissions first
             const hasPermission = canViewAction(action.rules || 'public');
-            console.log('🔍 Action permission check:', { 
-                actionTitle: action.title, 
-                actionRules: action.rules, 
-                hasPermission,
-                userRole: role
-            });
             
             if (!hasPermission) {
                 return false;
