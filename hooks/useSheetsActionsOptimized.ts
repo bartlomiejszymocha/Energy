@@ -156,20 +156,20 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
     }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [fetchActions, isOnline]);
+  }, [isOnline]); // Remove fetchActions from dependencies
 
   // Odśwież gdy wracasz online
   useEffect(() => {
     if (isOnline && actions.length === 0) {
       fetchActions();
     }
-  }, [isOnline, actions.length, fetchActions]);
+  }, [isOnline]); // Remove actions.length and fetchActions from dependencies
 
   const refresh = useCallback(async () => {
     retryCount.current = 0;
     retryDelay.current = 1000;
     await fetchActions();
-  }, [fetchActions]);
+  }, []); // Remove fetchActions dependency
 
   return { 
     actions, 
