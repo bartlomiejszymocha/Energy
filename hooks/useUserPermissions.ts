@@ -14,6 +14,7 @@ interface UserPermissions {
 }
 
 export const useUserPermissions = (): UserPermissions => {
+    console.log('🔍 useUserPermissions: Hook called');
     const { user, loadingAuth } = useAuth();
     const [userRole, setUserRole] = useState<UserRole>('public');
     const [isLoading, setIsLoading] = useState(true);
