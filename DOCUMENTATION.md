@@ -689,7 +689,7 @@ interface Exercise {
 
 #### Lokalizacja danych:
 - **Akcje**: `constants/actions.ts`
-- **Ćwiczenia**: `constants/exerciseLibrary.ts`
+- **Ćwiczenia**: Google Sheets (kolumny K-N) - brak lokalnych plików
 - **Tagi**: `constants/tags.ts`
 
 #### Przykład dodawania nowej akcji:
@@ -848,6 +848,19 @@ Komponent automatycznie konwertuje proste stringi z Google Sheets na złożone o
 - `rest` → 30 sekund odpoczynku (domyślne)
 - `rest 30` → 30 sekund odpoczynku
 
+**✅ Pełna lista obsługiwanych formatów przerw:**
+- ✅ `R` → 30s odpoczynek (domyślny)
+- ✅ `R 20` → 20s odpoczynek (ze spacją)
+- ✅ `R20` → 20s odpoczynek (bez spacji)
+- ✅ `rest` → 30s odpoczynek (domyślny)
+- ✅ `rest 30` → 30s odpoczynek
+- ✅ `ex017 20` → ćwiczenie ex017 przez 20s
+
+**🔧 Regex Pattern dla przerw:**
+```javascript
+const restMatch = part.match(/^r(?:est)?\s*(\d+)?$/i);
+```
+
 ##### **3. Inteligentny Parser Regex:**
 
 ```typescript
@@ -858,15 +871,21 @@ const restMatch = part.match(/^r(?:est)?\s*(\d+)?$/i);
 const match = part.match(/(ex\d+)\s*\(?(\d+)/);
 ```
 
-##### **4. Automatyczne Mapowanie Ćwiczeń:**
+##### **4. Automatyczne Mapowanie Ćwiczeń z Google Sheets:**
 ```typescript
-// Parser automatycznie łączy exerciseId z exerciseLibrary
+// Parser automatycznie łączy exerciseId z ćwiczeniami z Google Sheets (kolumny K-N)
 const exerciseDetails = exerciseLibrary[step.exerciseId];
 if (!exerciseDetails) {
   console.warn(`Exercise with id "${step.exerciseId}" not found in library.`);
   return null;
 }
 ```
+
+**📊 Źródło danych ćwiczeń:**
+- ✅ **Wszystkie ćwiczenia pochodzą z Google Sheets** (kolumny K-N)
+- ✅ **Brak lokalnych plików** - `constants/exerciseLibrary.ts` został usunięty
+- ✅ **API endpoint:** `/api/sheets-to-exercises` pobiera dane z kolumn K-N
+- ✅ **Automatyczne odświeżanie** co 5 minut z Google Sheets
 
 ##### **5. Obsługa Błędów:**
 - **Nieznane ćwiczenia**: Automatyczne ostrzeżenia w konsoli
@@ -940,8 +959,8 @@ console.log('🔍 Final workoutSteps:', workoutSteps);
 ##### **Problem: Brak ćwiczeń w treningu**
 **Przyczyna:** Ćwiczenia nie istnieją w exerciseLibrary
 **Rozwiązanie:** 
-1. Sprawdź czy exerciseId istnieje w `constants/exerciseLibrary.ts`
-2. Dodaj brakujące ćwiczenia do biblioteki
+1. Sprawdź czy exerciseId istnieje w Google Sheets (kolumny K-N)
+2. Dodaj brakujące ćwiczenia do arkusza Google Sheets
 
 #### Przykłady Użycia:
 
@@ -964,7 +983,7 @@ console.log('🔍 Final workoutSteps:', workoutSteps);
 
 ##### **Zależności:**
 - `useWorkoutEngine` hook
-- `exerciseLibrary` z constants
+- `exerciseLibrary` z Google Sheets (API)
 - `ActionItem` interface z types.ts
 
 ##### **Wymagane Props:**
@@ -983,6 +1002,7 @@ interface WorkoutModalProps {
 **Wersja 1.1.0** - Dodano obsługę różnych formatów przerw (R, R20, R 20)
 **Wersja 1.2.0** - Poprawiono regex patterns i dodano debug logi
 **Wersja 1.3.0** - Dodano automatyczne mapowanie ćwiczeń z exerciseLibrary
+**Wersja 1.4.0** - Migracja na Google Sheets - usunięto lokalne pliki ćwiczeń
 
 ---
 
@@ -2081,7 +2101,7 @@ Energy/
 │   └── useUserSettings.ts # Ustawienia użytkownika
 ├── constants/           # Stałe aplikacji
 │   ├── actions.ts       # Biblioteka akcji
-│   ├── exerciseLibrary.ts # Biblioteka ćwiczeń
+│   └── (exerciseLibrary.ts - USUNIĘTY - ćwiczenia z Google Sheets)
 │   └── tags.ts          # Tagi
 ├── services/            # Usługi zewnętrzne
 │   ├── convertkitService.ts # API ConvertKit
@@ -3514,12 +3534,15 @@ interface ClientData {
 
 ## 📝 Historia zmian dokumentacji
 
-### Wersja 1.5.0 - Styczeń 2025
-**Data:** 2025-01-29  
-**Autor:** Bartłomiej Szymocha  
+### Wersja 1.6.0 - Styczeń 2025
+**Data:** 2025-01-29
+**Autor:** Bartłomiej Szymocha
 **Status:** OCHRONIONY - Edycja wymaga autoryzacji
 
 #### Nowe funkcjonalności:
+- ✅ **📊 Migracja na Google Sheets** - usunięto lokalne pliki ćwiczeń
+- ✅ **🔧 Parser Przerw** - szczegółowa dokumentacja obsługiwanych formatów
+- ✅ **📝 Aktualizacja Dokumentacji** - wszystkie ćwiczenia z Google Sheets
 - ✅ **🏋️ WorkoutPage - System Treningów** - kompletna dokumentacja
 - ✅ **Parser Stringów Treningowych** - automatyczna konwersja z Google Sheets
 - ✅ **Obsługa Formatów** - R, R20, R 20, rest, ex001 60, ex002 (45s)
