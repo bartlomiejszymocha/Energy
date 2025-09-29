@@ -52,9 +52,33 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
       
       if (isLocalhost) {
         console.log('🔍 Development mode - using static actions fallback');
-        // In development, use empty array since API won't work locally
-        // This prevents CORS errors and allows development to continue
-        setActions([]);
+        // In development, provide sample actions for testing
+        const sampleActions: ActionItem[] = [
+          {
+            id: 'dev_action_1',
+            name: 'Reset oddechowy (DEV)',
+            type: 'Reset Energetyczny',
+            icon: '🫁',
+            description: 'Przykładowa akcja do testowania w development',
+            triggerTags: ['stress', 'tired'],
+            timeOfDay: ['Poranek', 'Południe'],
+            rules: 'public',
+            workout: 'ex001 60, R 30, ex002 45'
+          },
+          {
+            id: 'dev_action_2', 
+            name: 'Quick Movement (DEV)',
+            type: 'Protokół Ruchowy',
+            icon: '🏃‍♂️',
+            description: 'Sample movement action for development testing',
+            triggerTags: ['energy', 'focus'],
+            timeOfDay: ['Południe'],
+            rules: 'public',
+            workout: 'ex003 45, R 15, ex001 30'
+          }
+        ];
+        
+        setActions(sampleActions);
         setLastUpdated(new Date());
         setError(null);
         setLoading(false);
