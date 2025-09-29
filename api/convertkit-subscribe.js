@@ -14,11 +14,11 @@ export default async function handler(req, res) {
 
   const API_KEY = process.env.CONVERTKIT_API_KEY;
   
-  // App notifications list (confirmed immediately)
-  const APP_FORM_ID = '8608142'; // Powiadomienia o aplikacji - POPRAWNY FORM ID
+  // App notifications list (confirmed immediately) - "Energy Playbook - Product"
+  const APP_FORM_ID = '693f8d6049'; // Energy Playbook - Product (automatyczne potwierdzanie)
   
-  // Newsletter list (requires confirmation)
-  const NEWSLETTER_FORM_ID = '8608137'; // Newsletter z tipami - POPRAWNY FORM ID
+  // Newsletter list (requires confirmation) - "Energy Playbook - Newsletter"  
+  const NEWSLETTER_FORM_ID = '8eed27a04c'; // Energy Playbook - Newsletter (potwierdzanie przez email)
   
   console.log('🔍 ConvertKit API setup:', {
     API_KEY: API_KEY ? `${API_KEY.substring(0, 10)}...` : 'MISSING',
