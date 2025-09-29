@@ -11,8 +11,10 @@ export interface EnergyLog {
 export type ActionType = 'Reset Energetyczny' | 'Protokół Ruchowy' | 'Protokuł Ruchowy' | 'Technika oddechowa' | 'Technika Oddechowa';
 
 export interface Exercise {
+  id?: string;
   name: string;
   videoUrl?: string;
+  videourl?: string; // For Google Sheets compatibility
   note?: string;
 }
 
