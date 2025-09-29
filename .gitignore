@@ -28,3 +28,34 @@ dist-ssr
 # Environment files
 .env*
 !.env.example
+
+# API Keys and secrets
+*.key
+*.pem
+*.p12
+*.pfx
+*secret*
+*password*
+*token*
+*api-key*
+
+# Configuration files with potential secrets
+config.json
+secrets.json
+credentials.json
+service-account*.json
+
+# Firebase
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+
+# Vercel
+.vercel/project.json
+.vercel/.env*
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+.cache/
