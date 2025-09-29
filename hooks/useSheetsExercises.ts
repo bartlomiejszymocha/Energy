@@ -52,8 +52,41 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
       const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
       if (isLocalhost) {
-        console.log('🔍 Development mode - using empty exercise library fallback');
-        setExercises({});
+        console.log('🔍 Development mode - using sample exercise library fallback');
+        // Provide sample exercises for development testing
+        const sampleExercises: Record<string, Exercise> = {
+          'ex001': {
+            id: 'ex001',
+            name: '4Point Knee Taps',
+            videoUrl: 'https://example.com/ex001.mp4',
+            note: 'Sample exercise for development'
+          },
+          'ex002': {
+            id: 'ex002', 
+            name: 'Mountain Climbers',
+            videoUrl: 'https://example.com/ex002.mp4',
+            note: 'Sample exercise for development'
+          },
+          'ex003': {
+            id: 'ex003',
+            name: 'Jumping Jacks',
+            videoUrl: 'https://example.com/ex003.mp4', 
+            note: 'Sample exercise for development'
+          },
+          'ex005': {
+            id: 'ex005',
+            name: 'Burpees',
+            videoUrl: 'https://example.com/ex005.mp4',
+            note: 'Sample exercise for development'
+          },
+          'ex017': {
+            id: 'ex017',
+            name: 'Wstrząsanie',
+            videoUrl: 'https://example.com/ex017.mp4',
+            note: 'Sample exercise for development'
+          }
+        };
+        setExercises(sampleExercises);
         setLastUpdated(new Date());
         setError(null);
         setLoading(false);
