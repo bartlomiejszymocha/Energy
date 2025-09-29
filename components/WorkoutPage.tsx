@@ -264,7 +264,52 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
     const workoutPlaylist = useMemo((): EnrichedWorkoutStep[] => {
         if (!action.workout) return [];
 
-        return action.workout.map(step => {
+        // Parse workout string to array if it's a string
+        let workoutSteps: WorkoutStep[] = [];
+        
+        if (typeof action.workout === 'string') {
+            console.log('🔍 Parsing workout string:', action.workout);
+            // Parse string format: "ex005 60, R 30, ex002 45, R 30, ex003 60"
+            const parts = action.workout.split(',').map(part => part.trim());
+            console.log('🔍 Workout parts:', parts);
+            workoutSteps = parts.map(part => {
+                if (part.toLowerCase() === 'r' || part.toLowerCase().includes('rest')) {
+                    return {
+                        type: 'rest' as const,
+                        duration: 30, // Default rest time
+                        name: 'Odpoczynek'
+                    };
+                } else {
+                    // Parse exercise format: "ex005 60" or "ex005 (60s)"
+                    const match = part.match(/(ex\d+)\s*\(?(\d+)/);
+                    if (match) {
+                        const exerciseId = match[1];
+                        const duration = parseInt(match[2]);
+                        return {
+                            type: 'exercise' as const,
+                            exerciseId,
+                            duration,
+                            name: exerciseId
+                        };
+                    }
+                    // Fallback for unrecognized format
+                    return {
+                        type: 'exercise' as const,
+                        exerciseId: 'ex001',
+                        duration: 60,
+                        name: 'Ćwiczenie'
+                    };
+                }
+            });
+        } else if (Array.isArray(action.workout)) {
+            console.log('🔍 Workout is already array:', action.workout);
+            workoutSteps = action.workout;
+        } else {
+            console.log('🔍 Unknown workout type:', typeof action.workout, action.workout);
+        }
+
+        console.log('🔍 Final workoutSteps:', workoutSteps);
+        return workoutSteps.map(step => {
             if (step.type === 'exercise') {
                 const exerciseDetails = exerciseLibrary[step.exerciseId];
                  if (!exerciseDetails) {

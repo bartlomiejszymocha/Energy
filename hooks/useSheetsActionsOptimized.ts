@@ -52,6 +52,7 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
       
       if (isLocalhost) {
         console.log('🔍 Development mode - using static actions fallback');
+        console.log('🔍 Hostname:', window.location.hostname);
         // In development, provide sample actions for testing
         const sampleActions: ActionItem[] = [
           {
