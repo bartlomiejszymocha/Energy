@@ -48,13 +48,21 @@ export default async function handler(req, res) {
 
     // Przetwórz dane (pierwszy wiersz to nagłówki)
     const headers = rows[0];
-    const clients = rows.slice(1).map(row => {
+    console.log('📋 Headers found:', headers);
+    
+    const clients = rows.slice(1).map((row, index) => {
+      console.log(`📋 Processing row ${index + 1}:`, row);
       const client = {};
       headers.forEach((header, colIndex) => {
         client[header] = row[colIndex] || '';
       });
+      console.log(`📋 Parsed client ${index + 1}:`, client);
       return client;
-    }).filter(client => client.uid || client.email); // Filtruj puste wiersze
+    }).filter(client => {
+      const hasData = client.uid || client.email;
+      console.log(`📋 Client ${client.email || client.uid} has data:`, hasData);
+      return hasData;
+    }); // Filtruj puste wiersze
 
     // Aktualizuj cache
     cache.data = clients;
