@@ -20,9 +20,12 @@ export const useUserPermissions = (): UserPermissions => {
 
     useEffect(() => {
         const determineUserRole = async () => {
+            console.log('🔍 useUserPermissions: determineUserRole called', { loadingAuth, user: user?.email });
+            
             if (loadingAuth) return;
             
             if (!user) {
+                console.log('🔍 useUserPermissions: No user, setting public role');
                 setUserRole('public');
                 setIsLoading(false);
                 return;
