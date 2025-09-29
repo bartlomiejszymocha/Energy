@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
     // Pobierz dane z arkusza
     const spreadsheetId = process.env.SHEETS_ID;
-    const range = process.env.SHEETS_RANGE || 'Actions!A:N';
+    const range = process.env.SHEETS_RANGE || 'Actions & Exercises!A:J';
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
@@ -81,8 +81,7 @@ export default async function handler(req, res) {
             action['exercises'] = [];
           }
         }
-        // Ignore Exercise Library columns (K-N: idE, name, videourl, note)
-        // These are separate exercise definitions, not action properties
+        // Exercise Library columns (K-N) są pobierane przez /api/sheets-to-exercises
       });
       
       // Map title to name for frontend compatibility
