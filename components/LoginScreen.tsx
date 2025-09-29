@@ -109,7 +109,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                                 className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#259dff] focus:ring-[#259dff] focus:ring-2 mt-0.5 flex-shrink-0"
                             />
                             <label htmlFor="newsletter-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
-                                <span className="font-semibold text-white">⚡️ Rozpocznij darmowy, 12-dniowy kurs energetyczny, by pokonać prokrastynację.</span> Otrzymasz jeden prosty hack dziennie - bez przytłoczenia, krok po kroku.
+                                <span className="font-semibold text-white">🚀 Dołącz do mojego newsletter'a gdzie dziele się wskazówkami jak przejąć kontrolę nad swoją energią.</span>
                                 <span className="block mt-1 text-[0.7rem] text-[#A1A1AA]/70">
                                     🚨 Sprawdź e-mail, by potwierdzić zapis.
                                 </span>
