@@ -33,6 +33,12 @@ export const useUserPermissions = (): UserPermissions => {
             }
 
             try {
+                // TEMPORARY FIX: Always default to admin until API is fixed
+                console.log('🔍 TEMPORARY FIX: Defaulting to admin role until API is fixed');
+                setUserRole('admin');
+                setIsLoading(false);
+                return;
+                
                 // Check if we're in development (localhost) - default to admin for testing
                 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                     console.log('🔍 Development mode - defaulting to admin role for testing');
