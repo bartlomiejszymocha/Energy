@@ -47,35 +47,46 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
         setError(null);
       }
 
-      // Check if localhost (development)
+      // Check if localhost (development) - DISABLED for testing
       const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
-      if (isLocalhost) {
+      if (isLocalhost) { // ENABLED - use different sample actions for testing
         console.log('🔍 Development mode - using static actions fallback');
         console.log('🔍 Hostname:', window.location.hostname);
         // In development, provide sample actions for testing
         const sampleActions: ActionItem[] = [
           {
             id: 'dev_action_1',
-            name: 'Reset oddechowy (DEV)',
-            type: 'Reset Energetyczny',
-            icon: '🫁',
-            description: 'Przykładowa akcja do testowania w development',
-            triggerTags: ['stress', 'tired'],
-            timeOfDay: ['Poranek', 'Południe'],
-            rules: 'public',
-            workout: 'ex001 60, R 30, ex002 45'
+            name: 'Reboot - BrainFlow (DEV)',
+            type: 'Protokół Ruchowy',
+            icon: '🧠',
+            description: 'Test akcji z workout string 1',
+            triggerTags: ['focus', 'brain'],
+            timeOfDay: ['Poranek'],
+            rules: 'admin',
+            workout: 'ex005 60, R 30, ex002 45, R 30, ex003 60'
           },
           {
             id: 'dev_action_2', 
-            name: 'Quick Movement (DEV)',
+            name: 'NSDR (DEV)',
             type: 'Protokół Ruchowy',
-            icon: '🏃‍♂️',
-            description: 'Sample movement action for development testing',
-            triggerTags: ['energy', 'focus'],
+            icon: '🧘',
+            description: 'Test akcji z workout string 2',
+            triggerTags: ['relax', 'energy'],
+            timeOfDay: ['Wieczór'],
+            rules: 'public',
+            workout: 'ex017 20, R 20, ex002 30, R10, ex10 40, R 10'
+          },
+          {
+            id: 'dev_action_3',
+            name: 'Stwórz coś kreatywnego (DEV)',
+            type: 'Protokół Ruchowy',
+            icon: '🎨',
+            description: 'Test akcji z workout string 3',
+            triggerTags: ['creative', 'focus'],
             timeOfDay: ['Południe'],
             rules: 'public',
-            workout: 'ex003 45, R 15, ex001 30'
+            workout: 'ex003 60, R 30, ex005 45, R 30, ex007 60'
           }
         ];
         

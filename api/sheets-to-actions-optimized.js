@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
     // Pobierz dane z arkusza
     const spreadsheetId = process.env.SHEETS_ID;
-    const range = process.env.SHEETS_RANGE || 'Actions!A:K';
+    const range = process.env.SHEETS_RANGE || 'Actions!A:N';
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
@@ -48,28 +48,41 @@ export default async function handler(req, res) {
       headers.forEach((header, colIndex) => {
         let value = row[colIndex];
         
-        // Parsowanie specjalnych typów danych
-        if (header === 'exercises' && value) {
+        // Mapowanie nagłówków z Google Sheets na właściwości frontendu
+        if (header === 'idA' && value) {
+          action['id'] = value;
+        } else if (header === 'rules' && value) {
+          action['rules'] = value;
+        } else if (header === 'title' && value) {
+          action['name'] = value;
+          action['title'] = value; // Keep both for compatibility
+        } else if (header === 'type' && value) {
+          action['type'] = value;
+        } else if (header === 'duration' && value) {
+          action['duration'] = parseFloat(value);
+        } else if (header === 'icon' && value) {
+          action['icon'] = value;
+        } else if (header === 'content' && value) {
+          action['description'] = value;
+          action['content'] = value; // Keep both for compatibility
+        } else if (header === 'breathing' && value) {
+          action['breathingPattern'] = value;
+        } else if (header === 'workout' && value) {
+          action['workout'] = value.toString().trim();
+        } else if (header === 'actionUrl' && value) {
+          action['videoUrl'] = value;
+        } else if (header === 'tags' && value) {
+          action['tags'] = value.split(',').map(tag => tag.trim());
+        } else if (header === 'exercises' && value) {
           try {
-            value = JSON.parse(value);
+            action['exercises'] = JSON.parse(value);
           } catch (e) {
             console.error(`Error parsing exercises JSON for row ${index}:`, e);
-            value = [];
-          }
-        } else if (header === 'tags' && value) {
-          value = value.split(',').map(tag => tag.trim());
-        } else if (header === 'duration' && value) {
-          value = parseFloat(value);
-        } else if (header === 'workout' && value) {
-          try {
-            value = JSON.parse(value);
-          } catch (e) {
-            console.error(`Error parsing workout JSON for row ${index}:`, e);
-            value = [];
+            action['exercises'] = [];
           }
         }
-        
-        action[header] = value;
+        // Ignore Exercise Library columns (K-N: idE, name, videourl, note)
+        // These are separate exercise definitions, not action properties
       });
       
       // Map title to name for frontend compatibility
@@ -86,6 +99,12 @@ export default async function handler(req, res) {
 
     // Log dla monitorowania
     console.log(`Fetched ${actions.length} actions from Google Sheets`);
+    
+    // Debug log - pokaż workout strings
+    console.log('🔍 Workout strings from API:');
+    actions.forEach((action, index) => {
+      console.log(`Action ${index + 1}: "${action.name}" - Workout: "${action.workout}"`);
+    });
 
     res.status(200).json(actions);
 

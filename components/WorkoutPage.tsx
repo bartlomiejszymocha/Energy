@@ -260,6 +260,7 @@ interface WorkoutModalProps {
 }
 
 export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onComplete, exerciseLibrary }) => {
+    console.log('🏋️ WorkoutModal opened for action:', action.name, 'with workout:', action.workout);
     
     const workoutPlaylist = useMemo((): EnrichedWorkoutStep[] => {
         if (!action.workout) return [];
@@ -268,7 +269,7 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
         let workoutSteps: WorkoutStep[] = [];
         
         if (typeof action.workout === 'string') {
-            console.log('🔍 Parsing workout string:', action.workout);
+            console.log('🔍 Parsing workout string for action:', action.name, ':', action.workout);
             // Parse string format: "ex005 60, R 30, ex002 45, R 30, ex003 60"
             const parts = action.workout.split(',').map(part => part.trim());
             console.log('🔍 Workout parts:', parts);
@@ -331,7 +332,7 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
                 name: 'Odpoczynek',
             };
         }).filter(Boolean) as EnrichedWorkoutStep[];
-    }, [action.workout, exerciseLibrary]);
+    }, [action.workout, exerciseLibrary, action.name]);
 
     const engine = useWorkoutEngine(workoutPlaylist);
     
