@@ -109,7 +109,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
                                 className="h-5 w-5 rounded-md border-white/30 bg-white/10 text-[#259dff] focus:ring-[#259dff] focus:ring-2 mt-0.5 flex-shrink-0"
                             />
                             <label htmlFor="newsletter-consent" className="ml-3 text-sm text-[#A1A1AA] cursor-pointer leading-relaxed">
-                                <span className="font-semibold text-white">🚀 Chcę dołączyć do listy mailowej i dostawać praktyczne wskazówki, które realnie pomogą Ci poprawić swoją energię i zacząć robić co planowałeś</span>
+                                🚀 Chcę dołączyć do listy mailowej i dostawać praktyczne wskazówki, które realnie pomogą mi poprawić swoją energię i zacznę robić co planowałem.
                                 <span className="block mt-1 text-[0.7rem] text-[#A1A1AA]/70">
                                     🚨 Sprawdź e-mail, by potwierdzić zapis.
                                 </span>
