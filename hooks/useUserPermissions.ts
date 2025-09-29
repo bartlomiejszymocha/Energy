@@ -18,6 +18,14 @@ export const useUserPermissions = (): UserPermissions => {
     const { user, loadingAuth } = useAuth();
     const [userRole, setUserRole] = useState<UserRole>('public');
     const [isLoading, setIsLoading] = useState(true);
+    
+    // TEMPORARY: Force admin role for debugging
+    console.log('🔍 useUserPermissions: user email:', user?.email);
+    if (user?.email === 'bartlomiej.szymocha@gmail.com') {
+        console.log('🔍 useUserPermissions: FORCING ADMIN ROLE FOR DEBUG');
+        setUserRole('admin');
+        setIsLoading(false);
+    }
 
     useEffect(() => {
         const determineUserRole = async () => {
