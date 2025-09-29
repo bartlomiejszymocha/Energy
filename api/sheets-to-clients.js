@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     }
 
     // Przetwórz dane (pierwszy wiersz to nagłówki)
-    const headers = rows[0];
+    const headers = rows[0].map(header => header.trim()); // Usuń spacje z nagłówków
     console.log('📋 Headers found:', headers);
     
     const clients = rows.slice(1).map((row, index) => {
