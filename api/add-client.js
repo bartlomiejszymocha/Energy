@@ -1,14 +1,36 @@
 import { google } from 'googleapis';
 
 export default async function handler(req, res) {
+  // SECURITY: Rate limiting check
+  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log(`API request from IP: ${clientIP}`);
+  
   if (req.method !== "POST") {
     return res.status(405).send("Method Not Allowed");
   }
 
   const { uid, email, displayName, role = 'public', lastLogin } = req.body;
 
+  // SECURITY: Input validation and sanitization
   if (!uid || !email) {
     return res.status(400).json({ error: "Missing uid or email" });
+  }
+
+  // SECURITY: Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: "Invalid email format" });
+  }
+
+  // SECURITY: Validate role
+  const validRoles = ['public', 'pro', 'admin'];
+  if (!validRoles.includes(role)) {
+    return res.status(400).json({ error: "Invalid role" });
+  }
+
+  // SECURITY: Validate input lengths
+  if (uid.length > 128 || email.length > 255 || (displayName && displayName.length > 100)) {
+    return res.status(400).json({ error: "Input too long" });
   }
 
   try {

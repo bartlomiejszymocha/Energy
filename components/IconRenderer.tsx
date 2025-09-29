@@ -17,12 +17,22 @@ export const IconRenderer: React.FC<IconRendererProps> = ({
 
   // Sprawdź czy to SVG (zaczyna się od <svg)
   if (icon.trim().startsWith('<svg')) {
-    // Napraw błędy składniowe w SVG
+    // BEZPIECZNA SANITYZACJA SVG - usuń potencjalnie niebezpieczne elementy
     let cleanedSvg = icon
       .replace(/width="24" height="24" "fill="none"/g, 'width="24" height="24" fill="none"') // Napraw podwójne cudzysłowy
       .replace(/"fill="none"/g, ' fill="none"') // Napraw inne błędy cudzysłowów
       .replace(/fill="none"/g, 'fill="none"') // Upewnij się, że fill="none" jest poprawne
-      .replace(/fill="none"/g, 'fill="none"'); // Napraw wszystkie wystąpienia
+      .replace(/fill="none"/g, 'fill="none"') // Napraw wszystkie wystąpienia
+      // SECURITY: Usuń potencjalnie niebezpieczne elementy
+      .replace(/<script[^>]*>.*?<\/script>/gi, '') // Usuń wszystkie script tagi
+      .replace(/on\w+="[^"]*"/gi, '') // Usuń wszystkie event handlery (onclick, onload, etc.)
+      .replace(/javascript:/gi, '') // Usuń javascript: protokoły
+      .replace(/data:/gi, '') // Usuń data: protokoły (może zawierać kod)
+      .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '') // Usuń iframe
+      .replace(/<object[^>]*>.*?<\/object>/gi, '') // Usuń object
+      .replace(/<embed[^>]*>/gi, '') // Usuń embed
+      .replace(/<link[^>]*>/gi, '') // Usuń link
+      .replace(/<meta[^>]*>/gi, ''); // Usuń meta
     
     // Dodaj style do SVG, żeby się dopasował do kontenera
     const styledSvg = cleanedSvg.replace(
