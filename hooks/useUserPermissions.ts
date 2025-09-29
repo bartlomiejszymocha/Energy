@@ -36,6 +36,7 @@ export const useUserPermissions = (): UserPermissions => {
                 ];
 
                 if (adminEmails.includes(user.email || '')) {
+                    console.log('🔍 Admin email detected:', user.email, 'setting role to admin');
                     setUserRole('admin');
                     setIsLoading(false);
                     return;
@@ -113,11 +114,14 @@ export const useUserPermissions = (): UserPermissions => {
         
         // If still loading permissions, default to showing public actions
         if (isLoading) {
+            console.log('⏳ Still loading permissions, defaulting to public only');
             return rule === 'public' || rule === undefined;
         }
         
         if (rule === 'priv') {
-            return userRole === 'admin'; // Only admin can see private actions
+            const canSee = userRole === 'admin';
+            console.log('🔒 Private action check:', { canSee, userRole, isAdmin: userRole === 'admin' });
+            return canSee; // Only admin can see private actions
         }
         
         if (rule === 'pro') {
