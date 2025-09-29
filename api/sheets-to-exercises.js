@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
     // Pobierz dane z arkusza - Exercise Library (kolumny K-N)
     const spreadsheetId = process.env.SHEETS_ID;
-    const range = 'Actions!K:N'; // idE, name, videourl, note
+    const range = 'K:N'; // idE, name, videourl, note
 
     console.log('🔍 Fetching exercises from spreadsheet:', spreadsheetId, 'range:', range);
     
