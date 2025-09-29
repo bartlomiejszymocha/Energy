@@ -104,7 +104,7 @@ export const useAuth = () => {
                     if (!alreadyAddedToSheets) {
                         console.log('🔍 Adding user to Google Sheets clients:', currentUser.email);
                     
-                    try {
+                        try {
                         const clientData = {
                             uid: currentUser.uid,
                             email: currentUser.email,
@@ -130,13 +130,14 @@ export const useAuth = () => {
                         } else {
                             console.error('❌ Failed to add user to Google Sheets clients:', response.status);
                         }
-                    } catch (error) {
-                        console.error('❌ Error adding user to Google Sheets clients:', error);
+                        } catch (error) {
+                            console.error('❌ Error adding user to Google Sheets clients:', error);
+                        }
                     }
                 }
-                } else {
-                    console.log('🔍 Development mode - skipping Google Sheets client addition');
-                }
+            } else {
+                console.log('🔍 Development mode - skipping Google Sheets client addition');
+            }
             
             setUser(currentUser);
             setLoadingAuth(false);
