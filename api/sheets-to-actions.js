@@ -61,12 +61,9 @@ export default async function handler(req, res) {
         } else if (header === 'duration' && value) {
           value = parseFloat(value);
         } else if (header === 'workout' && value) {
-          try {
-            value = JSON.parse(value);
-          } catch (e) {
-            console.error(`Error parsing workout JSON for row ${index}:`, e);
-            value = [];
-          }
+          // Keep workout as simple string - no JSON parsing needed
+          // Frontend will handle parsing "ex001 60, R 30, ex002 45" format
+          value = value.toString().trim();
         }
         
         action[header] = value;
