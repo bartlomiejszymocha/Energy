@@ -1,0 +1,17 @@
+# EditorConfig dla Energy Playbook
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Ochrona dokumentacji
+[DOCUMENTATION.md]
+# Ten plik wymaga specjalnej autoryzacji do edycji
+# UWAGA: Edycja wymaga zgody właściciela dokumentu
+
+
+

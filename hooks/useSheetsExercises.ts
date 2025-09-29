@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Exercise } from '../types';
-import { EXERCISE_LIBRARY } from '../constants/exerciseLibrary';
 
 interface UseSheetsExercisesReturn {
   exercises: Record<string, Exercise>;
@@ -12,7 +11,7 @@ interface UseSheetsExercisesReturn {
 }
 
 export const useSheetsExercises = (): UseSheetsExercisesReturn => {
-  const [exercises, setExercises] = useState<Record<string, Exercise>>(EXERCISE_LIBRARY);
+  const [exercises, setExercises] = useState<Record<string, Exercise>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -52,8 +51,8 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
       const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
       if (isLocalhost) {
-        console.log('🔍 Development mode - using static exercise library fallback');
-        setExercises(EXERCISE_LIBRARY);
+        console.log('🔍 Development mode - using empty exercise library fallback');
+        setExercises({});
         setLastUpdated(new Date());
         setError(null);
         setLoading(false);
@@ -101,8 +100,8 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
       } else {
         setError(errorMessage);
         console.error("Failed to fetch exercises from Sheets API:", err);
-        // Fallback to static library on error
-        setExercises(EXERCISE_LIBRARY);
+        // Fallback to empty library on error
+        setExercises({});
       }
     } finally {
       setLoading(false);

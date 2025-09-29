@@ -1,0 +1,24 @@
+{
+  "name": "Energy Playbook",
+  "short_name": "Energy Playbook",
+  "description": "Proste narzędzie do śledzenia energii i budowania nawyków",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E0F12",
+  "theme_color": "#007AFF",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/energy-playbook.firebasestorage.app/o/logoDES%20(1).png?alt=media&token=71219723-d4ca-4fa4-9c46-eb224a715a10",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/energy-playbook.firebasestorage.app/o/logoDES%20(1).png?alt=media&token=71219723-d4ca-4fa4-9c46-eb224a715a10",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "health", "lifestyle"],
+  "lang": "pl"
+}
