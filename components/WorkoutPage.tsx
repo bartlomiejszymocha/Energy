@@ -273,10 +273,13 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
             const parts = action.workout.split(',').map(part => part.trim());
             console.log('🔍 Workout parts:', parts);
             workoutSteps = parts.map(part => {
-                if (part.toLowerCase() === 'r' || part.toLowerCase().includes('rest')) {
+                // Check for rest patterns: "R", "R 20", "R20", "rest", "rest 30", etc.
+                const restMatch = part.match(/^r(?:est)?\s*(\d+)?$/i);
+                if (restMatch) {
+                    const duration = restMatch[1] ? parseInt(restMatch[1]) : 30; // Default 30s if no duration
                     return {
                         type: 'rest' as const,
-                        duration: 30, // Default rest time
+                        duration,
                         name: 'Odpoczynek'
                     };
                 } else {
