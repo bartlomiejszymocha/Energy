@@ -20,6 +20,7 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
   const retryCount = useRef(0);
   const maxRetries = 3;
   const retryDelay = useRef(1000);
+  const hasInitialized = useRef(false);
 
   // Sprawdź połączenie internetowe
   useEffect(() => {
@@ -56,6 +57,7 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
         setLastUpdated(new Date());
         setError(null);
         setLoading(false);
+        hasInitialized.current = true;
         return;
       }
 
@@ -82,6 +84,7 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
       setError(null);
       retryCount.current = 0;
       retryDelay.current = 1000;
+      hasInitialized.current = true;
 
       console.log(`Fetched ${Object.keys(data).length} exercises from Sheets API`);
 
@@ -110,7 +113,9 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
 
   // Automatyczne odświeżanie
   useEffect(() => {
-    fetchExercises();
+    if (!hasInitialized.current) {
+      fetchExercises();
+    }
 
     // Odśwież co 5 minut
     const interval = setInterval(() => {
@@ -124,10 +129,10 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
 
   // Odśwież gdy wracasz online
   useEffect(() => {
-    if (isOnline && Object.keys(exercises).length === 0) {
+    if (isOnline && Object.keys(exercises).length === 0 && hasInitialized.current) {
       fetchExercises();
     }
-  }, [isOnline, exercises]); // Remove fetchExercises from dependencies
+  }, [isOnline]); // Remove exercises from dependencies to prevent infinite loop
 
   const refresh = useCallback(async () => {
     retryCount.current = 0;
