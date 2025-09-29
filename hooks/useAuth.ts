@@ -46,7 +46,11 @@ export const useAuth = () => {
                 });
                 
                 // Only process if user hasn't been added before AND we have a pending subscription
-                if (!alreadyAdded && hasPendingSubscription) {
+                // DEBUG: Allow re-processing for testing
+                const shouldForceProcess = window.location.hostname === 'localhost' && 
+                    localStorage.getItem('forceConvertKitProcess') === 'true';
+                
+                if ((!alreadyAdded && hasPendingSubscription) || shouldForceProcess) {
                     console.log('🔍 Processing ConvertKit subscription for:', currentUser.email);
                     
                     try {
