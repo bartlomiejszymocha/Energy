@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
 
 export type UserRole = 'public' | 'pro' | 'admin';
-export type ActionRule = 'priv' | 'public' | 'pro';
+export type ActionRule = 'public' | 'pro' | 'admin';
 
 interface UserPermissions {
     role: UserRole;
@@ -18,14 +18,6 @@ export const useUserPermissions = (): UserPermissions => {
     const { user, loadingAuth } = useAuth();
     const [userRole, setUserRole] = useState<UserRole>('public');
     const [isLoading, setIsLoading] = useState(true);
-    
-    // TEMPORARY: Force admin role for debugging
-    console.log('🔍 useUserPermissions: user email:', user?.email);
-    if (user?.email === 'bartlomiej.szymocha@gmail.com') {
-        console.log('🔍 useUserPermissions: FORCING ADMIN ROLE FOR DEBUG');
-        setUserRole('admin');
-        setIsLoading(false);
-    }
 
     useEffect(() => {
         const determineUserRole = async () => {
@@ -41,51 +33,42 @@ export const useUserPermissions = (): UserPermissions => {
             }
 
             try {
-                // 1. Check if user is admin (your email)
-                const adminEmails = [
-                    'bartlomiejszymocha@gmail.com', // Twój email
-                    // Dodaj inne admin emails tutaj
-                ];
-
-                if (adminEmails.includes(user.email || '')) {
-                    console.log('🔍 Admin email detected:', user.email, 'setting role to admin');
+                // Check if we're in development (localhost) - default to admin for testing
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    console.log('🔍 Development mode - defaulting to admin role for testing');
                     setUserRole('admin');
                     setIsLoading(false);
                     return;
                 }
 
-                // 2. Check if we're in development (localhost)
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                    console.log('🔍 Development mode - defaulting to admin role for testing');
-                    setUserRole('admin'); // Admin role for local testing
-                    setIsLoading(false);
-                    return;
-                }
-
-                // 3. Check user role from Google Sheets API (production only)
-                const response = await fetch('/api/sheets-to-clients');
+                // Check user role from Google Sheets API
+                console.log('🔍 Fetching user role from Google Sheets API...');
+                const response = await fetch('https://www.resetujenergie.pl/api/sheets-to-clients');
                 
                 if (response.ok) {
                     const clients = await response.json();
+                    console.log('🔍 Clients from API:', clients);
+                    
                     const currentUserClient = clients.find((client: any) => 
                         client.uid === user.uid || client.email === user.email
                     );
 
                     if (currentUserClient) {
+                        console.log('🔍 Found user in clients sheet:', currentUserClient);
                         setUserRole(currentUserClient.role || 'public');
                     } else {
-                        // 3. User not in clients sheet - add them as public
+                        console.log('🔍 User not found in clients sheet, adding as public...');
+                        // User not in clients sheet - add them as public
                         await addUserToClientsSheet(user);
                         setUserRole('public');
                     }
                 } else {
-                    // 4. API error - default to public
                     console.warn('Failed to fetch user permissions, defaulting to public');
                     setUserRole('public');
                 }
             } catch (error) {
                 console.error('Error determining user role:', error);
-                setUserRole('public');
+                setUserRole('public'); // Fallback to public on error
             } finally {
                 setIsLoading(false);
             }
@@ -97,7 +80,7 @@ export const useUserPermissions = (): UserPermissions => {
     // Helper function to add user to clients sheet
     const addUserToClientsSheet = async (user: any) => {
         try {
-            const response = await fetch('/api/add-client', {
+            const response = await fetch('https://www.resetujenergie.pl/api/add-client', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,25 +110,27 @@ export const useUserPermissions = (): UserPermissions => {
         // If still loading permissions, default to showing public actions
         if (isLoading) {
             console.log('⏳ Still loading permissions, defaulting to public only');
-            return rule === 'public' || rule === undefined;
+            return rule === 'public';
         }
         
-        if (rule === 'priv') {
+        if (rule === 'admin') {
             const canSee = userRole === 'admin';
-            console.log('🔒 Private action check:', { canSee, userRole, isAdmin: userRole === 'admin' });
-            return canSee; // Only admin can see private actions
+            console.log('🔒 Admin action check:', { canSee, userRole, isAdmin: userRole === 'admin' });
+            return canSee; // Only admin can see admin actions
         }
         
         if (rule === 'pro') {
-            return userRole === 'pro' || userRole === 'admin'; // Pro and admin can see pro actions
+            const canSee = userRole === 'pro' || userRole === 'admin';
+            console.log('⭐ Pro action check:', { canSee, userRole, isProOrAdmin: userRole === 'pro' || userRole === 'admin' });
+            return canSee; // Pro and admin can see pro actions
         }
         
-        if (rule === 'public' || rule === undefined) {
+        if (rule === 'public') {
             return true; // Everyone can see public actions
         }
         
-        console.log('⚠️ Unknown rule:', rule, 'defaulting to true for safety');
-        return true; // Default to showing action if rule is unknown
+        console.log('⚠️ Unknown rule:', rule, 'defaulting to false for safety');
+        return false; // Default to hiding action if rule is unknown
     };
 
     return {
