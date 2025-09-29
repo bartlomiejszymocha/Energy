@@ -139,7 +139,20 @@ export const useEnergyData = (uid: string | null) => {
     if (typeof rating === 'number' && rating > 0) logToWrite.rating = rating;
 
     if (uid) {
-        await addDoc(collection(db, USERS_COLLECTION, uid, LOGS_COLLECTION), logToWrite);
+        try {
+            console.log('🔍 Saving log to Firestore:', logToWrite);
+            await addDoc(collection(db, USERS_COLLECTION, uid, LOGS_COLLECTION), logToWrite);
+            console.log('✅ Log saved successfully to Firestore');
+        } catch (error) {
+            console.error('❌ Failed to save log to Firestore:', error);
+            // Fallback to localStorage if Firestore fails
+            const newLog: EnergyLog = { id: `local-${Date.now()}`, ...logData };
+            setLogs(prev => {
+                const updated = [...prev, newLog];
+                localStorage.setItem(LS_LOGS_KEY, JSON.stringify(updated));
+                return updated;
+            });
+        }
     } else {
         const newLog: EnergyLog = { id: `local-${Date.now()}`, ...logData };
         setLogs(prev => {
@@ -152,7 +165,13 @@ export const useEnergyData = (uid: string | null) => {
 
   const removeLog = useCallback(async (logId: string) => {
     if (uid) {
-        await deleteDoc(doc(db, USERS_COLLECTION, uid, LOGS_COLLECTION, logId));
+        try {
+            console.log('🔍 Removing log from Firestore:', logId);
+            await deleteDoc(doc(db, USERS_COLLECTION, uid, LOGS_COLLECTION, logId));
+            console.log('✅ Log removed successfully from Firestore');
+        } catch (error) {
+            console.error('❌ Failed to remove log from Firestore:', error);
+        }
     } else {
         setLogs(prev => {
             const updated = prev.filter(log => log.id !== logId);
@@ -164,7 +183,20 @@ export const useEnergyData = (uid: string | null) => {
 
   const addCompletedAction = useCallback(async (actionId: string) => {
     if (uid) {
-        await addDoc(collection(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION), { actionId, timestamp: Timestamp.now() });
+        try {
+            console.log('🔍 Saving completed action to Firestore:', { actionId, timestamp: Timestamp.now() });
+            await addDoc(collection(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION), { actionId, timestamp: Timestamp.now() });
+            console.log('✅ Completed action saved successfully to Firestore');
+        } catch (error) {
+            console.error('❌ Failed to save completed action to Firestore:', error);
+            // Fallback to localStorage if Firestore fails
+            const newAction: CompletedActionLog = { id: `local-${Date.now()}`, actionId, timestamp: Date.now() };
+            setCompletedActions(prev => {
+                const updated = [...prev, newAction];
+                localStorage.setItem(LS_ACTIONS_KEY, JSON.stringify(updated));
+                return updated;
+            });
+        }
     } else {
         const newAction: CompletedActionLog = { id: `local-${Date.now()}`, actionId, timestamp: Date.now() };
         setCompletedActions(prev => {
@@ -177,7 +209,13 @@ export const useEnergyData = (uid: string | null) => {
 
   const removeCompletedAction = useCallback(async (logId: string) => {
     if (uid) {
-        await deleteDoc(doc(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION, logId));
+        try {
+            console.log('🔍 Removing completed action from Firestore:', logId);
+            await deleteDoc(doc(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION, logId));
+            console.log('✅ Completed action removed successfully from Firestore');
+        } catch (error) {
+            console.error('❌ Failed to remove completed action from Firestore:', error);
+        }
     } else {
         setCompletedActions(prev => {
             const updated = prev.filter(a => a.id !== logId);
@@ -189,7 +227,13 @@ export const useEnergyData = (uid: string | null) => {
   
   const addFavoriteAction = useCallback(async (actionId: string) => {
     if (uid) {
-        await updateDoc(doc(db, USERS_COLLECTION, uid), { favoriteActions: arrayUnion(actionId) });
+        try {
+            console.log('🔍 Adding favorite action to Firestore:', actionId);
+            await updateDoc(doc(db, USERS_COLLECTION, uid), { favoriteActions: arrayUnion(actionId) });
+            console.log('✅ Favorite action added successfully to Firestore');
+        } catch (error) {
+            console.error('❌ Failed to add favorite action to Firestore:', error);
+        }
     } else {
         setFavoriteActions(prev => {
             const updated = new Set(prev).add(actionId);
@@ -201,7 +245,13 @@ export const useEnergyData = (uid: string | null) => {
 
   const removeFavoriteAction = useCallback(async (actionId: string) => {
     if (uid) {
-        await updateDoc(doc(db, USERS_COLLECTION, uid), { favoriteActions: arrayRemove(actionId) });
+        try {
+            console.log('🔍 Removing favorite action from Firestore:', actionId);
+            await updateDoc(doc(db, USERS_COLLECTION, uid), { favoriteActions: arrayRemove(actionId) });
+            console.log('✅ Favorite action removed successfully from Firestore');
+        } catch (error) {
+            console.error('❌ Failed to remove favorite action from Firestore:', error);
+        }
     } else {
         setFavoriteActions(prev => {
             const updated = new Set(prev);
@@ -214,13 +264,19 @@ export const useEnergyData = (uid: string | null) => {
 
   const resetAllData = useCallback(async () => {
     if (uid) {
-        const batch = writeBatch(db);
-        const logsSnapshot = await getDocs(query(collection(db, USERS_COLLECTION, uid, LOGS_COLLECTION)));
-        logsSnapshot.forEach(doc => batch.delete(doc.ref));
-        const actionsSnapshot = await getDocs(query(collection(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION)));
-        actionsSnapshot.forEach(doc => batch.delete(doc.ref));
-        batch.update(doc(db, USERS_COLLECTION, uid), { favoriteActions: [] });
-        await batch.commit();
+        try {
+            console.log('🔍 Resetting all data in Firestore for user:', uid);
+            const batch = writeBatch(db);
+            const logsSnapshot = await getDocs(query(collection(db, USERS_COLLECTION, uid, LOGS_COLLECTION)));
+            logsSnapshot.forEach(doc => batch.delete(doc.ref));
+            const actionsSnapshot = await getDocs(query(collection(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION)));
+            actionsSnapshot.forEach(doc => batch.delete(doc.ref));
+            batch.update(doc(db, USERS_COLLECTION, uid), { favoriteActions: [] });
+            await batch.commit();
+            console.log('✅ All data reset successfully in Firestore');
+        } catch (error) {
+            console.error('❌ Failed to reset data in Firestore:', error);
+        }
     } else {
         localStorage.removeItem(LS_LOGS_KEY);
         localStorage.removeItem(LS_ACTIONS_KEY);
