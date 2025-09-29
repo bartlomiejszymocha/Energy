@@ -31,6 +31,7 @@ export default async function handler(req, res) {
     const range = 'Clients!A:E'; // uid, email, displayName, role, lastLogin
 
     console.log('🔍 Fetching clients from spreadsheet:', spreadsheetId, 'range:', range);
+    console.log('🔍 Environment check - SHEETS_CLIENTS_ID exists:', !!spreadsheetId);
     
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
