@@ -47,7 +47,21 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
         setError(null);
       }
 
-      // ALWAYS use the working optimized API endpoint
+      // Check if localhost (development)
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      if (isLocalhost) {
+        console.log('🔍 Development mode - using static actions fallback');
+        // In development, use empty array since API won't work locally
+        // This prevents CORS errors and allows development to continue
+        setActions([]);
+        setLastUpdated(new Date());
+        setError(null);
+        setLoading(false);
+        return;
+      }
+
+      // Production: use working API endpoint
       const apiEndpoint = 'https://resetujenergie.pl/api/sheets-to-actions-optimized';
       
       const response = await fetch(apiEndpoint, {
