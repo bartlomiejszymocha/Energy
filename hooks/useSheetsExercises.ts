@@ -120,20 +120,20 @@ export const useSheetsExercises = (): UseSheetsExercisesReturn => {
     }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [fetchExercises, isOnline]);
+  }, [isOnline]); // Remove fetchExercises from dependencies
 
   // Odśwież gdy wracasz online
   useEffect(() => {
     if (isOnline && Object.keys(exercises).length === 0) {
       fetchExercises();
     }
-  }, [isOnline, exercises, fetchExercises]);
+  }, [isOnline, exercises]); // Remove fetchExercises from dependencies
 
   const refresh = useCallback(async () => {
     retryCount.current = 0;
     retryDelay.current = 1000;
     await fetchExercises();
-  }, [fetchExercises]);
+  }, []); // Remove fetchExercises dependency
 
   return { 
     exercises, 
