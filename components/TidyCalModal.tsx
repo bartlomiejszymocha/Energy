@@ -1,5 +1,5 @@
 import React from 'react';
-import { XMarkIcon } from './icons/Icons';
+import { XMarkIcon } from './icons/LucideIcons';
 
 interface TidyCalModalProps {
     isOpen: boolean;
@@ -15,7 +15,7 @@ export const TidyCalModal: React.FC<TidyCalModalProps> = ({ isOpen, onClose }) =
 
     return (
         <div 
-            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[100] p-4"
+            className="fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4"
             onClick={onClose}
         >
             <div 

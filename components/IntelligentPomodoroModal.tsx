@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { XMarkIcon } from './icons/Icons';
+import { XMarkIcon } from './icons/LucideIcons';
 import type { ActionItem } from '../types';
 
 interface IntelligentPomodoroModalProps {
@@ -279,7 +279,7 @@ export const IntelligentPomodoroModal: React.FC<IntelligentPomodoroModalProps> =
 
     return (
         <div 
-            className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4"
             onClick={onClose}
         >
             <div 

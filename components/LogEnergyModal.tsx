@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { XMarkIcon } from './icons/Icons';
+import { XMarkIcon } from './icons/LucideIcons';
 
 interface LogEnergyModalProps {
     onClose: () => void;
@@ -17,7 +17,7 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
     useEffect(() => {
         setLogDate(new Date());
         const timer = setTimeout(() => {
-            noteInputRef.current?.focus();
+            noteInputRef.current?.focus({ preventScroll: true });
         }, 100); 
 
         return () => clearTimeout(timer);
@@ -61,19 +61,33 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
 
     return (
         <div 
-            className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
+            className="bg-black bg-opacity-70"
             onClick={onClose}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: 999999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '1rem'
+            }}
         >
             <div 
-                className="bg-space-900 rounded-xl shadow-2xl w-full max-w-md p-6 relative animate-fade-in-up"
+                className="bg-white dark:bg-space-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl w-full max-w-md p-6 relative animate-fade-in-up"
                 onClick={(e) => e.stopPropagation()}
             >
-                <button onClick={onClose} className="absolute top-4 right-4 text-system-grey hover:text-cloud-white transition">
+                <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 dark:text-system-grey hover:text-gray-900 dark:hover:text-cloud-white transition">
                     <XMarkIcon className="h-6 w-6" />
                 </button>
 
-                <h2 className="text-2xl font-bold text-cloud-white text-center mb-2">Jak Twoja energia?</h2>
-                <p className="text-center text-system-grey mb-6">Oceń swój obecny poziom energii lub dodaj notatkę.</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-cloud-white text-center mb-2">Jak Twoja energia?</h2>
+                <p className="text-center text-gray-600 dark:text-system-grey mb-6">Oceń swój obecny poziom energii lub dodaj notatkę.</p>
                 
                 <div className="flex justify-center items-center gap-3 sm:gap-4 mb-6">
                     {[1, 2, 3, 4, 5].map(level => (
@@ -81,7 +95,7 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
                             key={level}
                             onClick={() => setRating(level)}
                             className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full text-xl font-bold transition-all duration-200 flex items-center justify-center
-                                ${rating === level ? `text-space-950 ${RATING_CONFIG[level].color} scale-110 shadow-lg` : 'bg-space-800 text-system-grey hover:bg-space-700'}`}
+                                ${rating === level ? `text-white ${RATING_CONFIG[level].color} scale-110 shadow-lg` : 'bg-gray-100 dark:bg-space-800 border border-gray-200 dark:border-white/20 text-gray-600 dark:text-system-grey hover:bg-gray-200 dark:hover:bg-space-700'}`}
                         >
                             {level}
                         </button>
@@ -89,15 +103,20 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
                 </div>
                 
                 {rating > 0 && (
-                    <p className="text-center font-semibold mb-6 transition-opacity duration-300" 
-                       style={{ color: RATING_CONFIG[rating].color.startsWith('bg-') ? `var(--tw-color-${RATING_CONFIG[rating].color.substring(3).replace('/', '-')})` : RATING_CONFIG[rating].color }}>
+                    <p className={`text-center font-semibold mb-6 transition-opacity duration-300 ${
+                        rating === 1 ? 'text-red-600 dark:text-red-400' :
+                        rating === 2 ? 'text-orange-600 dark:text-orange-400' :
+                        rating === 3 ? 'text-yellow-600 dark:text-yellow-500' :
+                        rating === 4 ? 'text-green-600 dark:text-green-400' :
+                        'text-green-700 dark:text-green-400'
+                    }`}>
                         {RATING_CONFIG[rating].label}
                     </p>
                 )}
 
-                <div className="border-t border-space-700 pt-6">
+                <div className="border-t border-gray-200 dark:border-white/10 pt-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-cloud-white">Dodaj notatkę</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-cloud-white">Dodaj notatkę</h3>
                          {isEditingTime ? (
                             <input
                                 type="time"
@@ -105,12 +124,12 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
                                 onChange={handleTimeChange}
                                 onBlur={() => setIsEditingTime(false)}
                                 autoFocus
-                                className="bg-space-800 text-cloud-white rounded-lg p-2 text-base font-mono focus:ring-2 focus:ring-electric-500 focus:outline-none transition"
+                                className="bg-gray-100 dark:bg-space-800 border border-gray-200 dark:border-white/20 text-gray-900 dark:text-cloud-white rounded-lg p-2 text-base font-mono focus:ring-2 focus:ring-electric-500 focus:outline-none transition"
                             />
                         ) : (
                             <button
                                 onClick={() => setIsEditingTime(true)}
-                                className="text-base font-mono text-system-grey bg-space-800 hover:bg-space-700 py-2 px-3 rounded-lg transition-colors"
+                                className="text-base font-mono text-gray-600 dark:text-system-grey bg-gray-100 dark:bg-space-800 border border-gray-200 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-space-700 py-2 px-3 rounded-lg transition-colors"
                                 title="Zmień godzinę wpisu"
                             >
                                 {formattedTime}
@@ -123,10 +142,10 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
                         onChange={(e) => setNote(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Tutaj wpisz swoje notatki..."
-                        className="w-full bg-space-800 text-cloud-white rounded-lg p-3 text-base focus:ring-2 focus:ring-electric-500 focus:outline-none transition"
+                        className="w-full bg-gray-100 dark:bg-space-800 border border-gray-200 dark:border-white/20 text-gray-900 dark:text-cloud-white rounded-lg p-3 text-base focus:ring-2 focus:ring-electric-500 focus:outline-none transition"
                         rows={3}
                     />
-                    <p className="hidden sm:block text-xs text-system-grey text-right mt-2">
+                    <p className="hidden sm:block text-xs text-gray-600 dark:text-system-grey text-right mt-2">
                         Naciśnij <kbd>1-5</kbd> aby ocenić, potem <kbd>Enter</kbd> aby zapisać.
                     </p>
                 </div>
@@ -135,7 +154,7 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave 
                     <button
                         onClick={() => onSave(rating > 0 ? rating : undefined, note, logDate.getTime())}
                         disabled={isSaveDisabled}
-                        className="w-full bg-electric-500 text-cloud-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-electric-600 transition-colors disabled:bg-space-700 disabled:text-system-grey/50 disabled:cursor-not-allowed"
+                        className="w-full bg-electric-500 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-electric-600 transition-colors disabled:bg-gray-100 dark:disabled:bg-space-800 disabled:text-gray-400 dark:disabled:text-system-grey/50 disabled:cursor-not-allowed disabled:border disabled:border-gray-200 dark:disabled:border-white/20"
                     >
                         Zapisz
                     </button>

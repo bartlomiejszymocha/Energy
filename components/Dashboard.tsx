@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import type { EnergyLog, CompletedActionLog, ActionItem } from '../types';
 import { EnergyChart } from './EnergyChart';
-import { PlusIcon, QuestionMarkCircleIcon, TrashIcon, ArrowPathCircularIcon, BoltIcon, BreathingIcon, XMarkIcon, ArrowsPointingOutIcon, ArchiveBoxIcon } from './icons/Icons';
-import { ACTION_LIBRARY } from '../constants/actions';
+import { PlusIcon, QuestionMarkCircleIcon, TrashIcon, ArrowPathCircularIcon, BoltIcon, BreathingIcon, XMarkIcon, ArrowsPointingOutIcon, ArchiveBoxIcon, ChevronDownIcon } from './icons/LucideIcons';
+import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
+import { IconRenderer } from './IconRenderer';
 
 const RATING_CONFIG: { [key: number]: { color: string; label: string } } = {
     1: { color: 'bg-danger-red', label: 'Bardzo nisko' },
@@ -23,6 +24,8 @@ const DailySummary: React.FC<{
     onOpenModal: () => void;
     onShowHistory: () => void;
 }> = ({ logs, completedActions, onCopySummary, isCopied, onResetDataClick, onRemoveCompletedAction, onRemoveLog, onOpenModal, onShowHistory }) => {
+    const { actions: sheetsActions } = useSheetsActionsOptimized();
+    const [isEnergyLogsExpanded, setIsEnergyLogsExpanded] = useState(true);
     const { todayLogs, todayCompletedActions } = useMemo(() => {
         const today = new Date();
         const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
@@ -46,36 +49,38 @@ const DailySummary: React.FC<{
     const renderSummaryIcon = (type: ActionItem['type']) => {
         switch (type) {
             case 'Protokół Ruchowy':
-                return <BoltIcon className="h-5 w-5 text-system-grey" />;
+            case 'Protokuł Ruchowy': // obsługa błędu ortograficznego
+                return <BoltIcon className="h-4 w-4 text-gray-600 dark:text-system-grey" />;
             case 'Technika oddechowa':
-                return <BreathingIcon className="h-5 w-5 text-system-grey" />;
+            case 'Technika Oddechowa': // obsługa różnej wielkości liter
+                return <BreathingIcon className="h-4 w-4 text-gray-600 dark:text-system-grey" />;
             case 'Reset Energetyczny':
             default:
-                return <ArrowPathCircularIcon className="h-5 w-5 text-system-grey" />;
+                return <ArrowPathCircularIcon className="h-4 w-4 text-gray-600 dark:text-system-grey" />;
         }
     };
 
     return (
         <div 
-            className="bg-white/5 border border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:h-full flex flex-col cursor-pointer lg:cursor-default backdrop-blur-sm"
+            className="bg-white/90 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:h-full flex flex-col cursor-pointer lg:cursor-default backdrop-blur-sm"
             onClick={handleCardClick}
         >
             <div className="flex items-center justify-between gap-3 mb-4 flex-shrink-0">
                  <div className="flex items-center gap-3">
                     <span className="text-2xl">🏆</span>
-                    <h3 className="text-lg font-medium text-cloud-white/80">Podsumowanie</h3>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-cloud-white/80">Podsumowanie</h3>
                  </div>
                  <div className="flex items-center gap-2">
                     <button
                         onClick={(e) => { e.stopPropagation(); onOpenModal(); }}
-                        className="hidden lg:flex bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/40 text-cloud-white font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 items-center backdrop-blur-sm"
+                        className="hidden lg:flex bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 items-center backdrop-blur-sm"
                         title="Powiększ podsumowanie"
                     >
                         <ArrowsPointingOutIcon className="h-5 w-5" />
                     </button>
                     <button
                         onClick={(e) => { e.stopPropagation(); onResetDataClick(); }}
-                        className="bg-white/10 border border-white/20 hover:bg-danger-red/20 hover:border-danger-red/40 text-danger-red/80 font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 text-sm backdrop-blur-sm"
+                        className="bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-danger-red/20 hover:border-danger-red/40 text-danger-red font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 text-sm backdrop-blur-sm"
                         title="Resetuj wszystkie dane"
                     >
                         <TrashIcon className="h-5 w-5" />
@@ -87,7 +92,7 @@ const DailySummary: React.FC<{
                             onCopySummary();
                         }}
                         className={`font-bold py-2 px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center text-sm backdrop-blur-sm
-                            ${isCopied ? 'bg-success-green text-cloud-white cursor-default' : 'bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/40 text-cloud-white'}`
+                            ${isCopied ? 'bg-success-green text-white cursor-default' : 'bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white'}`
                         }
                         title="Kopiuj Podsumowanie Dnia"
                     >
@@ -112,13 +117,27 @@ const DailySummary: React.FC<{
                     <p className="text-system-grey text-center">Brak dzisiejszej aktywności.</p>
                 </div>
             ) : (
-                <div className="hidden lg:block h-80 lg:h-auto lg:max-h-[26rem] overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                <div className="hidden lg:block h-80 lg:h-auto lg:max-h-[280px] overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                     {todayLogs.length > 0 && (
                         <div>
-                            <h4 className="font-bold text-system-grey mb-2 text-sm uppercase tracking-wider">Wpisy Energii</h4>
-                            <div className="space-y-3">
+                            <div className="flex items-center justify-between mb-2">
+                                <h4 className="font-bold text-gray-600 dark:text-system-grey text-sm uppercase tracking-wider">Wpisy Energii</h4>
+                                <button
+                                    onClick={() => setIsEnergyLogsExpanded(!isEnergyLogsExpanded)}
+                                    className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-space-700 transition-colors duration-200"
+                                    title={isEnergyLogsExpanded ? "Ukryj wpisy energii" : "Pokaż wpisy energii"}
+                                >
+                                    <ChevronDownIcon 
+                                        className={`h-4 w-4 text-gray-500 dark:text-system-grey transition-transform duration-200 ${
+                                            isEnergyLogsExpanded ? 'rotate-180' : 'rotate-0'
+                                        }`} 
+                                    />
+                                </button>
+                            </div>
+                            {isEnergyLogsExpanded && (
+                                <div className="space-y-3">
                                 {todayLogs.map(log => (
-                                    <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-white/5 border border-white/10 rounded-lg backdrop-blur-sm">
+                                    <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg backdrop-blur-sm">
                                         {log.rating ? (
                                             <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg text-space-950 ${RATING_CONFIG[log.rating].color}`}>
                                                 {log.rating}
@@ -130,15 +149,15 @@ const DailySummary: React.FC<{
                                         )}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex justify-between items-start">
-                                                <p className="text-cloud-white text-sm break-words flex-1 pr-2">{log.note || <span className="text-system-grey/70">Brak notatki</span>}</p>
-                                                <span className="text-xs text-system-grey flex-shrink-0">
+                                                <p className="text-gray-800 dark:text-cloud-white text-sm break-words flex-1 pr-2">{log.note || <span className="text-gray-500 dark:text-system-grey/70">Brak notatki</span>}</p>
+                                                <span className="text-xs text-gray-500 dark:text-system-grey flex-shrink-0">
                                                     {new Date(log.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
                                             {log.tags && log.tags.length > 0 && (
                                                 <div className="flex flex-wrap gap-1.5 mt-2">
                                                     {log.tags.map(tag => (
-                                                        <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-space-700 text-system-grey">
+                                                        <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-space-700 dark:text-system-grey">
                                                             {tag}
                                                         </span>
                                                     ))}
@@ -154,24 +173,29 @@ const DailySummary: React.FC<{
                                         </button>
                                     </div>
                                 ))}
-                            </div>
+                                </div>
+                            )}
                         </div>
                     )}
                     {todayCompletedActions.length > 0 && (
                         <div className={todayLogs.length > 0 ? 'pt-4' : ''}>
-                            <h4 className="font-bold text-system-grey mb-2 text-sm uppercase tracking-wider">Wykonane Akcje</h4>
+                            <h4 className="font-bold text-gray-600 dark:text-system-grey mb-2 text-sm uppercase tracking-wider">Wykonane Akcje</h4>
                             <div className="space-y-2">
                                 {todayCompletedActions.map(actionLog => {
-                                    const actionDetails = ACTION_LIBRARY.find(a => a.id === actionLog.actionId);
+                                    const actionDetails = sheetsActions.find(a => a.id === actionLog.actionId);
                                     if (!actionDetails) return null;
                                     return (
-                                        <div key={actionLog.id} className="group relative flex items-center gap-3 p-2.5 bg-white/5 border border-white/10 rounded-lg backdrop-blur-sm">
-                                             <div className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center bg-space-700 text-lg">
-                                                {renderSummaryIcon(actionDetails.type)}
+                                        <div key={actionLog.id} className="group relative flex items-center gap-3 p-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg backdrop-blur-sm">
+                                             <div className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center bg-gray-200 dark:bg-space-700">
+                                                <IconRenderer 
+                                                    icon={actionDetails.icon} 
+                                                    className="text-lg" 
+                                                    fallback={renderSummaryIcon(actionDetails.type)}
+                                                />
                                              </div>
                                              <div className="flex-1 min-w-0 flex justify-between items-center">
-                                                <p className="text-cloud-white text-sm truncate pr-2">{actionDetails.title}</p>
-                                                <span className="text-xs text-system-grey flex-shrink-0">
+                                                <p className="text-gray-800 dark:text-cloud-white text-sm truncate pr-2">{actionDetails.title}</p>
+                                                <span className="text-xs text-gray-500 dark:text-system-grey flex-shrink-0">
                                                     {new Date(actionLog.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                              </div>
@@ -246,7 +270,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
         if (todayCompletedActions.length > 0) {
             summary += "**⚡ Wykonane Akcje:**\n";
             todayCompletedActions.sort((a, b) => a.timestamp - b.timestamp).forEach(actionLog => {
-                const actionDetails = ACTION_LIBRARY.find(a => a.id === actionLog.actionId);
+                const actionDetails = sheetsActions.find(a => a.id === actionLog.actionId);
                 const title = actionDetails ? actionDetails.title : 'Nieznana akcja';
                 summary += `- ${timeFormatter.format(new Date(actionLog.timestamp))} | Akcja: ${title}\n`;
             });
@@ -265,15 +289,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
 
 
     return (
-        <div className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="bg-white/5 border border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm">
+        <div className="space-y-6 mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[380px]">
+                <div className="bg-white/90 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm lg:h-full overflow-hidden">
                     <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between sm:items-start">
-                        <h3 className="text-lg font-medium text-cloud-white/80 text-left">📊 Wykres energii na dziś</h3>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-cloud-white/80 text-left">📊 Wykres energii na dziś</h3>
                         <div className="flex items-center justify-center flex-wrap gap-2">
                              <button
                                 onClick={onInstructionsClick}
-                                className="bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/40 text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2 backdrop-blur-sm"
+                                className="bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2 backdrop-blur-sm"
                             >
                                 <span className="sm:hidden">Zacznij tutaj!</span>
                                 <span className="hidden sm:inline md:hidden">
@@ -295,7 +319,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                             </button>
                         </div>
                     </div>
-                    <div className="flex-grow h-52 sm:h-72">
+                    <div className="flex-grow h-64 sm:h-80 lg:flex-1 lg:min-h-0 overflow-hidden">
                         {(() => {
                             const today = new Date();
                             const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
@@ -321,7 +345,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                     </div>
                 </div>
 
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-1 lg:h-full">
                     <DailySummary 
                       logs={logs} 
                       completedActions={completedActions}

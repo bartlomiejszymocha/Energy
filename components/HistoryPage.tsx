@@ -3,7 +3,7 @@ import type { EnergyLog, CompletedActionLog } from '../types';
 import { EnergyChart } from './EnergyChart';
 import { DaySummaryCard } from './DaySummaryCard';
 import { HistoryDaySelector } from './HistoryDaySelector';
-import { ArrowLeftIcon } from './icons/Icons';
+import { ArrowLeftIcon } from './icons/LucideIcons';
 
 interface HistoryPageProps {
     logs: EnergyLog[];
@@ -78,10 +78,10 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ logs, completedActions
     return (
         <div className="animate-fade-in-up">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-3xl font-bold text-cloud-white">Historia Aktywności</h1>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-cloud-white">Historia Aktywności</h1>
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-2 bg-space-800 text-cloud-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-space-700 transition-colors"
+                    className="flex items-center gap-2 bg-gray-200 dark:bg-space-800 text-gray-700 dark:text-cloud-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-300 dark:hover:bg-space-700 transition-colors"
                 >
                     <ArrowLeftIcon className="h-5 w-5" />
                     <span>Wróć</span>
@@ -103,8 +103,8 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ logs, completedActions
                     {selectedDayTimestamp ? (
                         <>
                             {/* Chart at the top */}
-                            <div className="bg-space-900 rounded-xl shadow-lg p-4 sm:p-6">
-                                <h3 className="text-lg font-medium text-cloud-white/80 mb-4">
+                            <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-transparent">
+                                <h3 className="text-lg font-medium text-gray-700 dark:text-cloud-white/80 mb-4">
                                     Wykres energii - <span className="text-electric-500 font-semibold">{selectedDateFormatted}</span>
                                 </h3>
                                 <div className="h-72">
@@ -113,7 +113,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ logs, completedActions
                             </div>
 
                             {/* Summary at the bottom */}
-                            <div className="bg-space-900 rounded-xl shadow-lg">
+                            <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg border border-gray-200 dark:border-transparent">
                                 <DaySummaryCard
                                     logs={selectedDayData.logs}
                                     completedActions={selectedDayData.completedActions}
@@ -123,8 +123,8 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ logs, completedActions
                             </div>
                         </>
                     ) : (
-                        <div className="md:col-span-3 bg-space-900 rounded-xl shadow-lg p-6 flex items-center justify-center h-full">
-                            <p className="text-system-grey text-center">Wybierz dzień z listy, aby zobaczyć jego historię.</p>
+                        <div className="md:col-span-3 bg-white dark:bg-space-900 rounded-xl shadow-lg p-6 flex items-center justify-center h-full border border-gray-200 dark:border-transparent">
+                            <p className="text-gray-600 dark:text-system-grey text-center">Wybierz dzień z listy, aby zobaczyć jego historię.</p>
                         </div>
                     )}
                 </div>

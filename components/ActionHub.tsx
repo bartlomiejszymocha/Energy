@@ -2,8 +2,10 @@
 import React, { useState, useMemo } from 'react';
 import type { ActionItem, ActionType } from '../types';
 import { ActionCard } from './ActionCard';
-import { ACTION_LIBRARY } from '../constants/actions';
-import { ArrowPathCircularIcon, BoltIcon, BreathingIcon, StarIcon } from './icons/Icons';
+// import { ACTION_LIBRARY } from '../constants/actions'; // Usunięto - używamy tylko Google Sheets
+import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
+import { useUserPermissions } from '../hooks/useUserPermissions';
+import { ArrowPathCircularIcon, BoltIcon, BreathingIcon, StarIcon, CogIcon } from './icons/LucideIcons';
 
 interface ActionHubProps {
     onCompleteAction: (actionId: string) => void;
@@ -26,6 +28,10 @@ export const ActionHub: React.FC<ActionHubProps> = ({
     onOpenBreathingModal,
     todayCompletedActionIds
 }) => {
+    // Hook do pobierania danych z Google Sheets przez Vercel API
+    const { actions: sheetsActions, loading: sheetsLoading, error: sheetsError, refresh: refreshSheets } = useSheetsActionsOptimized();
+    // Hook do sprawdzania uprawnień użytkownika
+    const { canViewAction, isLoading: permissionsLoading, role } = useUserPermissions();
     const [duration, setDuration] = useState(15);
     const [filter, setFilter] = useState<FilterType>('all');
     const [expandedActionId, setExpandedActionId] = useState<string | null>(null);
@@ -34,9 +40,45 @@ export const ActionHub: React.FC<ActionHubProps> = ({
         setExpandedActionId(prevId => (prevId === actionId ? null : actionId));
     };
 
+    // Reset expanded card when filter changes
+    React.useEffect(() => {
+        setExpandedActionId(null);
+    }, [filter]);
+
     const filteredActions = useMemo(() => {
         const actualDuration = isNaN(duration) || duration < 1 ? 1 : duration > 15 ? 15 : duration;
-        const filtered = ACTION_LIBRARY.filter(action => {
+        
+        // Debug: sprawdź stan
+        console.log('ActionHub Debug:', {
+            sheetsLoading,
+            sheetsError,
+            sheetsActionsLength: sheetsActions.length,
+            sheetsActions: sheetsActions,
+            permissionsLoading,
+            userRole: role,
+            ACTION_LIBRARYLength: 0 // Usunięto ACTION_LIBRARY
+        });
+        
+        // Używamy tylko akcji z Google Sheets
+        const actionsSource = sheetsActions;
+        
+        console.log('Using actionsSource:', actionsSource.length, 'actions');
+        
+        const filtered = actionsSource.filter(action => {
+            // 1. Check permissions first
+            const hasPermission = canViewAction(action.rules || 'public');
+            console.log('🔍 Action permission check:', { 
+                actionTitle: action.title, 
+                actionRules: action.rules, 
+                hasPermission,
+                userRole: role
+            });
+            
+            if (!hasPermission) {
+                return false;
+            }
+            
+            // 2. Check duration
             if (action.duration > actualDuration) {
                 return false;
             }
@@ -45,9 +87,9 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                 case 'reset':
                     return action.type === 'Reset Energetyczny';
                 case 'movement':
-                    return action.type === 'Protokół Ruchowy';
+                    return ['Protokół Ruchowy', 'Protokuł Ruchowy'].includes(action.type);
                 case 'breath':
-                    return action.type === 'Technika oddechowa';
+                    return ['Technika oddechowa', 'Technika Oddechowa'].includes(action.type);
                 case 'favorites':
                     return favoriteActionIds.has(action.id);
                 case 'all':
@@ -59,7 +101,9 @@ export const ActionHub: React.FC<ActionHubProps> = ({
         if (filter === 'all') {
             const typeOrder: { [key in ActionType]: number } = {
                 'Protokół Ruchowy': 1,
+                'Protokuł Ruchowy': 1,
                 'Technika oddechowa': 2,
+                'Technika Oddechowa': 2,
                 'Reset Energetyczny': 3,
             };
             return filtered.sort((a, b) => typeOrder[a.type] - typeOrder[b.type]);
@@ -67,7 +111,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
 
         return filtered;
 
-    }, [duration, filter]);
+    }, [duration, filter, sheetsActions, sheetsLoading, sheetsError, favoriteActionIds, canViewAction, permissionsLoading, role]);
     
     const filterButtons = [
         { key: 'all' as FilterType, label: 'Wszystko', icon: null },
@@ -93,14 +137,32 @@ export const ActionHub: React.FC<ActionHubProps> = ({
     const progressPercentage = isNaN(duration) ? 100 : ((Math.max(1, Math.min(15, duration)) - 1) / 14) * 100;
 
     return (
-        <div className="space-y-6 pt-4 sm:pt-6">
+        <div className="space-y-6 pt-2 sm:pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div className="text-center md:text-left">
-                    <h2 className="text-2xl md:text-3xl font-bold text-cloud-white">
-                        <span role="img" aria-label="Toolbox" className="mr-3">🧰</span>
-                        Narzędziownik energetyczny
-                    </h2>
-                    <p className="text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
+                        <div className="flex items-center justify-center md:justify-start gap-3">
+                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-cloud-white flex items-center gap-3">
+                                <span className="text-2xl">🧰</span>
+                                Narzędziownik energetyczny
+                            </h2>
+                            {(sheetsLoading || permissionsLoading) && (
+                                <div className="flex items-center gap-1 text-sm text-electric-500">
+                                    <ArrowPathCircularIcon className="h-4 w-4 animate-spin" />
+                                    <span>{permissionsLoading ? 'Sprawdzanie uprawnień...' : 'Synchronizacja...'}</span>
+                                </div>
+                            )}
+                            {sheetsError && (
+                                <button
+                                    onClick={refreshSheets}
+                                    className="flex items-center gap-1 text-sm text-danger-red hover:text-danger-red/80 transition"
+                                    title="Błąd synchronizacji - kliknij aby odświeżyć"
+                                >
+                                    <ArrowPathCircularIcon className="h-4 w-4" />
+                                    <span>Błąd</span>
+                                </button>
+                            )}
+                        </div>
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
                         Wszystkie dostępne protokoły ruchowe, techniki oddechowe i resety energetyczne.
                         {favoriteActionIds.size === 0 && (
                             <> Dodaj do ulubionych (klikając ⭐) te, których używasz najczęściej.</>
@@ -108,11 +170,11 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                     </p>
                 </div>
                 
-                <div className="w-full max-w-lg mx-auto md:max-w-none">
+                <div className="w-full max-w-lg mx-auto md:max-w-none px-2 sm:px-0">
                     <div className="flex flex-col items-center md:items-start w-full">
                         <div className="w-full text-center md:text-left mb-1">
                              <div className="flex items-center justify-center md:justify-start gap-2">
-                                <span className="text-cloud-white/80">Ile masz czasu?</span>
+                                <span className="text-gray-600 dark:text-cloud-white/80">Ile masz czasu?</span>
                                  <div className="text-lg font-bold text-electric-500 flex items-center gap-1.5">
                                     <input
                                         type="number"
@@ -121,7 +183,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                                         value={duration === 0 ? '' : duration}
                                         onChange={handleDurationInputChange}
                                         onBlur={handleDurationInputBlur}
-                                        className="tabular-nums w-[4ch] bg-transparent p-1 border-0 text-lg font-bold text-electric-500 focus:outline-none focus:ring-1 focus:ring-electric-500 focus:bg-space-800 rounded-md text-center"
+                                        className="tabular-nums w-[4ch] bg-transparent p-1 border-0 text-lg font-bold text-electric-500 focus:outline-none focus:ring-1 focus:ring-electric-500 focus:bg-gray-100 dark:focus:bg-space-800 rounded-md text-center"
                                     />
                                     <span>min</span>
                                     <span>⏱️</span>
@@ -219,15 +281,15 @@ export const ActionHub: React.FC<ActionHubProps> = ({
             `}</style>
 
             {/* ActionHub with modern glassmorphism styling */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-2 backdrop-blur-sm">
-                <div className="flex items-center justify-center gap-1 md:gap-2 flex-wrap">
+            <div className="bg-gray-100 dark:bg-space-950 border border-gray-200 dark:border-white/10 rounded-xl p-1">
+                <div className="flex items-center justify-center gap-0.5 md:gap-2 flex-wrap">
                     {filterButtons.map(({ key, label, icon: Icon }) => (
                          <button 
                             key={key}
                             onClick={() => setFilter(key)}
-                            className={`px-1.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold flex items-center gap-1 md:gap-2 transition-all duration-200 ${filter === key ? 'bg-electric-500 text-cloud-white' : 'bg-white/5 border border-white/10 text-system-grey hover:bg-white/10 hover:border-white/20 backdrop-blur-sm'}`}
+                            className={`px-1 md:px-4 py-2 md:py-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-1 md:gap-2 transition-all duration-200 flex-1 md:flex-none ${filter === key ? 'bg-electric-500 text-white' : 'bg-white dark:bg-space-900 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-system-grey hover:bg-gray-100 dark:hover:bg-space-700 hover:border-gray-300 dark:hover:border-white/20'}`}
                         >
-                            {Icon && <Icon className="h-3.5 w-3.5 md:h-5 md:w-5" />}
+                            {Icon && <Icon className="h-3 w-3 md:h-4 md:w-4" />}
                             <span className="hidden sm:inline">{label}</span>
                             <span className="sm:hidden">{label.split(' ')[0]}</span>
                         </button>
@@ -235,7 +297,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
                 {filteredActions.length > 0 ? (
                     filteredActions.map(action => (
                         <ActionCard 
@@ -254,7 +316,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                     ))
                 ) : (
                     <div className="col-span-full text-center py-10">
-                        <p className="text-system-grey">Brak akcji spełniających wybrane kryteria.</p>
+                        <p className="text-gray-600 dark:text-system-grey">Brak akcji spełniających wybrane kryteria.</p>
                     </div>
                 )}
             </div>

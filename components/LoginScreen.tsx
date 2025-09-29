@@ -57,14 +57,20 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onSignIn }) => {
             
             <div className="w-full max-w-md mx-auto z-10">
                 <div className="text-center">
-                    <div className="text-6xl sm:text-7xl mb-5 sm:mb-6 text-white">🚀</div>
+                    <div className="mb-5 sm:mb-6 flex justify-center">
+                        <img 
+                            src="https://firebasestorage.googleapis.com/v0/b/energy-playbook.firebasestorage.app/o/logoDES%20(1).png?alt=media&token=71219723-d4ca-4fa4-9c46-eb224a715a10" 
+                            alt="Energy Playbook Logo" 
+                            className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
+                        />
+                    </div>
                         <h1 className="text-3xl sm:text-4xl text-white mb-3 sm:mb-3">Sprawdź <span className="font-bold">Energy Playbook</span>!</h1>
                     <p className="text-base sm:text-lg text-gray-300 mb-7 sm:mb-8">Proste i sprawdzone narzędzie, dzięki któremu <span className="font-bold underline decoration-2 decoration-[#FF6B35]/80 underline-offset-2">odzyskasz 2h produktywności</span> dziennie.<br className="hidden sm:block" /> Przejmij kontrolę nad swoją energią już dziś!</p>
                     
                     <button
                         onClick={handleSignInClick}
                         disabled={isLoading}
-                        className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-white/10 border-2 border-[#259dff]/80 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-wait relative overflow-hidden group"
+                        className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-white/10 border-2 border-[#259dff]/80 rounded-xl hover:bg-white/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-wait relative overflow-hidden group"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#259dff]/30 to-transparent -translate-x-full group-hover:translate-x-full animate-shimmer-on-load transition-transform duration-1000"></div>
                         <GoogleIcon className="w-6 h-6 relative z-10" />

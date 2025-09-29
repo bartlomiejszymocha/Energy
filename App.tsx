@@ -4,10 +4,11 @@ import { useUserSettings } from './hooks/useUserSettings';
 import { useNotifications } from './hooks/useNotifications';
 import { useAuth } from './hooks/useAuth';
 import type { ActionItem, Exercise } from './types';
-import { fetchExerciseLibrary } from './services/exerciseService';
+import { useSheetsExercises } from './hooks/useSheetsExercises';
 
 // Components
 import { Header } from './components/Header';
+import { EyeIcon, EyeOffIcon } from './components/icons/LucideIcons';
 import { Dashboard } from './components/Dashboard';
 import { ActionHub } from './components/ActionHub';
 import { FavoritesBar } from './components/FavoritesBar';
@@ -24,7 +25,7 @@ import { TidyCalModal } from './components/TidyCalModal';
 import { LoginScreen } from './components/LoginScreen';
 import { HistoryPage } from './components/HistoryPage';
 import { WorkoutModal } from './components/WorkoutPage';
-import { PlusIcon, CalendarDaysIcon, ChartBarIcon } from './components/icons/Icons';
+import { PlusIcon, CalendarDaysIcon, ChartBarIcon } from './components/icons/LucideIcons';
 
 function App() {
   const { user, loadingAuth, signInWithGoogle, signOut } = useAuth();
@@ -42,7 +43,8 @@ function App() {
     requestPermission, 
     updateSettings: updateNotificationSettings,
     addReminder,
-    removeReminder
+    removeReminder,
+    testNotification
   } = useNotifications();
 
   // State
@@ -58,8 +60,8 @@ function App() {
   const [workoutAction, setWorkoutAction] = useState<ActionItem | null>(null);
   const [isTidyCalModalOpen, setIsTidyCalModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [exerciseLibrary, setExerciseLibrary] = useState<Record<string, Exercise> | null>(null);
-  const [libraryError, setLibraryError] = useState<string | null>(null);
+  const { exercises: exerciseLibrary, loading: exercisesLoading, error: libraryError } = useSheetsExercises();
+  const [isDashboardVisible, setIsDashboardVisible] = useState(true);
   const userRef = useRef(user);
 
   const showToast = useCallback((message: string) => {
@@ -67,17 +69,7 @@ function App() {
     setTimeout(() => setToastMessage(null), 3000);
   }, []);
 
-  // Effect to fetch exercise library
-  useEffect(() => {
-    fetchExerciseLibrary()
-      .then(library => {
-        setExerciseLibrary(library);
-      })
-      .catch(error => {
-        console.error(error);
-        setLibraryError("Nie udało się załadować biblioteki ćwiczeń. Treningi mogą nie działać poprawnie.");
-      });
-  }, []);
+  // Exercise library is now loaded via useSheetsExercises hook
 
   useEffect(() => {
     if (libraryError) {
@@ -182,8 +174,8 @@ function App() {
 
   if (loadingAuth) {
     return (
-      <div className="bg-space-950 min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-system-grey">Ładowanie...</div>
+      <div className="bg-gray-100 dark:bg-space-950 min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-gray-600 dark:text-system-grey">Ładowanie...</div>
       </div>
     );
   }
@@ -194,7 +186,8 @@ function App() {
   }
 
   return (
-    <div className="bg-space-950 text-cloud-white min-h-screen font-sans">
+    <>
+    <div className="bg-gray-100 dark:bg-space-950 text-gray-900 dark:text-cloud-white min-h-screen font-sans">
         <Header 
         user={user}
         onSignOut={signOut}
@@ -208,20 +201,39 @@ function App() {
         completedActionIds={todayCompletedActionIds}
         onActionClick={handlePlayAction}
       />
-      <main className="max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+               <main className="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-8 min-h-screen">
         {view === 'dashboard' ? (
           <>
-            <Dashboard 
-              logs={logs}
-              completedActions={completedActions}
-              onLogEnergyClick={() => setIsLogEnergyModalOpen(true)}
-              onInstructionsClick={() => setIsInstructionsModalOpen(true)}
-              onResetDataClick={() => setIsResetDataModalOpen(true)}
-              onRemoveCompletedAction={handleRemoveCompletedAction}
-              onRemoveLog={handleRemoveLog}
-              onOpenSummaryModal={() => setIsFullSummaryModalOpen(true)}
-              onShowHistory={() => setView('history')}
-            />
+            {isDashboardVisible && (
+              <Dashboard 
+                logs={logs}
+                completedActions={completedActions}
+                onLogEnergyClick={() => setIsLogEnergyModalOpen(true)}
+                onInstructionsClick={() => setIsInstructionsModalOpen(true)}
+                onResetDataClick={() => setIsResetDataModalOpen(true)}
+                onRemoveCompletedAction={handleRemoveCompletedAction}
+                onRemoveLog={handleRemoveLog}
+                onOpenSummaryModal={() => setIsFullSummaryModalOpen(true)}
+                onShowHistory={() => setView('history')}
+                isDashboardVisible={isDashboardVisible}
+                onToggleDashboard={() => setIsDashboardVisible(false)}
+              />
+            )}
+            
+            {/* Przycisk "Pokaż Dashboard" - pojawia się gdy dashboard jest ukryty */}
+            {!isDashboardVisible && (
+                <div className="lg:flex-[1] lg:max-w-md lg:mx-auto">
+                    <button
+                        onClick={() => setIsDashboardVisible(true)}
+                        className="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-md p-1.5 shadow-sm hover:bg-gray-50 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-200 flex items-center justify-center gap-1.5"
+                        title="Pokaż wykres i podsumowanie"
+                    >
+                        <EyeIcon className="h-3.5 w-3.5 text-gray-600 dark:text-system-grey" />
+                        <span className="text-gray-700 dark:text-cloud-white font-medium text-xs">Pokaż wykres i podsumowanie</span>
+                    </button>
+                </div>
+            )}
+            
             <ActionHub 
               onCompleteAction={handleCompleteAction}
               completionCounts={completionCounts}
@@ -231,18 +243,18 @@ function App() {
               onOpenBreathingModal={(action) => setBreathingAction(action)}
               todayCompletedActionIds={todayCompletedActionIds}
             />
-            <div className="bg-white/5 border border-white/10 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400 backdrop-blur-sm">
-              <h2 className="text-2xl font-bold text-cloud-white">Gotowy na prawdziwą transformację?</h2>
-              <p className="text-system-grey mt-3 max-w-2xl mx-auto">
+            <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-cloud-white">Gotowy na prawdziwą transformację?</h2>
+              <p className="text-gray-600 dark:text-system-grey mt-3 max-w-2xl mx-auto">
                 Ten playbook to fundament. Prawdziwa transformacja wymaga wdrożenia, personalizacji i konsekwencji w chaosie codziennych obowiązków.
               </p>
-              <p className="text-cloud-white mt-4 max-w-2xl mx-auto font-semibold">
+              <p className="text-gray-900 dark:text-cloud-white mt-4 max-w-2xl mx-auto font-semibold">
                 W moim programie 'Energy CEO' pomagam Ci zbudować system, który da Ci energię do skalowania biznesu bez wypalenia.
               </p>
               <div className="mt-6">
                 <button
                   onClick={() => setIsTidyCalModalOpen(true)}
-                  className="inline-flex items-center gap-3 bg-electric-500 text-cloud-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
+                  className="inline-flex items-center gap-3 bg-electric-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
                 >
                   <ChartBarIcon className="h-5 w-5" />
                   <span>Aplikuj na strategiczną konsultację</span>
@@ -261,21 +273,41 @@ function App() {
         )}
       </main>
       
-      {view === 'dashboard' && (
+      {/* FAB gdy dashboard jest ukryty na mobile */}
+      {view === 'dashboard' && !isDashboardVisible && (
         <button
           onClick={() => setIsLogEnergyModalOpen(true)}
-          className="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-electric-500 sm:bg-space-800 text-cloud-white font-bold shadow-lg hover:bg-electric-600 sm:hover:bg-space-700 transition-all duration-200 hover:scale-105 active:scale-95 z-40 flex items-center justify-center animate-fade-in-up animation-delay-500 rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-auto md:h-auto md:rounded-lg md:px-4 md:py-2"
+          className="fixed bottom-4 right-4 sm:hidden bg-electric-500 text-white font-bold shadow-lg hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 z-40 flex items-center justify-center animate-fade-in-up animation-delay-500 rounded-full w-12 h-12"
           aria-label="Oceń poziom energii"
           title="Oceń poziom energii (Cmd/Ctrl + K)"
         >
-          <PlusIcon className="h-6 w-6 sm:hidden" />
-          <span className="hidden sm:flex items-baseline font-mono text-electric-500 font-bold">
+          <PlusIcon className="h-6 w-6" />
+        </button>
+      )}
+
+      {/* FAB zawsze widoczny na desktop/tablet */}
+      {view === 'dashboard' && (
+        <button
+          onClick={() => setIsLogEnergyModalOpen(true)}
+          className="hidden sm:flex fixed bottom-6 right-6 bg-electric-500 dark:bg-gray-800 text-white dark:text-cloud-white font-bold shadow-lg hover:bg-electric-600 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-105 active:scale-95 z-40 items-center justify-center animate-fade-in-up animation-delay-500 rounded-lg px-4 py-2"
+          aria-label="Oceń poziom energii"
+          title="Oceń poziom energii (Cmd/Ctrl + K)"
+        >
+          <span className="flex items-baseline font-mono text-white dark:text-electric-500 font-bold">
             <span className="text-lg">⌘</span>
             <span className="text-base ml-1">K</span>
           </span>
         </button>
       )}
 
+        <footer className="text-center py-6 px-4">
+          <p className="text-sm text-gray-600 dark:text-system-grey">
+            © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
+          </p>
+        </footer>
+      </div>
+      
+      {/* Modals rendered outside main container for proper positioning */}
       <ConfirmationToast message={toastMessage} />
       {isLogEnergyModalOpen && <LogEnergyModal onClose={() => setIsLogEnergyModalOpen(false)} onSave={handleSaveLog} />}
       {selectedActionForVideo && <VideoModal action={selectedActionForVideo} onClose={() => setSelectedActionForVideo(null)} onMarkComplete={() => { if (selectedActionForVideo) { handleCompleteAction(selectedActionForVideo.id); } setSelectedActionForVideo(null); }} />}
@@ -283,17 +315,11 @@ function App() {
       {isResetDataModalOpen && <ResetDataModal isOpen={isResetDataModalOpen} onClose={() => setIsResetDataModalOpen(false)} onConfirm={handleConfirmReset} />}
       {breathingAction && <BreathingModal isOpen={!!breathingAction} onClose={() => setBreathingAction(null)} action={breathingAction} onComplete={() => { if(breathingAction) { handleCompleteAction(breathingAction.id); } setBreathingAction(null); }} />}
       {isFullSummaryModalOpen && <FullSummaryModal isOpen={isFullSummaryModalOpen} onClose={() => setIsFullSummaryModalOpen(false)} logs={logs} completedActions={completedActions} onRemoveCompletedAction={handleRemoveCompletedAction} onRemoveLog={handleRemoveLog} />}
-      {isNotificationsModalOpen && <NotificationSettingsModal isOpen={isNotificationsModalOpen} onClose={() => setIsNotificationsModalOpen(false)} permission={permission} settings={notificationSettings} requestPermission={requestPermission} updateSettings={updateNotificationSettings} addReminder={addReminder} removeReminder={removeReminder} />}
+      {isNotificationsModalOpen && <NotificationSettingsModal isOpen={isNotificationsModalOpen} onClose={() => setIsNotificationsModalOpen(false)} permission={permission} settings={notificationSettings} requestPermission={requestPermission} updateSettings={updateNotificationSettings} addReminder={addReminder} removeReminder={removeReminder} testNotification={testNotification} />}
       {isTidyCalModalOpen && <TidyCalModal isOpen={isTidyCalModalOpen} onClose={() => setIsTidyCalModalOpen(false)} />}
       {isUserSettingsModalOpen && <UserSettingsModal isOpen={isUserSettingsModalOpen} onClose={() => setIsUserSettingsModalOpen(false)} onSave={saveSettings} currentSettings={settings} />}
-      {workoutAction && exerciseLibrary && <WorkoutModal user={user} action={workoutAction} onClose={() => setWorkoutAction(null)} onComplete={() => { if (workoutAction) { handleCompleteAction(workoutAction.id); setWorkoutAction(null); } }} exerciseLibrary={exerciseLibrary} />}
-      
-        <footer className="text-center py-6 px-4">
-          <p className="text-sm text-system-grey">
-            © 2025 Bartłomiej Szymocha | Wszelkie prawa zastrzeżone
-          </p>
-        </footer>
-    </div>
+      {workoutAction && Object.keys(exerciseLibrary).length > 0 && <WorkoutModal user={user} action={workoutAction} onClose={() => setWorkoutAction(null)} onComplete={() => { if (workoutAction) { handleCompleteAction(workoutAction.id); setWorkoutAction(null); } }} exerciseLibrary={exerciseLibrary} />}
+    </>
   );
 }
 

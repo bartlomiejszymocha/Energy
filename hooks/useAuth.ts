@@ -8,6 +8,13 @@ import {
 import { auth, googleAuthProvider } from '../firebase';
 import { useConvertKit } from './useConvertKit';
 
+// Function to force dark mode
+const forceDarkMode = () => {
+    localStorage.setItem('theme', 'dark');
+    document.documentElement.classList.add('dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
+};
+
 export const useAuth = () => {
     const [user, setUser] = useState<User | null>(null);
     const [loadingAuth, setLoadingAuth] = useState(true);
@@ -87,7 +94,49 @@ export const useAuth = () => {
                         console.error('❌ ConvertKit error:', error);
                     }
                 }
-            }
+                
+                // Check if we should add user to Google Sheets clients (production only)
+                if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                    const sheetsClientKey = `sheets_client_added_${currentUser.email}`;
+                    const alreadyAddedToSheets = localStorage.getItem(sheetsClientKey);
+                    
+                    // Add user to clients sheet on first login
+                    if (!alreadyAddedToSheets) {
+                        console.log('🔍 Adding user to Google Sheets clients:', currentUser.email);
+                    
+                    try {
+                        const clientData = {
+                            uid: currentUser.uid,
+                            email: currentUser.email,
+                            displayName: currentUser.displayName || '',
+                            role: 'public', // Default role
+                            lastLogin: new Date().toISOString()
+                        };
+                        
+                        const response = await fetch('/api/add-client', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(clientData)
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            console.log('✅ User added to Google Sheets clients:', result);
+                            
+                            // Mark user as added to prevent duplicate requests
+                            localStorage.setItem(sheetsClientKey, 'true');
+                        } else {
+                            console.error('❌ Failed to add user to Google Sheets clients:', response.status);
+                        }
+                    } catch (error) {
+                        console.error('❌ Error adding user to Google Sheets clients:', error);
+                    }
+                }
+                } else {
+                    console.log('🔍 Development mode - skipping Google Sheets client addition');
+                }
             
             setUser(currentUser);
             setLoadingAuth(false);
@@ -98,6 +147,8 @@ export const useAuth = () => {
     const signInWithGoogle = async (): Promise<void> => {
         try {
             await signInWithPopup(auth, googleAuthProvider);
+            // Force dark mode after successful login
+            forceDarkMode();
         } catch (error) {
             const authError = error as { code: string; message: string; };
             console.error("Firebase sign in error", authError);

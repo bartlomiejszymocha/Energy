@@ -2,10 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/energy-playbook.firebasestorage.app/o/logoDES%20(1).png?alt=media&token=71219723-d4ca-4fa4-9c46-eb224a715a10">
+    <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/energy-playbook.firebasestorage.app/o/logoDES%20(1).png?alt=media&token=71219723-d4ca-4fa4-9c46-eb224a715a10">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#0E0F12" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Energy Playbook" />
     <title>Energy Playbook</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +25,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <style>
       html {
+        scroll-behavior: smooth;
+      }
+      /* Fix for backdrop-blur performance issues during fast scrolling */
+      /* Temporarily disabled for modal positioning */
+      /*
+      * {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-perspective: 1000;
+        perspective: 1000;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: auto;
+      }
+      */
+      /* Optimize backdrop-blur elements */
+      .backdrop-blur-sm {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: transform;
+        contain: layout style paint;
+      }
+      /* Prevent scroll glitches */
+      body {
+        -webkit-overflow-scrolling: touch;
+      }
+      /* Optimize scrolling performance */
+      .overflow-y-auto {
+        -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
       }
       @keyframes fade-in-up {
@@ -49,13 +89,13 @@
         text-decoration-color: #007AFF;
       }
       kbd {
-        background-color: #373A43; /* space-700 */
-        border: 1px solid #23252C; /* space-800 */
+        background-color: #007AFF; /* electric-500 - niebieski */
+        border: 1px solid #0062CC; /* electric-600 - ciemniejszy niebieski */
         border-radius: 4px;
         padding: 2px 6px;
         font-size: 0.8em;
         font-family: monospace;
-        color: #F4F6F8; /* cloud-white */
+        color: #FFFFFF; /* biały tekst */
       }
       /* React Calendar Custom Styles */
       .react-calendar {
@@ -70,7 +110,7 @@
         margin-bottom: 1rem;
       }
       .react-calendar__navigation button {
-        color: #F4F6F8; /* cloud-white */
+        color: #374151; /* gray-700 for light mode */
         background: none;
         border: none;
         font-size: 1rem;
@@ -80,9 +120,16 @@
         transition: background-color 0.2s;
         min-width: 44px; /* for accessibility */
       }
+      .dark .react-calendar__navigation button {
+        color: #F4F6F8; /* cloud-white for dark mode */
+      }
        .react-calendar__navigation button:enabled:hover,
       .react-calendar__navigation button:enabled:focus {
-        background-color: #23252C; /* space-800 */
+        background-color: #E5E7EB; /* gray-200 for light mode */
+      }
+      .dark .react-calendar__navigation button:enabled:hover,
+      .dark .react-calendar__navigation button:enabled:focus {
+        background-color: #23252C; /* space-800 for dark mode */
       }
       .react-calendar__navigation button:disabled {
         opacity: 0.5;
@@ -96,19 +143,30 @@
         padding: 0.5rem;
         border-radius: 0.5rem;
         transition: background-color 0.2s;
+        color: #111827; /* gray-900 for light mode */
+      }
+      .dark .react-calendar__navigation__label {
+        color: #F4F6F8; /* cloud-white for dark mode */
       }
       .react-calendar__navigation__label:enabled:hover,
       .react-calendar__navigation__label:enabled:focus {
-        background-color: #23252C; /* space-800 */
+        background-color: #E5E7EB; /* gray-200 for light mode */
+      }
+      .dark .react-calendar__navigation__label:enabled:hover,
+      .dark .react-calendar__navigation__label:enabled:focus {
+        background-color: #23252C; /* space-800 for dark mode */
       }
       .react-calendar__month-view__weekdays {
         display: flex;
         text-align: center;
         font-weight: 600;
-        color: #8A94A6; /* system-grey */
+        color: #6B7280; /* gray-500 for light mode */
         text-transform: capitalize;
         font-size: 0.75rem;
         margin-bottom: 0.5rem;
+      }
+      .dark .react-calendar__month-view__weekdays {
+        color: #8A94A6; /* system-grey for dark mode */
       }
       .react-calendar__month-view__weekdays__weekday { flex: 0 0 calc(100% / 7); }
       .react-calendar__month-view__weekdays__weekday abbr {
@@ -118,7 +176,7 @@
       .react-calendar__tile {
         background: none;
         border: 2px solid transparent; /* Prevents layout shift on active */
-        color: #F4F6F8; /* cloud-white */
+        color: #374151; /* gray-700 for light mode */
         border-radius: 9999px;
         flex: 0 0 calc(100% / 7);
         aspect-ratio: 1 / 1;
@@ -130,26 +188,45 @@
         font-size: 0.875rem;
         padding: 0;
       }
+      .dark .react-calendar__tile {
+        color: #F4F6F8; /* cloud-white for dark mode */
+      }
       .react-calendar__tile:enabled:hover,
       .react-calendar__tile:enabled:focus {
-        background-color: #23252C; /* space-800 */
+        background-color: #E5E7EB; /* gray-200 for light mode */
+      }
+      .dark .react-calendar__tile:enabled:hover,
+      .dark .react-calendar__tile:enabled:focus {
+        background-color: #23252C; /* space-800 for dark mode */
       }
       .react-calendar__tile--now {
-        background-color: #373A43; /* space-700 */
+        background-color: #D1D5DB; /* gray-300 for light mode */
+        border-color: #D1D5DB;
+        color: #111827; /* gray-900 for light mode */
+      }
+      .dark .react-calendar__tile--now {
+        background-color: #373A43; /* space-700 for dark mode */
         border-color: #373A43;
+        color: #F4F6F8; /* cloud-white for dark mode */
       }
       .react-calendar__tile--active {
         background-color: transparent;
         border: 2px solid #007AFF; /* electric-500 */
-        color: #F4F6F8; /* cloud-white */
+        color: #374151; /* gray-700 for light mode */
         font-weight: bold;
+      }
+      .dark .react-calendar__tile--active {
+        color: #F4F6F8; /* cloud-white for dark mode */
       }
       .react-calendar__tile--active:enabled:hover,
       .react-calendar__tile--active:enabled:focus {
         background-color: rgba(0, 122, 255, 0.12);
       }
       .react-calendar__tile--hasActive {
-        background-color: #007AFF; /* electric-500 */
+        background-color: rgba(0, 122, 255, 0.1); /* electric-500 with opacity for light mode */
+      }
+      .dark .react-calendar__tile--hasActive {
+        background-color: #007AFF; /* electric-500 for dark mode */
       }
       /* Custom class for days with entries */
       .day-with-entry::after {
@@ -186,6 +263,7 @@
               'space': {
                 '950': '#0E0F12', // Almost Black (Main BG)
                 '900': '#181A1F', // Dark Charcoal (Cards)
+                '850': '#1d2128', // Custom card color
                 '800': '#23252C', // Charcoal (Interactive elements)
                 '700': '#373A43', // Grey (Borders, hovers)
               },
@@ -255,10 +333,87 @@
 .backdrop-blur-sm {
   will-change: backdrop-filter;
 }
+
+/* Style dla linków w opisach akcji */
+.action-content a {
+  color: var(--link-color, #007AFF) !important;
+  text-decoration: underline;
+  text-decoration-color: var(--link-color, #007AFF);
+  text-underline-offset: 2px;
+  transition: all 0.2s ease;
+}
+
+.action-content a:hover {
+  color: var(--link-hover, #0056CC) !important;
+  text-decoration-color: var(--link-hover, #0056CC);
+  text-decoration-thickness: 2px;
+}
+
+.action-content a:visited {
+  color: var(--link-color, #007AFF) !important;
+}
+
+/* Dark mode link styles */
+.dark .action-content a {
+  color: var(--link-color, #60A5FA) !important;
+  text-decoration-color: var(--link-color, #60A5FA);
+}
+
+.dark .action-content a:hover {
+  color: var(--link-hover, #93C5FD) !important;
+  text-decoration-color: var(--link-hover, #93C5FD);
+}
+
+/* FORCE Recharts grid colors to change with theme - CSS OVERRIDE */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #D1D5DB !important;
+  transition: stroke 0.15s ease !important;
+}
+
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: #1E293B !important;
+}
+
+/* Force axis colors */
+.recharts-xAxis .recharts-cartesian-axis-line,
+.recharts-yAxis .recharts-cartesian-axis-line,
+.recharts-xAxis .recharts-cartesian-axis-tick-line,
+.recharts-yAxis .recharts-cartesian-axis-tick-line {
+  stroke: #6B7280 !important;
+  transition: stroke 0.15s ease !important;
+}
+
+.dark .recharts-xAxis .recharts-cartesian-axis-line,
+.dark .recharts-yAxis .recharts-cartesian-axis-line,
+.dark .recharts-xAxis .recharts-cartesian-axis-tick-line,
+.dark .recharts-yAxis .recharts-cartesian-axis-tick-line {
+  stroke: #64748B !important;
+}
+
+/* Force axis text colors */
+.recharts-xAxis .recharts-text,
+.recharts-yAxis .recharts-text {
+  fill: #6B7280 !important;
+  transition: fill 0.15s ease !important;
+}
+
+.dark .recharts-xAxis .recharts-text,
+.dark .recharts-yAxis .recharts-text {
+  fill: #64748B !important;
+}
 </style>
 </head>
   <body class="bg-space-950 text-cloud-white">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      // Register service worker with proper cache management
+      // Service Worker temporarily disabled for debugging
+      console.log('Service Worker disabled for debugging');
+    </script>
   </body>
 </html>

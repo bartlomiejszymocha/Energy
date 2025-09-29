@@ -178,12 +178,12 @@ export const BreathingTimer: React.FC<BreathingTimerProps> = ({ isExpanded, size
     };
 
     return (
-        <div className={`mt-4 flex flex-col items-center justify-center text-center ${size === 'normal' ? 'bg-white/5 border border-white/10 rounded-lg backdrop-blur-sm' : ''} ${config.container}`}>
+        <div className={`mt-4 flex flex-col items-center justify-center text-center ${size === 'normal' ? 'bg-gray-100 dark:bg-space-800 border border-gray-200 dark:border-white/10 rounded-lg' : ''} ${config.container}`}>
             <div 
-                className={`relative ${config.circle} rounded-full border-4 border-electric-500 flex items-center justify-center mb-4 transform transition-transform ease-linear ${transition} ${isActive ? scale : 'scale-100'}`}
+                className={`relative ${config.circle} rounded-full border-4 border-electric-500 bg-white dark:bg-transparent flex items-center justify-center mb-4 transform transition-transform ease-linear ${transition} ${isActive ? scale : 'scale-100'}`}
             >
                 <div className="flex flex-col items-center">
-                     <span className={`${config.instructionText} font-bold text-cloud-white`}>{instruction}</span>
+                     <span className={`${config.instructionText} font-bold text-gray-900 dark:text-cloud-white`}>{instruction}</span>
                      {isActive && (
                         <span className={`${config.countdownText} font-mono font-bold text-electric-500`}>{countdown + 1}</span>
                      )}
@@ -192,20 +192,20 @@ export const BreathingTimer: React.FC<BreathingTimerProps> = ({ isExpanded, size
             
             <div className={`${config.buttonContainer} flex items-center justify-center`}>
                 {!isActive ? (
-                     <button onClick={startTimer} className={`bg-electric-500 text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm`}>
+                     <button onClick={startTimer} className={`bg-electric-500 text-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95`}>
                         Zacznij oddychać
                     </button>
                 ) : (
                     <div className="flex items-center gap-4">
-                        <button onClick={handleStopClick} className={`bg-danger-red text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-danger-red/80 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm`}>
+                        <button onClick={handleStopClick} className={`bg-danger-red text-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-danger-red/80 transition-all duration-200 hover:scale-105 active:scale-95`}>
                             Stop
                         </button>
                         {onCompleteClick && (
-                             <button onClick={onCompleteClick} className={`bg-success-green text-cloud-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-success-green/90 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm`}>
+                             <button onClick={onCompleteClick} className={`bg-success-green text-white font-bold ${config.buttonClasses} rounded-full shadow-md hover:bg-success-green/90 transition-all duration-200 hover:scale-105 active:scale-95`}>
                                 Zrobione
                             </button>
                         )}
-                        <div className={`${config.stopwatchText} font-mono font-bold text-system-grey`} aria-live="off">
+                        <div className={`${config.stopwatchText} font-mono font-bold text-gray-600 dark:text-system-grey`} aria-live="off">
                             {formatTime(elapsedTime)}
                         </div>
                     </div>

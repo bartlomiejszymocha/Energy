@@ -8,6 +8,12 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        hmr: {
+          overlay: true
+        },
+        watch: {
+          usePolling: true
+        }
       },
       plugins: [react()],
       define: {
@@ -17,6 +23,10 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      // Ignoruj pliki API podczas development
+      optimizeDeps: {
+        exclude: ['api']
       }
     };
 });

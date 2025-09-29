@@ -1,5 +1,5 @@
 import React from 'react';
-import { XMarkIcon } from './icons/Icons';
+import { XMarkIcon } from './icons/LucideIcons';
 
 interface InstructionsModalProps {
     isOpen: boolean;
@@ -9,39 +9,54 @@ interface InstructionsModalProps {
 const InstructionStep: React.FC<{ number: number, title: string, children: React.ReactNode }> = ({ number, title, children }) => (
     <div>
         <h3 className="text-lg font-bold flex items-center gap-3">
-            <span className="bg-electric-500 text-cloud-white w-7 h-7 rounded-full flex items-center justify-center font-mono shadow-lg backdrop-blur-sm">{number}</span>
-            <span className="text-electric-500/90">{title}</span>
+            <span className="bg-electric-500 text-white w-7 h-7 rounded-full flex items-center justify-center font-mono shadow-lg ">{number}</span>
+            <span className="text-electric-600 dark:text-electric-500/90">{title}</span>
         </h3>
-        <p className="text-system-grey mt-2 pl-10 text-sm">
+        <p className="text-gray-600 dark:text-system-grey mt-2 pl-10 text-sm">
             {children}
         </p>
     </div>
 );
 
 export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose }) => {
+
     if (!isOpen) {
         return null;
     }
 
     return (
         <div 
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="bg-black/80"
             onClick={onClose}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: 999999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '1rem'
+            }}
         >
             <div 
-                className="bg-white/5 border border-white/10 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-lg p-4 sm:p-6 relative animate-fade-in-up backdrop-blur-sm"
+                className="bg-white dark:bg-space-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-lg p-4 sm:p-6 relative animate-fade-in-up"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button 
                     onClick={onClose} 
-                    className="absolute top-4 right-4 text-system-grey hover:text-cloud-white transition p-1 rounded-full hover:bg-white/10 backdrop-blur-sm"
+                    className="absolute top-4 right-4 text-gray-600 dark:text-system-grey hover:text-gray-900 dark:hover:text-cloud-white transition p-1 rounded-full hover:bg-gray-100 dark:hover:bg-space-800"
                     aria-label="Zamknij instrukcję"
                 >
                     <XMarkIcon className="h-6 w-6" />
                 </button>
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-cloud-white">Jak korzystać z Energy Playbook?</h2>
-                    <p className="text-system-grey mt-1">Szybki przewodnik po kluczowych funkcjach.</p>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-cloud-white">Jak korzystać z Energy Playbook?</h2>
+                    <p className="text-gray-600 dark:text-system-grey mt-1">Szybki przewodnik po kluczowych funkcjach.</p>
                 </div>
                 
                 {/* Desktop/Tablet Instructions */}
@@ -91,7 +106,7 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, on
                 <div className="mt-8 text-center">
                     <button
                         onClick={onClose}
-                        className="w-full sm:w-auto bg-electric-500 text-cloud-white font-bold py-2 px-8 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
+                        className="w-full sm:w-auto bg-electric-500 text-white font-bold py-2 px-8 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 "
                     >
                         Zrozumiałem
                     </button>

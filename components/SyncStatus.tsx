@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpTrayIcon, ArrowPathCircularIcon, CheckCircleIcon, ExclamationTriangleIcon } from './icons/Icons';
+import { ArrowUpTrayIcon, ArrowPathCircularIcon, CheckCircleIcon, ExclamationTriangleIcon } from './icons/LucideIcons';
 import type { SyncState } from '../hooks/useEnergyData';
 
 interface SyncStatusProps {

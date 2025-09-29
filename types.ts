@@ -8,7 +8,7 @@ export interface EnergyLog {
   tags?: string[];
 }
 
-export type ActionType = 'Reset Energetyczny' | 'Protokół Ruchowy' | 'Technika oddechowa';
+export type ActionType = 'Reset Energetyczny' | 'Protokół Ruchowy' | 'Protokuł Ruchowy' | 'Technika oddechowa' | 'Technika Oddechowa';
 
 export interface Exercise {
   name: string;
@@ -46,6 +46,7 @@ export interface ActionItem {
   icon?: string;
   breathingPattern?: '478' | '4784';
   workout?: WorkoutStep[];
+  rules?: 'priv' | 'public' | 'pro'; // Permission rules
   // used in Workout modal to inject close handler
   onClose?: () => void;
 }

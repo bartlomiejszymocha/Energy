@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { UserSettings } from '../types';
-import { XMarkIcon, SunIcon, MoonIcon } from './icons/Icons';
+import { XMarkIcon, SunIcon, MoonIcon } from './icons/LucideIcons';
 
 interface UserSettingsModalProps {
     isOpen: boolean;
@@ -31,7 +31,7 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({ isOpen, on
     const inactiveThemeClasses = "bg-space-800 text-system-grey hover:bg-space-700";
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4" onClick={onClose}>
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4" onClick={onClose}>
             <div className="bg-white dark:bg-space-900 rounded-xl shadow-2xl w-full max-w-md p-6 relative animate-fade-in-up" onClick={e => e.stopPropagation()}>
                 <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 dark:text-system-grey hover:text-black dark:hover:text-cloud-white transition">
                     <XMarkIcon className="h-6 w-6" />

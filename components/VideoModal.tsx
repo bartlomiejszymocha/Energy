@@ -1,5 +1,5 @@
 import React from 'react';
-import { XMarkIcon, CheckCircleIcon } from './icons/Icons';
+import { XMarkIcon, CheckCircleIcon } from './icons/LucideIcons';
 import type { ActionItem } from '../types';
 
 interface VideoModalProps {
@@ -9,9 +9,24 @@ interface VideoModalProps {
 }
 
 export const VideoModal: React.FC<VideoModalProps> = ({ action, onClose, onMarkComplete }) => {
+
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[100] p-4"
+      className="bg-black bg-opacity-80"
+      style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 999999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '1rem'
+      }}
       onClick={onClose}
     >
       <div 

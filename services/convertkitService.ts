@@ -24,7 +24,7 @@ class ConvertKitService {
   private baseUrl = '/api';
 
   constructor() {
-    console.log('🔍 ConvertKit init: Using secure API endpoint');
+    console.log('🔍 ConvertKit init: Using Vercel API endpoint');
   }
 
   /**
@@ -76,7 +76,7 @@ class ConvertKitService {
    * Add tags to existing subscriber
    */
   async addTags(email: string, tags: string[]): Promise<ConvertKitResponse | null> {
-    if (!this.apiKey || !tags.length) {
+    if (!tags.length) {
       return null;
     }
 
@@ -87,7 +87,6 @@ class ConvertKitService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          api_key: this.apiKey,
           email,
           tags,
         }),
