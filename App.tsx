@@ -28,7 +28,7 @@ import { WorkoutModal } from './components/WorkoutPage';
 import { ConvertKitDebugPanel } from './components/ConvertKitDebugPanel';
 import { ChartModal } from './components/ChartModal';
 import { EnergyRatingGuideModal } from './components/EnergyRatingGuideModal';
-import { PlusIcon, CalendarDaysIcon, ChartBarIcon, CalendarIcon } from './components/icons/LucideIcons';
+import { PlusIcon, CalendarDaysIcon, ChartBarIcon, CalendarIcon, YoutubeIcon, LinkedinIcon, RocketIcon } from './components/icons/LucideIcons';
 
 function App() {
   const { user, loadingAuth, signInWithGoogle, signOut } = useAuth();
@@ -252,18 +252,42 @@ function App() {
               todayCompletedActionIds={todayCompletedActionIds}
             />
             <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-cloud-white">Gotowy na prawdziwą transformację?</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-cloud-white">Potrzebujesz spersonalizowanego wsparcia?</h2>
               <p className="text-sm sm:text-base text-gray-600 dark:text-system-grey mt-3 max-w-2xl mx-auto">
-                Prawdziwa transformacja wymaga wdrożenia, personalizacji i konsekwencji w natłoku codziennych obowiązków. Umów się na konsultację i współpracuj ze mną 1:1.
+                Razem stworzymy Twój unikalny system zarządzania energią - dopasowany do Twojego życia, celów i wyzwań.
               </p>
               <div className="mt-6">
                 <button
                   onClick={() => setIsTidyCalModalOpen(true)}
-                  className="inline-flex items-center gap-3 bg-electric-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
+                  className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl hover:shadow-orange-500/50 hover:from-orange-600 hover:to-red-600 transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm transform hover:-translate-y-1"
                 >
-                  <CalendarIcon className="h-5 w-5" />
-                  <span>Aplikuj na strategiczną konsultację</span>
+                  <RocketIcon className="h-6 w-6" />
+                  <span className="text-base">Aplikuj na strategiczną konsultację</span>
                 </button>
+              </div>
+              
+              <div className="mt-8 pt-6 border-t border-gray-200 dark:border-white/10">
+                <p className="text-xs font-semibold text-gray-600 dark:text-system-grey mb-3">Obserwuj po więcej:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
+                  <a
+                    href="https://www.youtube.com/@bartlomiejszymocha"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-center gap-2 bg-red-500/10 dark:bg-red-500/20 border border-red-500/30 hover:border-red-500 text-red-600 dark:text-red-400 font-medium py-2 px-4 rounded-lg transition-all duration-200 hover:scale-105 text-sm"
+                  >
+                    <YoutubeIcon className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                    <span>YouTube</span>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/bartlomiej-szymocha"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-center gap-2 bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/30 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-medium py-2 px-4 rounded-lg transition-all duration-200 hover:scale-105 text-sm"
+                  >
+                    <LinkedinIcon className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                    <span>LinkedIn</span>
+                  </a>
+                </div>
               </div>
             </div>
           </>

@@ -145,12 +145,12 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                                     </button>
                                 )}
                             </div>
-                            <p className="text-[12.6px] sm:text-[14.4px] text-gray-600 dark:text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
-                                Wszystkie dostępne protokoły ruchowe, techniki oddechowe i resety energetyczne.
-                                {favoriteActionIds.size === 0 && (
-                                    <> Dodaj do ulubionych (klikając ⭐) te, których używasz najczęściej.</>
-                                )}
-                            </p>
+                    <p className="text-[12.6px] sm:text-[14.4px] text-gray-600 dark:text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
+                        Gotowe protokoły do natychmiastowego użycia - ruch, oddech i regeneracja.
+                        {favoriteActionIds.size === 0 && (
+                            <> Oznacz gwiazdką ⭐ swoje ulubione.</>
+                        )}
+                    </p>
                         </div>
                     </div>
                 </div>

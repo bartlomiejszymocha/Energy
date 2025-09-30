@@ -80,7 +80,7 @@ const DailySummary: React.FC<{
                     </button>
                     <button
                         onClick={(e) => { e.stopPropagation(); onResetDataClick(); }}
-                        className="bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-danger-red/20 hover:border-danger-red/40 text-danger-red font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 text-sm backdrop-blur-sm"
+                        className="bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white font-bold p-2 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 text-sm backdrop-blur-sm"
                         title="Resetuj wszystkie dane"
                     >
                         <TrashIcon className="h-5 w-5" />

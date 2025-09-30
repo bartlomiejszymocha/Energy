@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
                     onClick={onLoginClick}
                     className="flex items-center gap-2 bg-electric-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 text-sm"
                 >
-                    <ArrowUpTrayIcon className="h-4 w-4" />
+                    <ArrowUpTrayIcon className="h-5 w-5" />
                     <span className="sm:hidden">Zaloguj</span>
                     <span className="hidden sm:inline">Zaloguj się, aby synchronizować</span>
                 </button>

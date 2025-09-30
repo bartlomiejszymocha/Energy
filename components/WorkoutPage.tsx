@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import type { User } from 'firebase/auth';
-import type { ActionItem, EnrichedWorkoutStep, Exercise } from '../types';
+import type { ActionItem, EnrichedWorkoutStep, Exercise, WorkoutStep } from '../types';
 import { useWorkoutEngine } from '../hooks/useWorkoutEngine';
 import { XMarkIcon, PlayIcon, PauseIcon, ChevronLeftIcon, ChevronRightIcon, CheckCircleIcon } from './icons/LucideIcons';
 import { IconRenderer } from './IconRenderer';
@@ -168,17 +168,25 @@ const ExerciseView: React.FC<{
 
 const RestView: React.FC<{
     engine: ReturnType<typeof useWorkoutEngine>;
-    onClose: () => void;
-}> = ({ engine, onClose }) => {
+    action: ActionItem;
+}> = ({ engine, action }) => {
     const { timeLeftInStep, progressPercentage, skipToNext, nextStep, isPaused, play, pause } = engine;
 
     return (
         <div className="grid grid-rows-[auto_1fr_auto] h-full w-full">
-            <header className="row-start-1 w-full flex items-center justify-between">
-                <h1 className="text-xl font-bold text-gray-900 dark:text-cloud-white">Odpoczynek</h1>
-                <button onClick={onClose} className="text-gray-600 dark:text-system-grey hover:text-gray-900 dark:hover:text-cloud-white transition p-1 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 " aria-label="Zamknij trening">
-                    <XMarkIcon className="h-6 w-6" />
-                </button>
+            <header className="row-start-1 w-full flex flex-col gap-4 pb-4">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <IconRenderer icon={action.icon} className="text-2xl -mt-1" />
+                        <h1 className="text-xl font-bold text-gray-900 dark:text-cloud-white">{action.title}</h1>
+                    </div>
+                    <button onClick={() => { action.onClose?.(); }} className="text-gray-600 dark:text-system-grey hover:text-gray-900 dark:hover:text-cloud-white transition p-1 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 " aria-label="Zamknij trening">
+                        <XMarkIcon className="h-6 w-6" />
+                    </button>
+                </div>
+                <div className="pt-4 border-t border-gray-200 dark:border-white/10">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-cloud-white text-center">Odpoczynek</h2>
+                </div>
             </header>
             <div className="row-start-2 flex items-center justify-center gap-8 w-full py-4">
                 <div className="relative w-48 h-48">
@@ -358,7 +366,7 @@ export const WorkoutModal: React.FC<WorkoutModalProps> = ({ action, onClose, onC
             return <ExerciseView engine={engine} action={enrichedAction} />;
         }
         if (engine.currentStep.type === 'rest') {
-            return <RestView engine={engine} onClose={onClose} />;
+            return <RestView engine={engine} action={action} />;
         }
         return null;
     };
