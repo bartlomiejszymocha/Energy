@@ -52,39 +52,23 @@ const CustomDot = (props: any) => {
         return <circle cx={cx} cy={cy} r={5} fill="#FF9500" stroke={fillColor} strokeWidth={2} />;
     }
     
-    // Render action icon if it's an action
+    // Render action icon if it's an action (just icon, no circle)
     if (payload.isAction && payload.icon) {
         return (
-            <g>
-                <circle cx={cx} cy={cy} r={9} fill="#007AFF" stroke={fillColor} strokeWidth={2} />
-                <text 
-                    x={cx} 
-                    y={cy + 2} 
-                    textAnchor="middle" 
-                    fontSize="12" 
-                    fill={fillColor}
-                    style={{ pointerEvents: 'none' }}
-                >
-                    {payload.icon}
-                </text>
-            </g>
+            <text 
+                x={cx} 
+                y={cy + 2} 
+                textAnchor="middle" 
+                fontSize="16" 
+                fill="#007AFF"
+                style={{ pointerEvents: 'none' }}
+            >
+                {payload.icon}
+            </text>
         );
     }
     
-    // Render just the rating number without circle for energy logs
-    return (
-        <text 
-            x={cx} 
-            y={cy + 2} 
-            textAnchor="middle" 
-            fontSize="14" 
-            fill="#007AFF"
-            fontWeight="bold"
-            style={{ pointerEvents: 'none' }}
-        >
-            {payload.rating}
-        </text>
-    );
+    return <circle cx={cx} cy={cy} r={6} fill="#007AFF" stroke={fillColor} strokeWidth={2} />;
 };
 
 const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
