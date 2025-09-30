@@ -71,7 +71,20 @@ const CustomDot = (props: any) => {
         );
     }
     
-    return <circle cx={cx} cy={cy} r={6} fill="#007AFF" stroke={fillColor} strokeWidth={2} />;
+    // Render just the rating number without circle for energy logs
+    return (
+        <text 
+            x={cx} 
+            y={cy + 2} 
+            textAnchor="middle" 
+            fontSize="14" 
+            fill="#007AFF"
+            fontWeight="bold"
+            style={{ pointerEvents: 'none' }}
+        >
+            {payload.rating}
+        </text>
+    );
 };
 
 const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
