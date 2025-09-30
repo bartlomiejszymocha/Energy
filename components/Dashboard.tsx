@@ -149,8 +149,8 @@ const DailySummary: React.FC<{
                                         )}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex justify-between items-start">
-                                                <p className="text-gray-800 dark:text-cloud-white text-[10px] break-words flex-1 pr-2">{log.note || <span className="text-gray-500 dark:text-system-grey/70">Brak notatki</span>}</p>
-                                                <span className="text-[8px] text-gray-500 dark:text-system-grey flex-shrink-0">
+                                                <p className="text-gray-800 dark:text-cloud-white text-[11px] break-words flex-1 pr-2">{log.note || <span className="text-gray-500 dark:text-system-grey/70">Brak notatki</span>}</p>
+                                                <span className="text-[9px] text-gray-500 dark:text-system-grey flex-shrink-0">
                                                     {new Date(log.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
@@ -185,8 +185,8 @@ const DailySummary: React.FC<{
                                                 />
                                              </div>
                                              <div className="flex-1 min-w-0 flex justify-between items-center">
-                                                <p className="text-gray-800 dark:text-cloud-white text-[10px] truncate pr-2">{actionDetails.title}</p>
-                                                <span className="text-[8px] text-gray-500 dark:text-system-grey flex-shrink-0">
+                                                <p className="text-gray-800 dark:text-cloud-white text-[11px] truncate pr-2">{actionDetails.title}</p>
+                                                <span className="text-[9px] text-gray-500 dark:text-system-grey flex-shrink-0">
                                                     {new Date(actionLog.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                              </div>
