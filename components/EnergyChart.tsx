@@ -56,12 +56,12 @@ const CustomDot = (props: any) => {
     if (payload.isAction && payload.icon) {
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} fill="#007AFF" stroke={fillColor} strokeWidth={2} />
+                <circle cx={cx} cy={cy} r={9} fill="#007AFF" stroke={fillColor} strokeWidth={2} />
                 <text 
                     x={cx} 
                     y={cy + 2} 
                     textAnchor="middle" 
-                    fontSize="10" 
+                    fontSize="12" 
                     fill={fillColor}
                     style={{ pointerEvents: 'none' }}
                 >
