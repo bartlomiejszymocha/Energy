@@ -67,8 +67,8 @@ const DailySummary: React.FC<{
         >
             <div className="flex items-center justify-between gap-3 mb-4 flex-shrink-0">
                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🏆</span>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-cloud-white/80">Podsumowanie</h3>
+                    <span className="text-[21.6px]">🏆</span>
+                    <h3 className="text-[16.2px] font-medium text-gray-900 dark:text-cloud-white/80">Podsumowanie</h3>
                  </div>
                  <div className="flex items-center gap-2">
                     <button
@@ -121,7 +121,7 @@ const DailySummary: React.FC<{
                     {todayLogs.length > 0 && (
                         <div>
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="font-bold text-gray-600 dark:text-system-grey text-sm uppercase tracking-wider">Wpisy Energii</h4>
+                                <h4 className="font-bold text-gray-600 dark:text-system-grey text-[12.6px] uppercase tracking-wider">Wpisy Energii</h4>
                                 <button
                                     onClick={() => setIsEnergyLogsExpanded(!isEnergyLogsExpanded)}
                                     className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-space-700 transition-colors duration-200"
@@ -149,8 +149,8 @@ const DailySummary: React.FC<{
                                         )}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex justify-between items-start">
-                                                <p className="text-gray-800 dark:text-cloud-white text-[11px] break-words flex-1 pr-2">{log.note || <span className="text-gray-500 dark:text-system-grey/70">Brak notatki</span>}</p>
-                                                <span className="text-[9px] text-gray-500 dark:text-system-grey flex-shrink-0">
+                                                <p className="text-gray-800 dark:text-cloud-white text-[9.9px] break-words flex-1 pr-2">{log.note || <span className="text-gray-500 dark:text-system-grey/70">Brak notatki</span>}</p>
+                                                <span className="text-[8.1px] text-gray-500 dark:text-system-grey flex-shrink-0">
                                                     {new Date(log.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
@@ -170,7 +170,7 @@ const DailySummary: React.FC<{
                     )}
                     {todayCompletedActions.length > 0 && (
                         <div className={todayLogs.length > 0 ? 'pt-4' : ''}>
-                            <h4 className="font-bold text-gray-600 dark:text-system-grey mb-2 text-sm uppercase tracking-wider">Wykonane Akcje</h4>
+                            <h4 className="font-bold text-gray-600 dark:text-system-grey mb-2 text-[12.6px] uppercase tracking-wider">Wykonane Akcje</h4>
                             <div className="space-y-2">
                                 {todayCompletedActions.map(actionLog => {
                                     const actionDetails = sheetsActions.find(a => a.id === actionLog.actionId);
@@ -185,8 +185,8 @@ const DailySummary: React.FC<{
                                                 />
                                              </div>
                                              <div className="flex-1 min-w-0 flex justify-between items-center">
-                                                <p className="text-gray-800 dark:text-cloud-white text-[11px] truncate pr-2">{actionDetails.title}</p>
-                                                <span className="text-[9px] text-gray-500 dark:text-system-grey flex-shrink-0">
+                                                <p className="text-gray-800 dark:text-cloud-white text-[9.9px] truncate pr-2">{actionDetails.title}</p>
+                                                <span className="text-[8.1px] text-gray-500 dark:text-system-grey flex-shrink-0">
                                                     {new Date(actionLog.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                              </div>
@@ -284,7 +284,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[380px]">
                 <div className="bg-white/90 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm lg:h-full overflow-hidden">
                     <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between sm:items-start">
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-cloud-white/80 text-left">📊 Wykres energii na dziś</h3>
+                        <h3 className="text-[16.2px] font-medium text-gray-900 dark:text-cloud-white/80 text-left">📊 Wykres energii na dziś</h3>
                         <div className="flex items-center justify-center flex-wrap gap-2">
                              <button
                                 onClick={onInstructionsClick}

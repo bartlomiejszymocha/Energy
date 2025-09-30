@@ -18,8 +18,8 @@ interface ActionCardProps {
 }
 
 const getCardBgClass = (type: ActionItem['type'], isCompletedToday: boolean = false): string => {
-    // All cards now use glassmorphism design for consistency
-    const baseClass = 'bg-white dark:bg-space-850'; // Custom card color for dark mode
+    // All cards now use glassmorphism design for consistency with chart/consultation sections
+    const baseClass = 'bg-white dark:bg-white/5';
     const borderClass = isCompletedToday 
         ? 'border-2 border-success-green dark:border-success-green' 
         : 'border border-gray-200 dark:border-white/10';

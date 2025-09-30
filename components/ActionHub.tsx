@@ -122,9 +122,8 @@ export const ActionHub: React.FC<ActionHubProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div className="text-center md:text-left">
                         <div className="flex items-center justify-center md:justify-start gap-3">
-                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-cloud-white flex items-center gap-3">
-                                <span className="text-2xl">🧰</span>
-                                Narzędziownik energetyczny
+                            <h2 className="text-[21.6px] md:text-3xl font-bold text-gray-900 dark:text-cloud-white">
+                                🧰 Narzędziownik energetyczny
                             </h2>
                             {(sheetsLoading || permissionsLoading) && (
                                 <div className="flex items-center gap-1 text-sm text-electric-500">
@@ -143,7 +142,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                                 </button>
                             )}
                         </div>
-                    <p className="text-sm sm:text-base text-gray-600 dark:text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
+                    <p className="text-[12.6px] sm:text-[14.4px] text-gray-600 dark:text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
                         Wszystkie dostępne protokoły ruchowe, techniki oddechowe i resety energetyczne.
                         {favoriteActionIds.size === 0 && (
                             <> Dodaj do ulubionych (klikając ⭐) te, których używasz najczęściej.</>

@@ -48,8 +48,8 @@ export const FavoritesBar: React.FC<FavoritesBarProps> = ({
                                 const isCompleted = completedActionIds.has(action.id);
                                 const REBOOT_PREFIX = 'Energetyczny Reboot - ';
                                 
-                                let displayTitle = action.title;
-                                if (action.title.startsWith(REBOOT_PREFIX)) {
+                                let displayTitle = action.title || 'Brak tytułu';
+                                if (action.title && action.title.startsWith(REBOOT_PREFIX)) {
                                     displayTitle = action.title.substring(REBOOT_PREFIX.length);
                                 } else if (action.id === 'recharge_nsdr') {
                                     displayTitle = 'NSDR';
