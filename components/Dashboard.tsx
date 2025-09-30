@@ -139,11 +139,11 @@ const DailySummary: React.FC<{
                                 {todayLogs.map(log => (
                                     <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg backdrop-blur-sm">
                                         {log.rating ? (
-                                            <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg text-space-950 ${RATING_CONFIG[log.rating].color}`}>
+                                            <div className={`w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs text-space-950 ${RATING_CONFIG[log.rating].color}`}>
                                                 {log.rating}
                                             </div>
                                         ) : (
-                                            <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center bg-space-700 text-lg">
+                                            <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center bg-space-700 text-xs">
                                                 📝
                                             </div>
                                         )}

@@ -152,11 +152,11 @@ export const FullSummaryModal: React.FC<{
                                         {todayLogs.map(log => (
                                             <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-gray-100 dark:bg-space-800 rounded-lg border border-gray-200 dark:border-transparent">
                                                 {log.rating ? (
-                                                    <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg text-white ${RATING_CONFIG[log.rating].color}`}>
+                                                    <div className={`w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs text-white ${RATING_CONFIG[log.rating].color}`}>
                                                         {log.rating}
                                                     </div>
                                                 ) : (
-                                                    <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center bg-gray-400 dark:bg-space-700 text-lg">
+                                                    <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center bg-gray-400 dark:bg-space-700 text-xs">
                                                         📝
                                                     </div>
                                                 )}
