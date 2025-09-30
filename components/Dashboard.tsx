@@ -280,7 +280,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
 
 
     return (
-        <div className="space-y-6 mb-16">
+        <div className="space-y-2 sm:space-y-6 mb-5 sm:mb-16">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[380px]">
                 <div className="bg-white/90 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-3 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm lg:h-full overflow-hidden">
                     <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between sm:items-start">

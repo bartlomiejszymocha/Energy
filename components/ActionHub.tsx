@@ -118,7 +118,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
     const progressPercentage = isNaN(duration) ? 100 : ((Math.max(1, Math.min(15, duration)) - 1) / 14) * 100;
 
     return (
-        <div className="space-y-6 pt-2 sm:pt-6">
+        <div className="space-y-6 pt-0 sm:pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div className="text-center md:text-left">
                         <div className="flex items-center justify-center md:justify-start gap-3">
