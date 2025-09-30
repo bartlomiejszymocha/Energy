@@ -6,6 +6,7 @@ export interface EnergyLog {
   rating?: number; // 1-5
   note?: string;
   tags?: string[];
+  meal?: boolean; // Czy wpis zawiera posiłek
 }
 
 export type ActionType = 'Reset Energetyczny' | 'Protokół Ruchowy' | 'Protokuł Ruchowy' | 'Technika oddechowa' | 'Technika Oddechowa';
@@ -75,6 +76,7 @@ export interface ChartPoint {
   rating: number;
   isAction: boolean;
   isNoteOnly: boolean;
+  isMeal?: boolean; // Czy wpis zawiera posiłek
   note?: string;
   title?: string;
   icon?: string;

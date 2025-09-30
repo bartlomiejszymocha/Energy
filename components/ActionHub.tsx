@@ -5,7 +5,7 @@ import { ActionCard } from './ActionCard';
 // import { ACTION_LIBRARY } from '../constants/actions'; // Usunięto - używamy tylko Google Sheets
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import { useUserPermissions } from '../hooks/useUserPermissions';
-import { ArrowPathCircularIcon, BoltIcon, BreathingIcon, StarIcon, CogIcon } from './icons/LucideIcons';
+import { ArrowPathCircularIcon, BoltIcon, BreathingIcon, StarIcon, CogIcon, WrenchIcon, ZapIcon, BoxIcon, LayoutGridIcon, GridIcon, BriefcaseIcon } from './icons/LucideIcons';
 
 interface ActionHubProps {
     onCompleteAction: (actionId: string) => void;
@@ -120,37 +120,42 @@ export const ActionHub: React.FC<ActionHubProps> = ({
     return (
         <div className="space-y-6 pt-0 sm:pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div className="text-center md:text-left">
-                        <div className="flex items-center justify-center md:justify-start gap-3">
-                            <h2 className="text-[21.6px] md:text-3xl font-bold text-gray-900 dark:text-cloud-white">
-                                🧰 Narzędziownik energetyczny
-                            </h2>
-                            {(sheetsLoading || permissionsLoading) && (
-                                <div className="flex items-center gap-1 text-sm text-electric-500">
-                                    <ArrowPathCircularIcon className="h-4 w-4 animate-spin" />
-                                    <span>{permissionsLoading ? 'Sprawdzanie uprawnień...' : 'Synchronizacja...'}</span>
-                                </div>
-                            )}
-                            {sheetsError && (
-                                <button
-                                    onClick={refreshSheets}
-                                    className="flex items-center gap-1 text-sm text-danger-red hover:text-danger-red/80 transition"
-                                    title="Błąd synchronizacji - kliknij aby odświeżyć"
-                                >
-                                    <ArrowPathCircularIcon className="h-4 w-4" />
-                                    <span>Błąd</span>
-                                </button>
-                            )}
+                <div className="text-center md:text-left md:pl-4">
+                    <div className="flex items-start justify-center md:justify-start gap-3">
+                        <GridIcon className="h-6 w-6 md:h-8 md:w-8 text-electric-500 flex-shrink-0" />
+                        <div>
+                            <div className="flex items-center justify-center md:justify-start gap-3">
+                                <h2 className="text-[21.6px] md:text-3xl font-bold text-gray-900 dark:text-cloud-white">
+                                    Narzędziownik energetyczny
+                                </h2>
+                                {(sheetsLoading || permissionsLoading) && (
+                                    <div className="flex items-center gap-1 text-sm text-electric-500">
+                                        <ArrowPathCircularIcon className="h-4 w-4 animate-spin" />
+                                        <span>{permissionsLoading ? 'Sprawdzanie uprawnień...' : 'Synchronizacja...'}</span>
+                                    </div>
+                                )}
+                                {sheetsError && (
+                                    <button
+                                        onClick={refreshSheets}
+                                        className="flex items-center gap-1 text-sm text-danger-red hover:text-danger-red/80 transition"
+                                        title="Błąd synchronizacji - kliknij aby odświeżyć"
+                                    >
+                                        <ArrowPathCircularIcon className="h-4 w-4" />
+                                        <span>Błąd</span>
+                                    </button>
+                                )}
+                            </div>
+                            <p className="text-[12.6px] sm:text-[14.4px] text-gray-600 dark:text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
+                                Wszystkie dostępne protokoły ruchowe, techniki oddechowe i resety energetyczne.
+                                {favoriteActionIds.size === 0 && (
+                                    <> Dodaj do ulubionych (klikając ⭐) te, których używasz najczęściej.</>
+                                )}
+                            </p>
                         </div>
-                    <p className="text-[12.6px] sm:text-[14.4px] text-gray-600 dark:text-cloud-white/80 mt-2 max-w-md mx-auto md:mx-0">
-                        Wszystkie dostępne protokoły ruchowe, techniki oddechowe i resety energetyczne.
-                        {favoriteActionIds.size === 0 && (
-                            <> Dodaj do ulubionych (klikając ⭐) te, których używasz najczęściej.</>
-                        )}
-                    </p>
+                    </div>
                 </div>
                 
-                <div className="w-full max-w-lg mx-auto md:max-w-none px-2 sm:px-0">
+                <div className="w-full max-w-lg mx-auto md:max-w-none px-2 sm:px-0 md:pr-4">
                     <div className="flex flex-col items-center md:items-start w-full">
                         <div className="w-full text-center md:text-left mb-1">
                              <div className="flex items-center justify-center md:justify-start gap-2">

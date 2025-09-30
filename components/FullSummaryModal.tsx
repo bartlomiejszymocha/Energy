@@ -1,16 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import type { EnergyLog, CompletedActionLog, ActionItem } from '../types';
-import { XMarkIcon, ArrowPathCircularIcon, BoltIcon, BreathingIcon } from './icons/LucideIcons';
+import { XMarkIcon, ArrowPathCircularIcon, BoltIcon, BreathingIcon, FileTextIcon } from './icons/LucideIcons';
 // import { ACTION_LIBRARY } from '../constants/actions'; // Usunięto - używamy tylko Google Sheets
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import { IconRenderer } from './IconRenderer';
 
 const RATING_CONFIG: { [key: number]: { color: string; label: string } } = {
-    1: { color: 'bg-danger-red', label: 'Bardzo nisko' },
-    2: { color: 'bg-alert-orange', label: 'Nisko' },
-    3: { color: 'bg-warning-yellow', label: 'Średnio' },
-    4: { color: 'bg-success-green/80', label: 'Wysoko' },
-    5: { color: 'bg-success-green', label: 'Bardzo wysoko' },
+    1: { color: 'bg-danger-red', label: 'Przetrwanie' },
+    2: { color: 'bg-alert-orange', label: 'Autopilot' },
+    3: { color: 'bg-warning-yellow', label: 'Stabilnie' },
+    4: { color: 'bg-success-green', label: 'Fokus' },
+    5: { color: 'bg-cyan-500', label: 'Flow' },
 };
 
 export const FullSummaryModal: React.FC<{
@@ -62,8 +62,9 @@ export const FullSummaryModal: React.FC<{
         if (todayLogs.length > 0) {
             summary += "**📝 Wpisy Energii:**\n";
             todayLogs.forEach(log => {
-                const ratingText = log.rating ? `Ocena: ${log.rating}/5` : 'Notatka';
-                summary += `- ${timeFormatter.format(new Date(log.timestamp))} | ${ratingText} ${log.note ? `| ${log.note}` : ''}\n`;
+                const mealPrefix = log.meal ? '🍽️ ' : '';
+                const ratingText = log.rating ? `Ocena: ${log.rating}/5` : (log.meal ? 'Posiłek' : 'Notatka');
+                summary += `- ${timeFormatter.format(new Date(log.timestamp))} | ${mealPrefix}${ratingText} ${log.note ? `| ${log.note}` : ''}\n`;
             });
         } else {
             summary += "**📝 Wpisy Energii:**\n- Brak wpisów energii na dziś.\n";
@@ -152,12 +153,16 @@ export const FullSummaryModal: React.FC<{
                                         {todayLogs.map(log => (
                                             <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-gray-100 dark:bg-space-800 rounded-lg border border-gray-200 dark:border-transparent">
                                                 {log.rating ? (
-                                                    <div className={`w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs text-white ${RATING_CONFIG[log.rating].color}`}>
-                                                        {log.rating}
+                                                    <div className={`w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs text-white ${log.meal ? 'bg-success-green' : RATING_CONFIG[log.rating].color}`}>
+                                                        {log.meal ? '🍽️' : log.rating}
+                                                    </div>
+                                                ) : log.meal ? (
+                                                    <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center bg-success-green text-xs">
+                                                        🍽️
                                                     </div>
                                                 ) : (
-                                                    <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center bg-gray-400 dark:bg-space-700 text-xs">
-                                                        📝
+                                                    <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center bg-gray-400 dark:bg-space-700">
+                                                        <FileTextIcon className="h-2.5 w-2.5 text-white" />
                                                     </div>
                                                 )}
                                                 <div className="flex-1 min-w-0">

@@ -4,6 +4,7 @@ import { XMarkIcon } from './icons/LucideIcons';
 interface InstructionsModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onOpenGuide?: () => void;
 }
 
 const InstructionStep: React.FC<{ number: number, title: string, children: React.ReactNode }> = ({ number, title, children }) => (
@@ -18,7 +19,7 @@ const InstructionStep: React.FC<{ number: number, title: string, children: React
     </div>
 );
 
-export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose }) => {
+export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose, onOpenGuide }) => {
 
     if (!isOpen) {
         return null;
@@ -65,6 +66,21 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, on
                         <>
                             Regularnie (3-5 razy dziennie) oceniaj swoją energię w skali 1-5. Użyj dzwonka (🔔), aby ustawić przypomnienia i utrwalić nawyk.
                             Możesz też szybko dodać wpis, używając skrótu <kbd>⌘</kbd>+<kbd>K</kbd> (Mac) lub <kbd>Ctrl</kbd>+<kbd>K</kbd> (Windows).
+                            {onOpenGuide && (
+                                <>
+                                    {' '}
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onOpenGuide();
+                                            onClose();
+                                        }}
+                                        className="text-electric-500 hover:text-electric-600 dark:text-electric-400 dark:hover:text-electric-500 underline font-semibold transition-colors"
+                                    >
+                                        Zobacz szczegółowy przewodnik po 5 poziomach energii
+                                    </button>
+                                </>
+                            )}
                         </>
                     </InstructionStep>
                     
@@ -87,6 +103,21 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, on
                        <>
                             Regularnie (3-5 razy dziennie) oceniaj swoją energię w skali 1-5.
                             Szybko dodaj wpis skrótem <kbd>⌘</kbd>+<kbd>K</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd>.
+                            {onOpenGuide && (
+                                <>
+                                    {' '}
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onOpenGuide();
+                                            onClose();
+                                        }}
+                                        className="text-electric-500 hover:text-electric-600 dark:text-electric-400 dark:hover:text-electric-500 underline font-semibold transition-colors"
+                                    >
+                                        Zobacz przewodnik po poziomach energii
+                                    </button>
+                                </>
+                            )}
                        </>
                     </InstructionStep>
                     

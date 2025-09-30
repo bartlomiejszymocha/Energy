@@ -25,7 +25,10 @@ import { TidyCalModal } from './components/TidyCalModal';
 import { LoginScreen } from './components/LoginScreen';
 import { HistoryPage } from './components/HistoryPage';
 import { WorkoutModal } from './components/WorkoutPage';
-import { PlusIcon, CalendarDaysIcon, ChartBarIcon } from './components/icons/LucideIcons';
+import { ConvertKitDebugPanel } from './components/ConvertKitDebugPanel';
+import { ChartModal } from './components/ChartModal';
+import { EnergyRatingGuideModal } from './components/EnergyRatingGuideModal';
+import { PlusIcon, CalendarDaysIcon, ChartBarIcon, CalendarIcon } from './components/icons/LucideIcons';
 
 function App() {
   const { user, loadingAuth, signInWithGoogle, signOut } = useAuth();
@@ -56,6 +59,8 @@ function App() {
   const [breathingAction, setBreathingAction] = useState<ActionItem | null>(null);
   const [isFullSummaryModalOpen, setIsFullSummaryModalOpen] = useState(false);
   const [isNotificationsModalOpen, setIsNotificationsModalOpen] = useState(false);
+  const [isChartModalOpen, setIsChartModalOpen] = useState(false);
+  const [isEnergyGuideModalOpen, setIsEnergyGuideModalOpen] = useState(false);
   const [selectedActionForVideo, setSelectedActionForVideo] = useState<ActionItem | null>(null);
   const [workoutAction, setWorkoutAction] = useState<ActionItem | null>(null);
   const [isTidyCalModalOpen, setIsTidyCalModalOpen] = useState(false);
@@ -106,6 +111,8 @@ function App() {
         else if (breathingAction) setBreathingAction(null);
         else if (isLogEnergyModalOpen) setIsLogEnergyModalOpen(false);
         else if (isFullSummaryModalOpen) setIsFullSummaryModalOpen(false);
+        else if (isChartModalOpen) setIsChartModalOpen(false);
+        else if (isEnergyGuideModalOpen) setIsEnergyGuideModalOpen(false);
         else if (isInstructionsModalOpen) setIsInstructionsModalOpen(false);
         else if (isNotificationsModalOpen) setIsNotificationsModalOpen(false);
         else if (isResetDataModalOpen) setIsResetDataModalOpen(false);
@@ -117,7 +124,7 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [
       isTidyCalModalOpen, selectedActionForVideo, breathingAction, isLogEnergyModalOpen, 
-      isFullSummaryModalOpen, isInstructionsModalOpen, isNotificationsModalOpen, 
+      isFullSummaryModalOpen, isChartModalOpen, isEnergyGuideModalOpen, isInstructionsModalOpen, isNotificationsModalOpen, 
       isResetDataModalOpen, isUserSettingsModalOpen, view, workoutAction
   ]);
 
@@ -132,11 +139,11 @@ function App() {
     return new Set(completedActions.filter(log => log.timestamp >= startOfToday).map(log => log.actionId));
   }, [completedActions]);
 
-  const handleSaveLog = (rating: number | undefined, note: string, timestamp: number) => {
+  const handleSaveLog = (rating: number | undefined, note: string, timestamp: number, meal?: boolean) => {
     const tags = new Date(timestamp).getHours() < 12 ? ['Poranek'] : new Date(timestamp).getHours() < 17 ? ['Południe'] : ['Wieczór'];
-    addLog(rating, note, tags, timestamp);
+    addLog(rating, note, tags, timestamp, meal);
     setIsLogEnergyModalOpen(false);
-    showToast('Wpis energii zapisany!');
+    showToast(meal ? 'Posiłek i energia zapisane!' : 'Wpis energii zapisany!');
   };
 
   const handleCompleteAction = useCallback((actionId: string) => {
@@ -215,6 +222,7 @@ function App() {
                 onRemoveLog={handleRemoveLog}
                 onOpenSummaryModal={() => setIsFullSummaryModalOpen(true)}
                 onShowHistory={() => setView('history')}
+                onOpenChartModal={() => setIsChartModalOpen(true)}
                 isDashboardVisible={isDashboardVisible}
                 onToggleDashboard={() => setIsDashboardVisible(false)}
               />
@@ -253,7 +261,7 @@ function App() {
                   onClick={() => setIsTidyCalModalOpen(true)}
                   className="inline-flex items-center gap-3 bg-electric-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-electric-600 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
                 >
-                  <ChartBarIcon className="h-5 w-5" />
+                  <CalendarIcon className="h-5 w-5" />
                   <span>Aplikuj na strategiczną konsultację</span>
                 </button>
               </div>
@@ -306,16 +314,21 @@ function App() {
       
       {/* Modals rendered outside main container for proper positioning */}
       <ConfirmationToast message={toastMessage} />
-      {isLogEnergyModalOpen && <LogEnergyModal onClose={() => setIsLogEnergyModalOpen(false)} onSave={handleSaveLog} />}
+      {isLogEnergyModalOpen && <LogEnergyModal onClose={() => setIsLogEnergyModalOpen(false)} onSave={handleSaveLog} onOpenGuide={() => setIsEnergyGuideModalOpen(true)} />}
+      {isEnergyGuideModalOpen && <EnergyRatingGuideModal isOpen={isEnergyGuideModalOpen} onClose={() => setIsEnergyGuideModalOpen(false)} />}
       {selectedActionForVideo && <VideoModal action={selectedActionForVideo} onClose={() => setSelectedActionForVideo(null)} onMarkComplete={() => { if (selectedActionForVideo) { handleCompleteAction(selectedActionForVideo.id); } setSelectedActionForVideo(null); }} />}
-      {isInstructionsModalOpen && <InstructionsModal isOpen={isInstructionsModalOpen} onClose={() => setIsInstructionsModalOpen(false)} />}
+      {isInstructionsModalOpen && <InstructionsModal isOpen={isInstructionsModalOpen} onClose={() => setIsInstructionsModalOpen(false)} onOpenGuide={() => setIsEnergyGuideModalOpen(true)} />}
       {isResetDataModalOpen && <ResetDataModal isOpen={isResetDataModalOpen} onClose={() => setIsResetDataModalOpen(false)} onConfirm={handleConfirmReset} />}
       {breathingAction && <BreathingModal isOpen={!!breathingAction} onClose={() => setBreathingAction(null)} action={breathingAction} onComplete={() => { if(breathingAction) { handleCompleteAction(breathingAction.id); } setBreathingAction(null); }} />}
       {isFullSummaryModalOpen && <FullSummaryModal isOpen={isFullSummaryModalOpen} onClose={() => setIsFullSummaryModalOpen(false)} logs={logs} completedActions={completedActions} onRemoveCompletedAction={handleRemoveCompletedAction} onRemoveLog={handleRemoveLog} />}
+      {isChartModalOpen && <ChartModal isOpen={isChartModalOpen} onClose={() => setIsChartModalOpen(false)} logs={logs} completedActions={completedActions} />}
       {isNotificationsModalOpen && <NotificationSettingsModal isOpen={isNotificationsModalOpen} onClose={() => setIsNotificationsModalOpen(false)} permission={permission} settings={notificationSettings} requestPermission={requestPermission} updateSettings={updateNotificationSettings} addReminder={addReminder} removeReminder={removeReminder} testNotification={testNotification} />}
       {isTidyCalModalOpen && <TidyCalModal isOpen={isTidyCalModalOpen} onClose={() => setIsTidyCalModalOpen(false)} />}
       {isUserSettingsModalOpen && <UserSettingsModal isOpen={isUserSettingsModalOpen} onClose={() => setIsUserSettingsModalOpen(false)} onSave={saveSettings} currentSettings={settings} />}
       {workoutAction && Object.keys(exerciseLibrary).length > 0 && <WorkoutModal user={user} action={workoutAction} onClose={() => setWorkoutAction(null)} onComplete={() => { if (workoutAction) { handleCompleteAction(workoutAction.id); setWorkoutAction(null); } }} exerciseLibrary={exerciseLibrary} />}
+      
+      {/* Debug panel (tylko na localhost) */}
+      {/* <ConvertKitDebugPanel /> */}
     </>
   );
 }

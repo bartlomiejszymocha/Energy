@@ -128,15 +128,16 @@ export const useEnergyData = (uid: string | null) => {
     setStreak(calculateStreak(completedActions));
   }, [completedActions]);
 
-  const addLog = useCallback(async (rating: number | undefined, note: string, tags: string[], timestamp: number) => {
-    const logData = { rating, note, tags, timestamp };
+  const addLog = useCallback(async (rating: number | undefined, note: string, tags: string[], timestamp: number, meal?: boolean) => {
+    const logData = { rating, note, tags, timestamp, meal };
     const trimmedNote = note.trim();
-    const logToWrite: { timestamp: Timestamp; tags: string[]; note?: string; rating?: number } = {
+    const logToWrite: { timestamp: Timestamp; tags: string[]; note?: string; rating?: number; meal?: boolean } = {
       timestamp: Timestamp.fromMillis(timestamp),
       tags,
     };
     if (trimmedNote.length > 0) logToWrite.note = trimmedNote;
     if (typeof rating === 'number' && rating > 0) logToWrite.rating = rating;
+    if (meal) logToWrite.meal = meal;
 
     if (uid) {
         try {

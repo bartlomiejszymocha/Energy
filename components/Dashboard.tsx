@@ -1,16 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import type { EnergyLog, CompletedActionLog, ActionItem } from '../types';
 import { EnergyChart } from './EnergyChart';
-import { PlusIcon, QuestionMarkCircleIcon, TrashIcon, ArrowPathCircularIcon, BoltIcon, BreathingIcon, XMarkIcon, ArrowsPointingOutIcon, ArchiveBoxIcon, ChevronDownIcon } from './icons/LucideIcons';
+import { PlusIcon, QuestionMarkCircleIcon, TrashIcon, ArrowPathCircularIcon, BoltIcon, BreathingIcon, XMarkIcon, ArrowsPointingOutIcon, ArchiveBoxIcon, ChevronDownIcon, ChartBarIcon, ActivityIcon, TrophyIcon, WrenchIcon, ZapIcon, ClockIcon } from './icons/LucideIcons';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import { IconRenderer } from './IconRenderer';
 
 const RATING_CONFIG: { [key: number]: { color: string; label: string } } = {
-    1: { color: 'bg-danger-red', label: 'Bardzo nisko' },
-    2: { color: 'bg-alert-orange', label: 'Nisko' },
-    3: { color: 'bg-warning-yellow', label: 'Średnio' },
-    4: { color: 'bg-success-green/80', label: 'Wysoko' },
-    5: { color: 'bg-success-green', label: 'Bardzo wysoko' },
+    1: { color: 'bg-danger-red', label: 'Przetrwanie' },
+    2: { color: 'bg-alert-orange', label: 'Autopilot' },
+    3: { color: 'bg-warning-yellow', label: 'Stabilnie' },
+    4: { color: 'bg-success-green', label: 'Fokus' },
+    5: { color: 'bg-cyan-500', label: 'Flow' },
 };
 
 const DailySummary: React.FC<{ 
@@ -67,7 +67,7 @@ const DailySummary: React.FC<{
         >
             <div className="flex items-center justify-between gap-3 mb-4 flex-shrink-0">
                  <div className="flex items-center gap-3">
-                    <span className="text-[21.6px]">🏆</span>
+                    <TrophyIcon className="h-6 w-6 text-alert-orange" />
                     <h3 className="text-[16.2px] font-medium text-gray-900 dark:text-cloud-white/80">Podsumowanie</h3>
                  </div>
                  <div className="flex items-center gap-2">
@@ -210,7 +210,7 @@ const DailySummary: React.FC<{
                     onClick={(e) => { e.stopPropagation(); onShowHistory(); }}
                     className="w-full text-center text-sm font-semibold text-electric-500 hover:text-electric-600 bg-electric-500/10 hover:bg-electric-500/20 py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 backdrop-blur-sm border border-electric-500/20 hover:border-electric-500/40"
                 >
-                    <ArchiveBoxIcon className="h-5 w-5" />
+                    <ClockIcon className="h-5 w-5" />
                     <span>Zobacz historię</span>
                 </button>
             </div>
@@ -228,9 +228,10 @@ interface DashboardProps {
     onRemoveLog: (logId: string) => void;
     onOpenSummaryModal: () => void;
     onShowHistory: () => void;
+    onOpenChartModal: () => void;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, onLogEnergyClick, onInstructionsClick, onResetDataClick, onRemoveCompletedAction, onRemoveLog, onOpenSummaryModal, onShowHistory }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, onLogEnergyClick, onInstructionsClick, onResetDataClick, onRemoveCompletedAction, onRemoveLog, onOpenSummaryModal, onShowHistory, onOpenChartModal }) => {
     const [isCopied, setIsCopied] = useState(false);
 
     const handleCopySummary = async () => {
@@ -284,8 +285,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[380px]">
                 <div className="bg-white/90 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-3 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm lg:h-full overflow-hidden">
                     <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between sm:items-start">
-                        <h3 className="text-[16.2px] font-medium text-gray-900 dark:text-cloud-white/80 text-left">📊 Wykres energii na dziś</h3>
+                        <div className="flex items-center gap-2">
+                            <ActivityIcon className="h-5 w-5 text-electric-500" />
+                            <h3 className="text-[16.2px] font-medium text-gray-900 dark:text-cloud-white/80">Wykres energii na dziś</h3>
+                        </div>
                         <div className="flex items-center justify-center flex-wrap gap-2">
+                            <button
+                                onClick={onOpenChartModal}
+                                className="bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2 backdrop-blur-sm"
+                                title="Powiększ wykres"
+                            >
+                                <ArrowsPointingOutIcon className="h-3.5 w-3.5 md:h-5 md:w-5" />
+                            </button>
                              <button
                                 onClick={onInstructionsClick}
                                 className="bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2 backdrop-blur-sm"
@@ -320,18 +331,24 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                             return <EnergyChart logs={chartLogs} completedActions={chartActions} />;
                         })()}
                     </div>
-                    <div className="flex items-center justify-center gap-4 text-xs text-system-grey pt-4 flex-shrink-0 flex-wrap">
-                        <div className="flex items-center gap-2">
-                            <BoltIcon className="h-4 w-4 text-system-grey" />
-                            <span>Ruch</span>
-                        </div>
-                         <div className="flex items-center gap-2">
-                            <BreathingIcon className="h-4 w-4 text-system-grey" />
-                            <span>Oddech</span>
-                        </div>
-                         <div className="flex items-center gap-2">
-                            <ArrowPathCircularIcon className="h-4 w-4 text-system-grey" />
-                            <span>Reset</span>
+                    <div className="pt-4 border-t border-gray-200 dark:border-space-700 flex-shrink-0">
+                        <div className="flex items-center justify-center flex-wrap gap-3 sm:gap-4">
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-2.5 h-2.5 rounded-full bg-electric-500"></div>
+                                <span className="text-[10px] text-gray-600 dark:text-system-grey">Poziom energii</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-2.5 h-2.5 rounded-full bg-success-green"></div>
+                                <span className="text-[10px] text-gray-600 dark:text-system-grey">Posiłek</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-2.5 h-2.5 rounded-full bg-alert-orange"></div>
+                                <span className="text-[10px] text-gray-600 dark:text-system-grey">Notatka</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <ZapIcon className="h-3 w-3 text-alert-orange" />
+                                <span className="text-[10px] text-gray-600 dark:text-system-grey">Akcja</span>
+                            </div>
                         </div>
                     </div>
                 </div>

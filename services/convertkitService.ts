@@ -22,9 +22,15 @@ interface ConvertKitResponse {
 
 class ConvertKitService {
   private baseUrl = '/api';
+  private useMock: boolean;
 
   constructor() {
-    console.log('🔍 ConvertKit init: Using Vercel API endpoint');
+    // Użyj mock API w development (localhost)
+    this.useMock = typeof window !== 'undefined' && 
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+      localStorage.getItem('convertkit_use_real_api') !== 'true';
+    
+    console.log('🔍 ConvertKit init:', this.useMock ? '🎭 MOCK MODE (localhost)' : '🌐 REAL API');
   }
 
   /**
@@ -32,9 +38,10 @@ class ConvertKitService {
    */
   async addSubscriber(subscriber: ConvertKitSubscriber): Promise<ConvertKitResponse | null> {
     try {
-      console.log('🔍 Calling secure ConvertKit API:', subscriber.email);
+      const endpoint = this.useMock ? 'convertkit-subscribe-mock' : 'convertkit-subscribe';
+      console.log(`🔍 Calling ConvertKit API (${this.useMock ? 'MOCK' : 'REAL'}):`, subscriber.email);
 
-      const response = await fetch(`${this.baseUrl}/convertkit-subscribe`, {
+      const response = await fetch(`${this.baseUrl}/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +62,11 @@ class ConvertKitService {
         return { error: data.error || 'Failed to add subscriber' };
       }
 
-      console.log('✅ ConvertKit API success:', data);
+      if (this.useMock) {
+        console.log('✅ ConvertKit MOCK success:', data);
+      } else {
+        console.log('✅ ConvertKit API success:', data);
+      }
       return data;
     } catch (error) {
       console.error('ConvertKit request failed:', error);

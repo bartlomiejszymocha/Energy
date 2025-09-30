@@ -1,6 +1,6 @@
 import React from 'react';
 import type { User } from 'firebase/auth';
-import { BellIcon, SunIcon, MoonIcon } from './icons/LucideIcons';
+import { BellIcon, SunIcon, MoonIcon, FlameIcon } from './icons/LucideIcons';
 import { ProfileDropdown } from './ProfileDropdown';
 import { ArrowUpTrayIcon } from './icons/LucideIcons';
 import { useTheme } from '../hooks/useTheme';
@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
               className="flex items-center gap-1 sm:gap-2 bg-gray-100 dark:bg-space-900 border border-gray-200 dark:border-white/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full animate-fade-in-up min-h-[36px]"
               title={streakTitle}
             >
-              <span className="text-xs sm:text-sm transition-all duration-300">🔥</span>
+              <FlameIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-orange-500" />
               <span className="font-bold text-xs sm:text-sm text-gray-900 dark:text-cloud-white">{streak}</span>
               <span className="hidden sm:inline text-xs font-medium text-gray-600 dark:text-system-grey">Streak</span>
             </div>
