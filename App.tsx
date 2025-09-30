@@ -244,8 +244,8 @@ function App() {
               todayCompletedActionIds={todayCompletedActionIds}
             />
             <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-cloud-white">Gotowy na prawdziwą transformację?</h2>
-              <p className="text-gray-600 dark:text-system-grey mt-3 max-w-2xl mx-auto">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-cloud-white">Gotowy na prawdziwą transformację?</h2>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-system-grey mt-3 max-w-2xl mx-auto">
                 Prawdziwa transformacja wymaga wdrożenia, personalizacji i konsekwencji w natłoku codziennych obowiązków. Umów się na konsultację i współpracuj ze mną 1:1.
               </p>
               <div className="mt-6">

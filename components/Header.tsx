@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut, onLoginClick, t
           </div>
           <div className="flex items-center gap-1 sm:gap-2 md:gap-3 ml-4 sm:ml-6">
             <div 
-              className="flex items-center gap-1 sm:gap-2 bg-gray-100 dark:bg-space-900 border border-gray-200 dark:border-white/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full animate-fade-in-up"
+              className="flex items-center gap-1 sm:gap-2 bg-gray-100 dark:bg-space-900 border border-gray-200 dark:border-white/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full animate-fade-in-up min-h-[36px]"
               title={streakTitle}
             >
               <span className="text-xs sm:text-sm transition-all duration-300">🔥</span>

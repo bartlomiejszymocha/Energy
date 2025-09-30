@@ -126,6 +126,8 @@ const ThemedXAxis: React.FC = () => {
 const ThemedYAxis: React.FC = () => {
     const { isDark } = useTheme();
     const textColor = isDark ? '#64748B' : '#6B7280';
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+    const fontSize = isMobile ? 10.8 : 12; // 12px * 0.9 = 10.8px on mobile
     
     return (
         <YAxis 
@@ -133,7 +135,8 @@ const ThemedYAxis: React.FC = () => {
             domain={[0.5, 5.5]} 
             ticks={[1, 2, 3, 4, 5]} 
             stroke={textColor} 
-            allowDecimals={false} 
+            allowDecimals={false}
+            style={{ fontSize }}
         />
     );
 };

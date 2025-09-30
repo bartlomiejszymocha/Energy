@@ -108,7 +108,7 @@ const DailySummary: React.FC<{
 
             {/* Mobile Prompt */}
             <div className="flex-grow flex items-center justify-center text-center lg:hidden">
-                <p className="text-system-grey">Kliknij, żeby zobaczyć podsumowanie dnia.</p>
+                <p className="text-system-grey text-[12.8px]">Kliknij, żeby zobaczyć podsumowanie dnia.</p>
             </div>
             
             {/* Desktop Content */}
@@ -282,7 +282,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
     return (
         <div className="space-y-6 mb-16">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[380px]">
-                <div className="bg-white/90 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-4 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm lg:h-full overflow-hidden">
+                <div className="bg-white/90 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-3 sm:p-6 lg:col-span-2 flex flex-col backdrop-blur-sm lg:h-full overflow-hidden">
                     <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between sm:items-start">
                         <h3 className="text-[16.2px] font-medium text-gray-900 dark:text-cloud-white/80 text-left">📊 Wykres energii na dziś</h3>
                         <div className="flex items-center justify-center flex-wrap gap-2">
