@@ -139,11 +139,11 @@ const DailySummary: React.FC<{
                                 {todayLogs.map(log => (
                                     <div key={log.id} className="group relative flex items-start gap-3 p-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg backdrop-blur-sm">
                                         {log.rating ? (
-                                            <div className={`w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs text-space-950 ${RATING_CONFIG[log.rating].color}`}>
+                                            <div className={`w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm text-space-950 ${RATING_CONFIG[log.rating].color}`}>
                                                 {log.rating}
                                             </div>
                                         ) : (
-                                            <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center bg-space-700 text-xs">
+                                            <div className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center bg-space-700 text-sm">
                                                 📝
                                             </div>
                                         )}
@@ -154,15 +154,6 @@ const DailySummary: React.FC<{
                                                     {new Date(log.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
-                                            {log.tags && log.tags.length > 0 && (
-                                                <div className="flex flex-wrap gap-1.5 mt-2">
-                                                    {log.tags.map(tag => (
-                                                        <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-space-700 dark:text-system-grey">
-                                                            {tag}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
                                         </div>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onRemoveLog(log.id); }}
