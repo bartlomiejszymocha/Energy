@@ -51,6 +51,26 @@ const CustomDot = (props: any) => {
     if (payload.isNoteOnly) {
         return <circle cx={cx} cy={cy} r={5} fill="#FF9500" stroke={fillColor} strokeWidth={2} />;
     }
+    
+    // Render action icon if it's an action
+    if (payload.isAction && payload.icon) {
+        return (
+            <g>
+                <circle cx={cx} cy={cy} r={8} fill="#007AFF" stroke={fillColor} strokeWidth={2} />
+                <text 
+                    x={cx} 
+                    y={cy + 2} 
+                    textAnchor="middle" 
+                    fontSize="10" 
+                    fill={fillColor}
+                    style={{ pointerEvents: 'none' }}
+                >
+                    {payload.icon}
+                </text>
+            </g>
+        );
+    }
+    
     return <circle cx={cx} cy={cy} r={6} fill="#007AFF" stroke={fillColor} strokeWidth={2} />;
 };
 
