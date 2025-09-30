@@ -91,7 +91,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
     };
 
     return (
-        <div className={`${cardBgClass} rounded-xl shadow-lg flex flex-col transition-all duration-300 hover:bg-gray-50 dark:hover:bg-blue-500/10 hover:border-gray-300 dark:hover:border-blue-400/30`}>
+        <div className={`${cardBgClass} rounded-xl shadow-lg flex flex-col transition-all duration-300 hover:bg-gray-50 dark:hover:bg-electric-500/10 hover:border-gray-300 dark:hover:border-electric-500/30`}>
             {/* Clickable Header */}
             <div className="p-4 sm:p-4 cursor-pointer" onClick={() => onToggleExpand(action.id)}>
                 <div className="flex justify-between items-start gap-2 sm:gap-3 min-h-12 sm:min-h-16">
