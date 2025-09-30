@@ -15,17 +15,18 @@ export default async function handler(req, res) {
   const API_KEY = process.env.CONVERTKIT_API_KEY;
   
   // App notifications list (confirmed immediately) - "Energy Playbook - Product"
-  const APP_FORM_ID = '693f8d6049'; // Energy Playbook - Product (automatyczne potwierdzanie)
+  const APP_SEQUENCE_ID = '2506447'; // Energy Playbook - Product sequence (automatyczne potwierdzanie)
   
   // Newsletter list (requires confirmation) - "Energy Playbook - Newsletter"  
-  const NEWSLETTER_FORM_ID = '8eed27a04c'; // Energy Playbook - Newsletter (potwierdzanie przez email)
+  const NEWSLETTER_SEQUENCE_ID = '2500809'; // Energy Playbook - Newsletter sequence (potwierdzanie przez email)
   
   console.log('🔍 ConvertKit API setup:', {
     API_KEY: API_KEY ? `${API_KEY.substring(0, 10)}...` : 'MISSING',
-    APP_FORM_ID,
-    NEWSLETTER_FORM_ID,
+    APP_SEQUENCE_ID,
+    NEWSLETTER_SEQUENCE_ID,
     email,
-    subscribeToNewsletter
+    subscribeToNewsletter,
+    timestamp: new Date().toISOString()
   });
 
   if (!API_KEY) {
@@ -45,9 +46,9 @@ export default async function handler(req, res) {
       fields: fields || {}
     };
 
-    console.log('Adding to app notifications:', { email, firstName });
+    console.log('Adding to product sequence:', { email, firstName });
 
-    const appResponse = await fetch(`https://api.convertkit.com/v3/forms/${APP_FORM_ID}/subscribe`, {
+    const appResponse = await fetch(`https://api.convertkit.com/v3/sequences/${APP_SEQUENCE_ID}/subscribe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(appPayload),
@@ -57,17 +58,17 @@ export default async function handler(req, res) {
     results.push({ list: 'app_notifications', success: appResponse.ok, data: appData });
 
     if (!appResponse.ok) {
-      console.error('❌ App notifications subscription failed:', {
+      console.error('❌ Product sequence subscription failed:', {
         status: appResponse.status,
         statusText: appResponse.statusText,
         data: appData,
-        formId: APP_FORM_ID
+        sequenceId: APP_SEQUENCE_ID
       });
     } else {
-      console.log('✅ App notifications success:', appData);
+      console.log('✅ Product sequence success:', appData);
     }
 
-    // 2. Optionally add to newsletter (requires confirmation)
+    // 2. Optionally add to newsletter sequence (requires confirmation)
     if (subscribeToNewsletter) {
       const newsletterPayload = {
         api_secret: API_KEY,
@@ -77,9 +78,9 @@ export default async function handler(req, res) {
         fields: fields || {}
       };
 
-      console.log('Adding to newsletter (with confirmation):', { email, firstName });
-
-      const newsletterResponse = await fetch(`https://api.convertkit.com/v3/forms/${NEWSLETTER_FORM_ID}/subscribe`, {
+      console.log('Adding to newsletter sequence (with confirmation):', { email, firstName });
+      
+      const newsletterResponse = await fetch(`https://api.convertkit.com/v3/sequences/${NEWSLETTER_SEQUENCE_ID}/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newsletterPayload),
@@ -89,14 +90,14 @@ export default async function handler(req, res) {
       results.push({ list: 'newsletter', success: newsletterResponse.ok, data: newsletterData });
 
       if (!newsletterResponse.ok) {
-        console.error('❌ Newsletter subscription failed:', {
+        console.error('❌ Newsletter sequence subscription failed:', {
           status: newsletterResponse.status,
           statusText: newsletterResponse.statusText,
           data: newsletterData,
-          formId: NEWSLETTER_FORM_ID
+          sequenceId: NEWSLETTER_SEQUENCE_ID
         });
       } else {
-        console.log('✅ Newsletter success (confirmation required):', newsletterData);
+        console.log('✅ Newsletter sequence success (confirmation required):', newsletterData);
       }
     }
 
