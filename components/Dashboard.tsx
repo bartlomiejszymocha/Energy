@@ -294,7 +294,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                         <div className="flex items-center justify-center flex-wrap gap-2">
                             <button
                                 onClick={onOpenChartModal}
-                                className="bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm flex items-center gap-1 md:gap-2 backdrop-blur-sm"
+                                className="hidden sm:flex bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-400 dark:hover:border-white/40 text-gray-700 dark:text-cloud-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 text-xs md:text-sm items-center gap-1 md:gap-2 backdrop-blur-sm"
                                 title="Powiększ wykres"
                             >
                                 <ArrowsPointingOutIcon className="h-3.5 w-3.5 md:h-5 md:w-5" />
