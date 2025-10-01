@@ -31,23 +31,27 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
         const time = new Date(label).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
         
         // Określ kolor tła i obramowania na podstawie typu wpisu
-        let bgColor = 'bg-blue-50 dark:bg-blue-900/20';
-        let borderColor = 'border-blue-200 dark:border-blue-500/30';
-        let accentColor = 'text-blue-600 dark:text-blue-400';
+        let bgColor = 'bg-gray-50 dark:bg-gray-900/20';
+        let borderColor = 'border-gray-200 dark:border-gray-500/30';
+        let accentColor = 'text-gray-600 dark:text-gray-400';
         
         if (data.isMeal) {
+            // Niebieskie dla posiłków
             bgColor = 'bg-blue-50 dark:bg-blue-900/20';
             borderColor = 'border-blue-200 dark:border-blue-500/30';
             accentColor = 'text-blue-600 dark:text-blue-400';
         } else if (data.isAction) {
+            // Zielone dla akcji
             bgColor = 'bg-green-50 dark:bg-green-900/20';
             borderColor = 'border-green-200 dark:border-green-500/30';
             accentColor = 'text-green-600 dark:text-green-400';
         } else if (data.isNoteOnly) {
+            // Pomarańczowe dla notatek
             bgColor = 'bg-orange-50 dark:bg-orange-900/20';
             borderColor = 'border-orange-200 dark:border-orange-500/30';
             accentColor = 'text-orange-600 dark:text-orange-400';
         }
+        // Wpisy energii pozostają szare (domyślne)
         
         return (
             <div 

@@ -130,7 +130,7 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, on
                     </InstructionStep>
 
                     <InstructionStep number={4} title="Używaj ulubionych">
-                        Oznaczaj akcje gwiazdką (⭐), by mieć je zawsze pod ręką.
+                        Kliknij gwiazdkę (⭐) przy najczęściej używanych akcjach - będą na górze ekranu.
                     </InstructionStep>
                 </div>
                 

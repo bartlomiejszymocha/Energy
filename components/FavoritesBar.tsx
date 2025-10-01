@@ -28,7 +28,7 @@ export const FavoritesBar: React.FC<FavoritesBarProps> = ({
                 <div className="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8 text-center">
                     <p className="text-xs text-gray-600 dark:text-system-grey flex items-center justify-center gap-2">
                         <StarIcon className="h-4 w-4 text-warning-yellow" />
-                        <span>Oznacz ulubione akcje, aby mieć je zawsze pod ręką.</span>
+                        <span>Kliknij gwiazdkę przy akcjach, które stosujesz najczęściej - będą tutaj</span>
                     </p>
                 </div>
             </div>
