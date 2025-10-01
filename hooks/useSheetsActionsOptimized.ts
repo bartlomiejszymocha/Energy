@@ -53,6 +53,10 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
       if (isLocalhost) { // ENABLED - use different sample actions for testing
         console.log('🔍 Development mode - using static actions fallback');
         console.log('🔍 Hostname:', window.location.hostname);
+        
+        // Get saved actions from localStorage
+        const savedActions = JSON.parse(localStorage.getItem('dev-actions') || '[]');
+        
         // In development, provide sample actions for testing
         const sampleActions: ActionItem[] = [
           {
@@ -90,7 +94,16 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
           }
         ];
         
-        setActions(sampleActions);
+        // Combine sample actions with saved actions
+        const allActions = [...sampleActions, ...savedActions];
+        
+        console.log('🔍 Loaded actions:', {
+          sample: sampleActions.length,
+          saved: savedActions.length,
+          total: allActions.length
+        });
+        
+        setActions(allActions);
         setLastUpdated(new Date());
         setError(null);
         setLoading(false);

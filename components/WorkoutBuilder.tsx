@@ -14,7 +14,7 @@ interface WorkoutStepBuilder extends WorkoutStep {
 
 export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
     const { exercises, loading: exercisesLoading, error: exercisesError } = useSheetsExercises();
-    const { refresh: refreshActions } = useSheetsActionsOptimized();
+    const { actions, refresh: refreshActions } = useSheetsActionsOptimized();
     
     // Workout metadata
     const [workoutTitle, setWorkoutTitle] = useState('');
@@ -28,6 +28,9 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
     const [selectedExerciseId, setSelectedExerciseId] = useState('');
     const [exerciseDuration, setExerciseDuration] = useState(30);
     const [restDuration, setRestDuration] = useState(15);
+    
+    // Local actions state for development mode
+    const [localActions, setLocalActions] = useState<ActionItem[]>([]);
     
     // Convert exercises to array for easier handling
     const exercisesArray = useMemo(() => 
@@ -116,10 +119,43 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             
             if (isLocalhost) {
-                console.log('🔍 Development mode - simulating save');
-                // Simulate successful save for development
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                console.log('✅ Workout saved successfully (simulated)');
+                console.log('🔍 Development mode - saving to localStorage');
+                
+                // Generate unique ID for the action
+                const actionId = `dev-workout-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                
+                // Convert workout steps to workout string format
+                const workoutString = workoutSteps.map(step => {
+                    if (step.type === 'exercise') {
+                        return `${step.exerciseId} ${step.duration}`;
+                    } else {
+                        return `R ${step.duration}`;
+                    }
+                }).join(', ');
+                
+                // Create new action
+                const newAction: ActionItem = {
+                    id: actionId,
+                    title: workoutTitle,
+                    content: workoutDescription,
+                    type: workoutType,
+                    duration: workoutDuration,
+                    icon: workoutIcon,
+                    workout: workoutStepsFormatted,
+                    rules: 'admin',
+                    triggerTags: ['admin-created', 'dev-created']
+                };
+                
+                // Get existing local actions
+                const existingActions = JSON.parse(localStorage.getItem('dev-actions') || '[]');
+                
+                // Add new action
+                const updatedActions = [...existingActions, newAction];
+                
+                // Save to localStorage
+                localStorage.setItem('dev-actions', JSON.stringify(updatedActions));
+                
+                console.log('✅ Workout saved to localStorage:', newAction);
                 alert('Trening został zapisany pomyślnie! (Tryb deweloperski)');
                 onClose();
                 return;
