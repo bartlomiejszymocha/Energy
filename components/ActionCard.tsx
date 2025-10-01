@@ -21,7 +21,7 @@ const getCardBgClass = (type: ActionItem['type'], isCompletedToday: boolean = fa
     // All cards now use glassmorphism design for consistency with chart/consultation sections
     const baseClass = 'bg-white dark:bg-white/5';
     const borderClass = isCompletedToday 
-        ? 'border-2 border-success-green dark:border-success-green' 
+        ? 'border border-success-green/40 dark:border-success-green/40' 
         : 'border border-gray-200 dark:border-white/10';
     return `${baseClass} ${borderClass}`;
 };
