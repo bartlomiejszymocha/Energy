@@ -13,7 +13,7 @@ interface WorkoutStepBuilder extends WorkoutStep {
 }
 
 export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
-    const { exercises, loading: exercisesLoading } = useSheetsExercises();
+    const { exercises, loading: exercisesLoading, error: exercisesError } = useSheetsExercises();
     const { refresh: refreshActions } = useSheetsActionsOptimized();
     
     // Workout metadata
@@ -138,6 +138,28 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             </div>
         );
     }
+
+    if (exercisesError) {
+        return (
+            <div className="flex flex-col items-center justify-center h-64 space-y-4">
+                <div className="text-red-600 dark:text-red-400">Błąd podczas ładowania ćwiczeń</div>
+                <div className="text-sm text-gray-600 dark:text-system-grey">{exercisesError}</div>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="px-4 py-2 bg-electric-500 text-white rounded-lg hover:bg-electric-600 transition-colors"
+                >
+                    Odśwież stronę
+                </button>
+            </div>
+        );
+    }
+
+    // Debug info
+    console.log('🔍 WorkoutBuilder - Exercises loaded:', {
+        count: Object.keys(exercises).length,
+        exercises: Object.keys(exercises),
+        sampleExercise: exercises[Object.keys(exercises)[0]]
+    });
 
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-6">
