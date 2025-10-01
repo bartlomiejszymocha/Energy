@@ -351,24 +351,19 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
         <ResponsiveContainer key={`chart-container-${isDark}`} width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 10, right: 15, left: 0, bottom: 10 }}>
                 <defs>
-                    {/* Gradient dla linii bazujący na wartościach energii */}
+                    {/* Gradient dla linii bazujący na wartościach energii - od 1 do 5 */}
                     <linearGradient id="energyLineGradient" x1="0" y1="0" x2="100%" y2="0">
-                        {chartData.filter(p => p.rating).map((point, index, arr) => {
-                            const offset = arr.length > 1 ? (index / (arr.length - 1)) * 100 : 0;
-                            return (
-                                <stop 
-                                    key={index} 
-                                    offset={`${offset}%`} 
-                                    stopColor={energyColors[point.rating] || '#8B5CF6'} 
-                                />
-                            );
-                        })}
+                        <stop offset="0%" stopColor={energyColors[1]} />
+                        <stop offset="25%" stopColor={energyColors[2]} />
+                        <stop offset="50%" stopColor={energyColors[3]} />
+                        <stop offset="75%" stopColor={energyColors[4]} />
+                        <stop offset="100%" stopColor={energyColors[5]} />
                     </linearGradient>
                     
-                    {/* Gradient dla wypełnienia pod wykresem */}
+                    {/* Gradient dla wypełnienia pod wykresem - od czerwonego do cyjan */}
                     <linearGradient id="energyAreaGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#8B5CF6" stopOpacity={0.2} />
-                        <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0} />
+                        <stop offset="0%" stopColor={energyColors[5]} stopOpacity={0.3} />
+                        <stop offset="100%" stopColor={energyColors[1]} stopOpacity={0.1} />
                     </linearGradient>
                 </defs>
                 <ThemedCartesianGrid />
