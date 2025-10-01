@@ -261,16 +261,21 @@ function App() {
               todayCompletedActionIds={todayCompletedActionIds}
             />
             
-            {/* Admin Button - visible only to administrators */}
+            {/* Admin Section - visible only to administrators */}
             {isAdmin && (
                 <div className="animate-fade-in-up animation-delay-300">
-                    <button
-                        onClick={() => setShowAdminPage(true)}
-                        className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
-                    >
-                        <SettingsIcon className="h-5 w-5" />
-                        <span>Tworzenie treningów</span>
-                    </button>
+                    <div className="bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl shadow-sm p-4 sm:p-6">
+                        <h3 className="text-sm font-semibold text-gray-600 dark:text-system-grey uppercase tracking-wider mb-3 text-center">
+                            Administrator
+                        </h3>
+                        <button
+                            onClick={() => setShowAdminPage(true)}
+                            className="w-full bg-white/30 dark:bg-white/10 border border-gray-200/50 dark:border-white/20 text-gray-700 dark:text-cloud-white font-medium py-2.5 px-4 rounded-lg hover:bg-white/40 dark:hover:bg-white/20 hover:border-gray-300/50 dark:hover:border-white/30 transition-all duration-200 flex items-center justify-center gap-2"
+                        >
+                            <SettingsIcon className="h-4 w-4" />
+                            <span>Tworzenie treningów</span>
+                        </button>
+                    </div>
                 </div>
             )}
             
