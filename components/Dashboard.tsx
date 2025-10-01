@@ -336,11 +336,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                     <div className="pt-4 border-t border-gray-200 dark:border-space-700 flex-shrink-0">
                         <div className="flex items-center justify-center flex-wrap gap-3 sm:gap-4">
                             <div className="flex items-center gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full bg-electric-500"></div>
+                                <div className="w-2.5 h-2.5 rounded-full bg-gray-700 dark:bg-gray-300"></div>
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Poziom energii</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full bg-gray-500"></div>
+                                <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Posiłek</span>
                             </div>
                             <div className="flex items-center gap-1.5">

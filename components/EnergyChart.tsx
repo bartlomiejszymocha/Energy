@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import type { EnergyLog, CompletedActionLog, ChartPoint } from '../types';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import { useTheme } from '../hooks/useTheme';
@@ -36,9 +36,9 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
         let accentColor = 'text-blue-600 dark:text-blue-400';
         
         if (data.isMeal) {
-            bgColor = 'bg-gray-50 dark:bg-gray-900/20';
-            borderColor = 'border-gray-200 dark:border-gray-500/30';
-            accentColor = 'text-gray-600 dark:text-gray-400';
+            bgColor = 'bg-blue-50 dark:bg-blue-900/20';
+            borderColor = 'border-blue-200 dark:border-blue-500/30';
+            accentColor = 'text-blue-600 dark:text-blue-400';
         } else if (data.isAction) {
             bgColor = 'bg-green-50 dark:bg-green-900/20';
             borderColor = 'border-green-200 dark:border-green-500/30';
@@ -82,53 +82,50 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
 
 const CustomDot = (props: any) => {
     const { cx, cy, payload } = props;
-    const { isDark } = useTheme();
-    const fillColor = isDark ? '#F4F6F8' : '#374151';
     
-    // Szara kropka dla posiłków
+    // Niebieska kropka dla posiłków
     if (payload.isMeal) {
-        return <circle cx={cx} cy={cy} r={6} fill="#6B7280" stroke={fillColor} strokeWidth={1} />;
+        return <circle cx={cx} cy={cy} r={6} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2} />;
     }
     
     if (payload.isNoteOnly) {
-        return <circle cx={cx} cy={cy} r={6} fill="#FF9500" stroke={fillColor} strokeWidth={1} />;
+        return <circle cx={cx} cy={cy} r={6} fill="#FB923C" stroke="#F97316" strokeWidth={2} />;
     }
     
     // Zielona kropka dla wykonanych akcji
     if (payload.isAction) {
-        return <circle cx={cx} cy={cy} r={6} fill="#10B981" stroke={fillColor} strokeWidth={1} />;
+        return <circle cx={cx} cy={cy} r={6} fill="#34D399" stroke="#10B981" strokeWidth={2} />;
     }
     
-    return <circle cx={cx} cy={cy} r={6} fill="#007AFF" stroke={fillColor} strokeWidth={1} />;
+    // Czarna kropka dla wpisów energii
+    return <circle cx={cx} cy={cy} r={6} fill="#374151" stroke="#1F2937" strokeWidth={2} />;
 };
 
 const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
     const { cx, cy, payload } = props;
-    const { isDark } = useTheme();
-    const strokeColor = isDark ? '#F4F6F8' : '#374151';
     
     if (payload.isMeal) {
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} stroke={strokeColor} strokeWidth={1} fill="#6B7280" />
+                <circle cx={cx} cy={cy} r={8} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2.5} />
             </g>
         );
     }
     if (payload.isNoteOnly) {
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} stroke={strokeColor} strokeWidth={1} fill="#FF9500" />
+                <circle cx={cx} cy={cy} r={8} fill="#FB923C" stroke="#F97316" strokeWidth={2.5} />
             </g>
         );
     }
     if (payload.isAction) {
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} stroke={strokeColor} strokeWidth={1} fill="#10B981" />
+                <circle cx={cx} cy={cy} r={8} fill="#34D399" stroke="#10B981" strokeWidth={2.5} />
             </g>
         );
     }
-    return <circle cx={cx} cy={cy} r={8} stroke={strokeColor} strokeWidth={1} fill="#007AFF" />;
+    return <circle cx={cx} cy={cy} r={8} fill="#374151" stroke="#1F2937" strokeWidth={2.5} />;
 };
 
 // KLUCZOWA ZMIANA: komponenty Recharts jako oddzielne komponenty z key
@@ -300,10 +297,40 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
 
     console.log('🎨 EnergyChart render - isDark:', isDark, 'mounted:', mounted);
 
+    // Kolory dla poziomów energii
+    const energyColors: { [key: number]: string } = {
+        1: '#EF4444', // czerwony
+        2: '#F97316', // pomarańczowy
+        3: '#F59E0B', // żółty
+        4: '#10B981', // zielony
+        5: '#06B6D4', // cyan
+    };
+
     // KLUCZOWA ZMIANA: ResponsiveContainer z key zmusza pełny restart
     return (
         <ResponsiveContainer key={`chart-container-${isDark}`} width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 10, right: 15, left: 0, bottom: 10 }}>
+                <defs>
+                    {/* Gradient dla linii bazujący na wartościach energii */}
+                    <linearGradient id="energyLineGradient" x1="0" y1="0" x2="100%" y2="0">
+                        {chartData.filter(p => p.rating).map((point, index, arr) => {
+                            const offset = arr.length > 1 ? (index / (arr.length - 1)) * 100 : 0;
+                            return (
+                                <stop 
+                                    key={index} 
+                                    offset={`${offset}%`} 
+                                    stopColor={energyColors[point.rating] || '#8B5CF6'} 
+                                />
+                            );
+                        })}
+                    </linearGradient>
+                    
+                    {/* Gradient dla wypełnienia pod wykresem */}
+                    <linearGradient id="energyAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#8B5CF6" stopOpacity={0.2} />
+                        <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0} />
+                    </linearGradient>
+                </defs>
                 <ThemedCartesianGrid />
                 <ThemedXAxis />
                 <ThemedYAxis />
@@ -317,10 +344,18 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
                         pointerEvents: 'none'
                     }}
                 />
+                <Area
+                    type="monotone"
+                    dataKey="rating"
+                    stroke="none"
+                    fill="url(#energyAreaGradient)"
+                    fillOpacity={1}
+                    connectNulls={false}
+                />
                 <Line
                     type="monotone"
                     dataKey="rating"
-                    stroke="#007AFF"
+                    stroke="url(#energyLineGradient)"
                     strokeWidth={3}
                     dot={<CustomDot />}
                     activeDot={false}
