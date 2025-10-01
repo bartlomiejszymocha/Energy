@@ -109,6 +109,22 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 triggerTags: ['admin-created']
             };
 
+            // Debug: Log the data being sent
+            console.log('🔍 Sending workout data:', actionData);
+
+            // Check if we're in development mode
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            if (isLocalhost) {
+                console.log('🔍 Development mode - simulating save');
+                // Simulate successful save for development
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                console.log('✅ Workout saved successfully (simulated)');
+                alert('Trening został zapisany pomyślnie! (Tryb deweloperski)');
+                onClose();
+                return;
+            }
+
             // Save to Google Sheets via API
             const response = await fetch('/api/add-action', {
                 method: 'POST',
@@ -119,15 +135,20 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             });
 
             if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Workout saved successfully:', result);
                 await refreshActions();
                 alert('Trening został zapisany pomyślnie!');
                 onClose();
             } else {
-                throw new Error('Błąd podczas zapisywania treningu');
+                const errorText = await response.text();
+                console.error('❌ API Error:', response.status, errorText);
+                throw new Error(`Błąd API: ${response.status} - ${errorText}`);
             }
         } catch (error) {
-            console.error('Error saving workout:', error);
-            alert('Błąd podczas zapisywania treningu');
+            console.error('❌ Error saving workout:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Nieznany błąd';
+            alert(`Błąd podczas zapisywania treningu: ${errorMessage}`);
         }
     };
 
