@@ -65,7 +65,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
                     <p className="text-green-600 dark:text-green-400 text-sm font-bold">Posiłek</p>
                 )}
                 {data.actionTitle && (
-                    <p className="text-gray-600 dark:text-system-grey text-sm">{`${data.icon || '⚡'} ${data.actionTitle}`}</p>
+                    <p className="text-gray-600 dark:text-system-grey text-sm">⚡ {data.actionTitle}</p>
                 )}
                 {data.note && (
                     <p className="text-gray-600 dark:text-system-grey text-sm italic">{data.note}</p>
