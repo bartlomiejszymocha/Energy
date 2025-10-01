@@ -82,50 +82,86 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
 
 const CustomDot = (props: any) => {
     const { cx, cy, payload } = props;
+    const { isDark } = useTheme();
     
-    // Niebieska kropka dla posiłków
+    // Niebieski trójkąt dla posiłków
     if (payload.isMeal) {
-        return <circle cx={cx} cy={cy} r={6} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2} />;
+        const size = 7;
+        const points = `${cx},${cy - size} ${cx - size},${cy + size} ${cx + size},${cy + size}`;
+        return <polygon points={points} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2} />;
     }
     
+    // Pomarańczowy kwadrat dla notatek
     if (payload.isNoteOnly) {
-        return <circle cx={cx} cy={cy} r={6} fill="#FB923C" stroke="#F97316" strokeWidth={2} />;
+        const size = 5.5;
+        return <rect x={cx - size} y={cy - size} width={size * 2} height={size * 2} fill="#FB923C" stroke="#F97316" strokeWidth={2} />;
     }
     
-    // Zielona kropka dla wykonanych akcji
+    // Zielony pięciokąt dla wykonanych akcji
     if (payload.isAction) {
-        return <circle cx={cx} cy={cy} r={6} fill="#34D399" stroke="#10B981" strokeWidth={2} />;
+        const size = 6.5;
+        const points = [
+            [cx, cy - size],
+            [cx + size * 0.95, cy - size * 0.31],
+            [cx + size * 0.59, cy + size * 0.81],
+            [cx - size * 0.59, cy + size * 0.81],
+            [cx - size * 0.95, cy - size * 0.31]
+        ].map(p => p.join(',')).join(' ');
+        return <polygon points={points} fill="#34D399" stroke="#10B981" strokeWidth={2} />;
     }
     
-    // Czarna kropka dla wpisów energii
-    return <circle cx={cx} cy={cy} r={6} fill="#374151" stroke="#1F2937" strokeWidth={2} />;
+    // Ciemnoszara kropka dla wpisów energii (jaśniejsza w light mode)
+    const dotFill = isDark ? '#374151' : '#6B7280';
+    const dotStroke = isDark ? '#1F2937' : '#4B5563';
+    return <circle cx={cx} cy={cy} r={6} fill={dotFill} stroke={dotStroke} strokeWidth={2} />;
 };
 
 const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
     const { cx, cy, payload } = props;
+    const { isDark } = useTheme();
     
+    // Niebieski trójkąt (większy) dla posiłków
     if (payload.isMeal) {
+        const size = 9;
+        const points = `${cx},${cy - size} ${cx - size},${cy + size} ${cx + size},${cy + size}`;
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2.5} />
+                <polygon points={points} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2.5} />
             </g>
         );
     }
+    
+    // Pomarańczowy kwadrat (większy) dla notatek
     if (payload.isNoteOnly) {
+        const size = 7;
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} fill="#FB923C" stroke="#F97316" strokeWidth={2.5} />
+                <rect x={cx - size} y={cy - size} width={size * 2} height={size * 2} fill="#FB923C" stroke="#F97316" strokeWidth={2.5} />
             </g>
         );
     }
+    
+    // Zielony pięciokąt (większy) dla wykonanych akcji
     if (payload.isAction) {
+        const size = 8;
+        const points = [
+            [cx, cy - size],
+            [cx + size * 0.95, cy - size * 0.31],
+            [cx + size * 0.59, cy + size * 0.81],
+            [cx - size * 0.59, cy + size * 0.81],
+            [cx - size * 0.95, cy - size * 0.31]
+        ].map(p => p.join(',')).join(' ');
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} fill="#34D399" stroke="#10B981" strokeWidth={2.5} />
+                <polygon points={points} fill="#34D399" stroke="#10B981" strokeWidth={2.5} />
             </g>
         );
     }
-    return <circle cx={cx} cy={cy} r={8} fill="#374151" stroke="#1F2937" strokeWidth={2.5} />;
+    
+    // Ciemnoszara kropka (większa) dla wpisów energii (jaśniejsza w light mode)
+    const dotFill = isDark ? '#374151' : '#6B7280';
+    const dotStroke = isDark ? '#1F2937' : '#4B5563';
+    return <circle cx={cx} cy={cy} r={8} fill={dotFill} stroke={dotStroke} strokeWidth={2.5} />;
 };
 
 // KLUCZOWA ZMIANA: komponenty Recharts jako oddzielne komponenty z key

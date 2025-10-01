@@ -340,15 +340,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Poziom energii</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                                <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[8px] border-b-blue-500"></div>
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Posiłek</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full bg-alert-orange"></div>
+                                <div className="w-2.5 h-2.5 bg-alert-orange"></div>
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Notatka</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full bg-success-green"></div>
+                                <svg width="12" height="12" viewBox="0 0 12 12" className="flex-shrink-0">
+                                    <polygon points="6,1 11,4.5 9,10 3,10 1,4.5" fill="#34D399" stroke="#10B981" strokeWidth="1" />
+                                </svg>
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Akcja</span>
                             </div>
                         </div>

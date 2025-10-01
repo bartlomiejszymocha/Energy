@@ -101,15 +101,17 @@ export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, c
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Poziom energii</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-blue-500 border border-gray-300 dark:border-white/40"></div>
+                                    <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-blue-500"></div>
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Posiłek</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-alert-orange border border-gray-300 dark:border-white/40"></div>
+                                    <div className="w-3 h-3 bg-alert-orange"></div>
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Notatka</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-success-green border border-gray-300 dark:border-white/40"></div>
+                                    <svg width="14" height="14" viewBox="0 0 12 12" className="flex-shrink-0">
+                                        <polygon points="6,1 11,4.5 9,10 3,10 1,4.5" fill="#34D399" stroke="#10B981" strokeWidth="1" />
+                                    </svg>
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Akcja</span>
                                 </div>
                             </div>
