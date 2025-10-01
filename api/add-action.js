@@ -34,6 +34,18 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Check required environment variables
+    if (!process.env.GOOGLE_CLIENT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+      throw new Error('Missing Google Sheets credentials');
+    }
+    
+    const spreadsheetId = process.env.SHEETS_ID;
+    if (!spreadsheetId) {
+      throw new Error('Missing required parameters: spreadsheetId');
+    }
+
+    console.log('🔍 Adding action to spreadsheet:', spreadsheetId);
+
     // Konfiguracja Google Sheets API
     const auth = new google.auth.GoogleAuth({
       credentials: {
@@ -44,37 +56,39 @@ export default async function handler(req, res) {
     });
 
     const sheets = google.sheets({ version: 'v4', auth });
-    const spreadsheetId = process.env.SHEETS_ACTIONS_ID;
 
-    // Generate unique ID for the action
-    const actionId = `admin-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    // Generate unique ID for the action (numeric for idA column)
+    const actionId = Date.now();
 
-    // Prepare workout data as JSON string
-    const workoutData = workout ? JSON.stringify(workout) : '';
+    // Convert workout steps to workout string format (like existing format)
+    const workoutString = workout ? workout.map(step => {
+      if (step.type === 'exercise') {
+        return `${step.exerciseId} ${step.duration}`;
+      } else {
+        return `R ${step.duration}`;
+      }
+    }).join(', ') : '';
 
-    // Prepare trigger tags as JSON string
-    const triggerTagsData = triggerTags.length > 0 ? JSON.stringify(triggerTags) : '';
-
-    // Create new action row
+    // Create new action row matching the sheet structure
     const newRow = [
-      actionId,           // A: id
-      title,              // B: title
-      content || '',      // C: content
+      actionId,           // A: idA (numeric)
+      rules,              // B: rules
+      title,              // C: title
       type,               // D: type
       duration || 15,     // E: duration
       icon || '⚡',       // F: icon
-      '',                 // G: videoUrl (empty for now)
-      '',                 // H: breathingPattern (empty for now)
-      workoutData,        // I: workout (JSON string)
-      rules,              // J: rules
-      triggerTagsData,    // K: triggerTags (JSON string)
-      'admin-created',    // L: createdBy
-      new Date().toISOString() // M: createdAt
+      content || '',      // G: content
+      '',                 // H: breathing (empty for now)
+      workoutString,      // I: workout (string format)
+      ''                  // J: actionUrl (empty for now)
     ];
+
+    console.log('🔍 New action row:', newRow);
+    console.log('🔍 Workout string:', workoutString);
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'A:M',
+      range: 'Actions & Exercises!A:J',
       valueInputOption: 'RAW',
       requestBody: {
         values: [newRow]
