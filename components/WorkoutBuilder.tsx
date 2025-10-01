@@ -336,24 +336,9 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         {/* Add Exercise Section */}
                         <div className="bg-white dark:bg-space-900 rounded-xl shadow-sm p-4">
                             <div className="mb-4">
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Choose Exercise"
-                                        value={selectedExerciseId ? exercises[selectedExerciseId]?.name || '' : ''}
-                                        readOnly
-                                        className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-white/20 rounded-lg bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white cursor-pointer"
-                                    />
-                                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            {/* Exercise Dropdown */}
-                            <div className="mb-4">
+                                <label className="block text-xs font-semibold text-gray-500 dark:text-system-grey uppercase tracking-wider mb-2">
+                                    CHOOSE EXERCISE
+                                </label>
                                 <select
                                     value={selectedExerciseId}
                                     onChange={(e) => setSelectedExerciseId(e.target.value)}
