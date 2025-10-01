@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
 import { ArrowLeftIcon, SettingsIcon, PlusIcon, ListIcon } from './icons/LucideIcons';
 import { WorkoutBuilder } from './WorkoutBuilder';
+import { WorkoutManager } from './WorkoutManager';
 
 interface AdminPageProps {
     onBack: () => void;
 }
 
 export const AdminPage: React.FC<AdminPageProps> = ({ onBack }) => {
-    const [currentView, setCurrentView] = useState<'dashboard' | 'workout-builder'>('dashboard');
+    const [currentView, setCurrentView] = useState<'dashboard' | 'workout-builder' | 'workout-manager'>('dashboard');
 
     if (currentView === 'workout-builder') {
         return (
             <div className="min-h-screen bg-gray-50 dark:bg-space-950">
                 <WorkoutBuilder onClose={() => setCurrentView('dashboard')} />
+            </div>
+        );
+    }
+
+    if (currentView === 'workout-manager') {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-space-950">
+                <WorkoutManager onClose={() => setCurrentView('dashboard')} />
             </div>
         );
     }
@@ -74,10 +83,10 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onBack }) => {
                             Przeglądaj i edytuj istniejące treningi. Zarządzaj uprawnieniami i widocznością.
                         </p>
                         <button
-                            disabled
-                            className="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-3 px-4 rounded-lg cursor-not-allowed"
+                            onClick={() => setCurrentView('workout-manager')}
+                            className="w-full bg-blue-500 text-white font-medium py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors"
                         >
-                            Wkrótce
+                            Zarządzaj treningami
                         </button>
                     </div>
                 </div>
