@@ -106,7 +106,7 @@ export const EnergyRatingGuideModal: React.FC<EnergyRatingGuideModalProps> = ({ 
                         color="#F97316"
                         feeling="Działasz na autopilocie. Brakuje Ci 'iskry' i proaktywności. Jesteś w stanie odpowiadać na bodźce zewnętrzne (maile, telefony, prośby), ale nie masz siły, by samemu inicjować działania. Odczuwasz mentalne zmęczenie i tendencję do odkładania ważnych rzeczy."
                         capable="Do zadań płytkich i administracyjnych: nadrabianie zaległości mailowych (odpowiadanie, nie pisanie ważnych wiadomości), porządkowanie plików, płacenie faktur, prosta praca z dokumentami."
-                        action="OCZYSZCZANIE"
+                        action="PROSTE ZADANIA / ORGANIZACJA"
                         actionDesc="Wykorzystaj ten stan do 'sprzątania' swojego środowiska pracy. Odhaczanie małych, prostych zadań może dać lekki zastrzyk dopaminy i poczucie kontroli."
                     />
 
@@ -116,7 +116,7 @@ export const EnergyRatingGuideModal: React.FC<EnergyRatingGuideModalProps> = ({ 
                         color="#F59E0B"
                         feeling="Jesteś w stabilnym, neutralnym stanie. Nie czujesz ani zmęczenia, ani euforii. Jesteś w stanie realizować zaplanowane wcześniej zadania i trzymać się rutyny. To solidny, przewidywalny stan."
                         capable="Do zadań systemowych i rutynowych: realizacja standardowych procesów, spotkania operacyjne i rozmowy z zespołem, sprawdzanie postępów w projektach, wykonywanie pracy według wcześniej ustalonego planu."
-                        action="EGZEKUCJA"
+                        action="REALIZACJA"
                         actionDesc="Skup się na konsekwentnym realizowaniu planu dnia. To jest czas na solidną, przewidywalną pracę - trzymaj się ustalonego kursu i systematycznie realizuj zaplanowane zadania."
                     />
 
@@ -136,7 +136,7 @@ export const EnergyRatingGuideModal: React.FC<EnergyRatingGuideModalProps> = ({ 
                         color="#06B6D4"
                         feeling="Jesteś w stanie 'flow'. Czas zdaje się nie istnieć. Praca przychodzi Ci bez wysiłku, a Ty czujesz pełne zaangażowanie i satysfakcję. Twój mózg tworzy nowe, nieoczywiste połączenia. To stan najwyższej wydajności i innowacyjności."
                         capable="Do zadań generatywnych i wizjonerskich: tworzenie nowych produktów lub usług, burza mózgów nad strategią, pisanie najważniejszych tekstów (manifest marki, kluczowy artykuł), tworzenie przełomowych rozwiązań."
-                        action="FINALIZACJA"
+                        action="WYKORZYSTAJ TO!"
                         actionDesc="Pozwól sobie płynąć z tym stanem jak najdłużej. Nie przerywaj go. Miej pod ręką notatnik, by łapać wszystkie pomysły. Po zakończeniu świadomie zaplanuj odpoczynek - ten stan jest bardzo intensywny dla układu nerwowego."
                     />
                 </div>
