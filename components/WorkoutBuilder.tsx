@@ -8,8 +8,11 @@ interface WorkoutBuilderProps {
     onClose: () => void;
 }
 
-interface WorkoutStepBuilder extends WorkoutStep {
+interface WorkoutStepBuilder {
     id: string;
+    type: 'exercise';
+    exerciseId: string;
+    duration: number;
 }
 
 export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
@@ -52,15 +55,6 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
         setSelectedExerciseId('');
     };
 
-    const addRestStep = () => {
-        const newStep: WorkoutStepBuilder = {
-            id: `rest-${Date.now()}`,
-            type: 'rest',
-            duration: restDuration
-        };
-        
-        setWorkoutSteps(prev => [...prev, newStep]);
-    };
 
     const removeStep = (stepId: string) => {
         setWorkoutSteps(prev => prev.filter(step => step.id !== stepId));
@@ -93,12 +87,24 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
         }
 
         try {
-            // Convert builder steps to WorkoutStep format
-            const workoutStepsFormatted: WorkoutStep[] = workoutSteps.map(step => ({
-                type: step.type,
-                ...(step.type === 'exercise' ? { exerciseId: step.exerciseId } : {}),
-                duration: step.duration
-            }));
+            // Convert builder steps to WorkoutStep format with automatic rest periods
+            const workoutStepsFormatted: WorkoutStep[] = [];
+            workoutSteps.forEach((step, index) => {
+                // Add exercise
+                workoutStepsFormatted.push({
+                    type: 'exercise',
+                    exerciseId: step.exerciseId,
+                    duration: step.duration
+                });
+                
+                // Add rest period after each exercise (except the last one)
+                if (index < workoutSteps.length - 1) {
+                    workoutStepsFormatted.push({
+                        type: 'rest',
+                        duration: restDuration
+                    });
+                }
+            });
 
             // Create action data
             const actionData = {
@@ -124,14 +130,15 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 // Generate unique ID for the action
                 const actionId = `dev-workout-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 
-                // Convert workout steps to workout string format
-                const workoutString = workoutSteps.map(step => {
-                    if (step.type === 'exercise') {
-                        return `${step.exerciseId} ${step.duration}`;
-                    } else {
-                        return `R ${step.duration}`;
+                // Convert workout steps to workout string format with automatic rest periods
+                const workoutStringParts: string[] = [];
+                workoutSteps.forEach((step, index) => {
+                    workoutStringParts.push(`${step.exerciseId} ${step.duration}`);
+                    if (index < workoutSteps.length - 1) {
+                        workoutStringParts.push(`R ${restDuration}`);
                     }
-                }).join(', ');
+                });
+                const workoutString = workoutStringParts.join(', ');
                 
                 // Create new action
                 const newAction: ActionItem = {
@@ -328,29 +335,21 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                     <div className="space-y-4">
                         {/* Add Exercise Section */}
                         <div className="bg-white dark:bg-space-900 rounded-xl shadow-sm p-4">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="flex-1">
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            placeholder="Choose Exercise"
-                                            value={selectedExerciseId ? exercises[selectedExerciseId]?.name || '' : ''}
-                                            readOnly
-                                            className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-white/20 rounded-lg bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white cursor-pointer"
-                                        />
-                                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </div>
+                            <div className="mb-4">
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Choose Exercise"
+                                        value={selectedExerciseId ? exercises[selectedExerciseId]?.name || '' : ''}
+                                        readOnly
+                                        className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-white/20 rounded-lg bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white cursor-pointer"
+                                    />
+                                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={addRestStep}
-                                    className="px-4 py-2 bg-gray-100 dark:bg-space-800 text-gray-700 dark:text-system-grey rounded-lg hover:bg-gray-200 dark:hover:bg-space-700 transition-colors"
-                                >
-                                    Add Break
-                                </button>
                             </div>
                             
                             {/* Exercise Dropdown */}
@@ -386,7 +385,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 dark:text-system-grey uppercase tracking-wider mb-2">
-                                        REST TIME (SEC)
+                                        REST BETWEEN (SEC)
                                     </label>
                                     <input
                                         type="number"
@@ -425,114 +424,68 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                         )}
                                         
                                         <div className="p-4">
-                                            {step.type === 'exercise' ? (
-                                                <div className="flex items-start gap-4">
-                                                    {/* Exercise Thumbnail */}
-                                                    <div className="w-16 h-16 bg-gray-100 dark:bg-space-800 rounded-lg flex items-center justify-center flex-shrink-0">
-                                                        <PlayIcon className="h-6 w-6 text-gray-600 dark:text-system-grey" />
+                                            <div className="flex items-start gap-4">
+                                                {/* Exercise Thumbnail */}
+                                                <div className="w-16 h-16 bg-gray-100 dark:bg-space-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                    <PlayIcon className="h-6 w-6 text-gray-600 dark:text-system-grey" />
+                                                </div>
+                                                
+                                                {/* Exercise Details */}
+                                                <div className="flex-1">
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <h3 className="font-semibold text-gray-900 dark:text-cloud-white text-lg">
+                                                            {exercises[step.exerciseId]?.name || 'Nieznane ćwiczenie'}
+                                                        </h3>
+                                                        <div className="flex items-center gap-2">
+                                                            <button
+                                                                onClick={() => moveStep(step.id, 'up')}
+                                                                disabled={index === 0}
+                                                                className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
+                                                            >
+                                                                ↑
+                                                            </button>
+                                                            <button
+                                                                onClick={() => moveStep(step.id, 'down')}
+                                                                disabled={index === workoutSteps.length - 1}
+                                                                className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
+                                                            >
+                                                                ↓
+                                                            </button>
+                                                            <button
+                                                                onClick={() => removeStep(step.id)}
+                                                                className="p-1 text-red-400 hover:text-red-600 transition-colors"
+                                                            >
+                                                                <TrashIcon className="h-4 w-4" />
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                     
-                                                    {/* Exercise Details */}
-                                                    <div className="flex-1">
-                                                        <div className="flex items-center justify-between mb-2">
-                                                            <h3 className="font-semibold text-gray-900 dark:text-cloud-white text-lg">
-                                                                {exercises[step.exerciseId]?.name || 'Nieznane ćwiczenie'}
-                                                            </h3>
-                                                            <div className="flex items-center gap-2">
-                                                                <button
-                                                                    onClick={() => moveStep(step.id, 'up')}
-                                                                    disabled={index === 0}
-                                                                    className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
-                                                                >
-                                                                    ↑
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => moveStep(step.id, 'down')}
-                                                                    disabled={index === workoutSteps.length - 1}
-                                                                    className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
-                                                                >
-                                                                    ↓
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => removeStep(step.id)}
-                                                                    className="p-1 text-red-400 hover:text-red-600 transition-colors"
-                                                                >
-                                                                    <TrashIcon className="h-4 w-4" />
-                                                                </button>
-                                                            </div>
+                                                    {/* Exercise Table */}
+                                                    <div className="bg-gray-50 dark:bg-space-800 rounded-lg p-3">
+                                                        <div className="grid grid-cols-4 gap-4 text-xs font-medium text-gray-500 dark:text-system-grey mb-2">
+                                                            <div>Set</div>
+                                                            <div>Duration</div>
+                                                            <div>Rest</div>
+                                                            <div>Type</div>
                                                         </div>
-                                                        
-                                                        {/* Exercise Table */}
-                                                        <div className="bg-gray-50 dark:bg-space-800 rounded-lg p-3">
-                                                            <div className="grid grid-cols-4 gap-4 text-xs font-medium text-gray-500 dark:text-system-grey mb-2">
-                                                                <div>Set</div>
-                                                                <div>Duration</div>
-                                                                <div>Rest</div>
-                                                                <div>Type</div>
-                                                            </div>
-                                                            <div className="grid grid-cols-4 gap-4 text-sm">
-                                                                <div className="font-medium">1</div>
-                                                                <div>{step.duration}s</div>
-                                                                <div>00:00</div>
-                                                                <div>Exercise</div>
-                                                            </div>
+                                                        <div className="grid grid-cols-4 gap-4 text-sm">
+                                                            <div className="font-medium">1</div>
+                                                            <div>{step.duration}s</div>
+                                                            <div>{restDuration}s</div>
+                                                            <div>Exercise</div>
                                                         </div>
-                                                        
-                                                        {/* Note Field */}
-                                                        <div className="mt-3">
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Add note for this exercise"
-                                                                className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-space-600 rounded-lg bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div className="flex items-center gap-4">
-                                                    {/* Rest Icon */}
-                                                    <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                                                        <ClockIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                                                     </div>
                                                     
-                                                    {/* Rest Details */}
-                                                    <div className="flex-1">
-                                                        <div className="flex items-center justify-between mb-2">
-                                                            <h3 className="font-semibold text-gray-900 dark:text-cloud-white text-lg">
-                                                                Rest Period
-                                                            </h3>
-                                                            <div className="flex items-center gap-2">
-                                                                <button
-                                                                    onClick={() => moveStep(step.id, 'up')}
-                                                                    disabled={index === 0}
-                                                                    className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
-                                                                >
-                                                                    ↑
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => moveStep(step.id, 'down')}
-                                                                    disabled={index === workoutSteps.length - 1}
-                                                                    className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
-                                                                >
-                                                                    ↓
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => removeStep(step.id)}
-                                                                    className="p-1 text-red-400 hover:text-red-600 transition-colors"
-                                                                >
-                                                                    <TrashIcon className="h-4 w-4" />
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div className="bg-blue-50 dark:bg-blue-900/10 rounded-lg p-3">
-                                                            <div className="text-sm text-blue-700 dark:text-blue-300">
-                                                                Duration: {step.duration} seconds
-                                                            </div>
-                                                        </div>
+                                                    {/* Note Field */}
+                                                    <div className="mt-3">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Add note for this exercise"
+                                                            className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-space-600 rounded-lg bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white"
+                                                        />
                                                     </div>
                                                 </div>
-                                            )}
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
