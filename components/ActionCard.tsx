@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ActionItem } from '../types';
-import { ClockIcon, VideoCameraIcon, ChevronDownIcon, CheckCircleIcon, CircleIcon, StarIcon, ArrowPathCircularIcon, BoltIcon, ArrowsPointingOutIcon, BreathingIcon } from './icons/LucideIcons';
+import { ClockIcon, VideoCameraIcon, ChevronDownIcon, CheckCircleIcon, CircleIcon, StarIcon, ArrowPathCircularIcon, BoltIcon, ArrowsPointingOutIcon, BreathingIcon, FlameIcon } from './icons/LucideIcons';
 import { BreathingTimer } from './BreathingTimer';
 import { IconRenderer } from './IconRenderer';
 
@@ -134,9 +134,10 @@ export const ActionCard: React.FC<ActionCardProps> = ({
                 <div className="flex items-center gap-2 text-[10px] mt-0 sm:mt-1 text-system-grey">
                     {completionCount > 0 && (
                         <>
-                            <span className="font-mono">
-                                x{completionCount}
-                            </span>
+                            <div className="flex items-center gap-1 bg-gray-100 dark:bg-space-900 border border-gray-200 dark:border-white/20 px-1.5 py-0.5 rounded-full">
+                                <FlameIcon className="h-3 w-3 text-orange-500" />
+                                <span className="font-bold text-[10px] text-gray-900 dark:text-cloud-white">{completionCount}</span>
+                            </div>
                             <span className="text-system-grey/50">|</span>
                         </>
                     )}
