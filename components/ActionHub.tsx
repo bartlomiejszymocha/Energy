@@ -274,15 +274,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                 <div className="flex items-center justify-center gap-0.5 md:gap-2 flex-wrap">
                     {filterButtons.map(({ key, label, icon: Icon }) => (
                         <div key={key} className="flex items-center gap-1">
-                            <button 
-                                onClick={() => setFilter(key)}
-                                className={`px-1 md:px-4 py-2 md:py-2 rounded-lg text-xs md:text-sm font-semibold flex items-center justify-center gap-1 md:gap-2 transition-all duration-200 flex-1 md:flex-none backdrop-blur-sm ${filter === key ? 'text-electric-500 hover:text-electric-600 bg-electric-500/10 hover:bg-electric-500/20 border border-electric-500/20 hover:border-electric-500/40' : 'bg-white dark:bg-space-900 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-system-grey hover:bg-gray-100 dark:hover:bg-space-700 hover:border-gray-300 dark:hover:border-white/20'}`}
-                            >
-                                {Icon && <Icon className="h-3 w-3 md:h-4 md:w-4" />}
-                                <span className="hidden sm:inline">{label}</span>
-                                <span className="sm:hidden">{label.split(' ')[0]}</span>
-                            </button>
-                            {/* Admin icon next to "Wszystko" button */}
+                            {/* Admin icon before "Wszystko" button */}
                             {key === 'all' && isAdmin && onOpenAdminPanel && (
                                 <button
                                     onClick={onOpenAdminPanel}
@@ -292,6 +284,14 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                                     <SettingsIcon className="h-3 w-3 md:h-4 md:w-4" />
                                 </button>
                             )}
+                            <button 
+                                onClick={() => setFilter(key)}
+                                className={`px-1 md:px-4 py-2 md:py-2 rounded-lg text-xs md:text-sm font-semibold flex items-center justify-center gap-1 md:gap-2 transition-all duration-200 flex-1 md:flex-none backdrop-blur-sm ${filter === key ? 'text-electric-500 hover:text-electric-600 bg-electric-500/10 hover:bg-electric-500/20 border border-electric-500/20 hover:border-electric-500/40' : 'bg-white dark:bg-space-900 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-system-grey hover:bg-gray-100 dark:hover:bg-space-700 hover:border-gray-300 dark:hover:border-white/20'}`}
+                            >
+                                {Icon && <Icon className="h-3 w-3 md:h-4 md:w-4" />}
+                                <span className="hidden sm:inline">{label}</span>
+                                <span className="sm:hidden">{label.split(' ')[0]}</span>
+                            </button>
                         </div>
                     ))}
                 </div>
