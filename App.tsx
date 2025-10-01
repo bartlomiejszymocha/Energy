@@ -3,6 +3,7 @@ import { useEnergyData } from './hooks/useEnergyData';
 import { useUserSettings } from './hooks/useUserSettings';
 import { useNotifications } from './hooks/useNotifications';
 import { useAuth } from './hooks/useAuth';
+import { useAdmin } from './hooks/useAdmin';
 import type { ActionItem, Exercise } from './types';
 import { useSheetsExercises } from './hooks/useSheetsExercises';
 
@@ -28,10 +29,12 @@ import { WorkoutModal } from './components/WorkoutPage';
 import { ConvertKitDebugPanel } from './components/ConvertKitDebugPanel';
 import { ChartModal } from './components/ChartModal';
 import { EnergyRatingGuideModal } from './components/EnergyRatingGuideModal';
-import { PlusIcon, CalendarDaysIcon, ChartBarIcon, CalendarIcon, YoutubeIcon, LinkedinIcon, RocketIcon } from './components/icons/LucideIcons';
+import { AdminPage } from './components/AdminPage';
+import { PlusIcon, CalendarDaysIcon, ChartBarIcon, CalendarIcon, YoutubeIcon, LinkedinIcon, RocketIcon, SettingsIcon } from './components/icons/LucideIcons';
 
 function App() {
   const { user, loadingAuth, signInWithGoogle, signOut } = useAuth();
+  const { isAdmin } = useAdmin();
   const { 
     logs, addLog, removeLog,
     completedActions, addCompletedAction, removeCompletedAction,
@@ -67,6 +70,7 @@ function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const { exercises: exerciseLibrary, loading: exercisesLoading, error: libraryError } = useSheetsExercises();
   const [isDashboardVisible, setIsDashboardVisible] = useState(true);
+  const [showAdminPage, setShowAdminPage] = useState(false);
   const userRef = useRef(user);
 
   const showToast = useCallback((message: string) => {
@@ -192,6 +196,11 @@ function App() {
     return <LoginScreen onSignIn={signInWithGoogle} />;
   }
 
+  // Show admin page if admin and showAdminPage is true
+  if (isAdmin && showAdminPage) {
+    return <AdminPage onBack={() => setShowAdminPage(false)} />;
+  }
+
   return (
     <>
     <div className="bg-gray-100 dark:bg-space-950 text-gray-900 dark:text-cloud-white min-h-screen font-sans">
@@ -251,6 +260,20 @@ function App() {
               onOpenBreathingModal={(action) => setBreathingAction(action)}
               todayCompletedActionIds={todayCompletedActionIds}
             />
+            
+            {/* Admin Button - visible only to administrators */}
+            {isAdmin && (
+                <div className="animate-fade-in-up animation-delay-300">
+                    <button
+                        onClick={() => setShowAdminPage(true)}
+                        className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+                    >
+                        <SettingsIcon className="h-5 w-5" />
+                        <span>Tworzenie treningów</span>
+                    </button>
+                </div>
+            )}
+            
             <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-cloud-white">Potrzebujesz spersonalizowanego wsparcia?</h2>
               <p className="text-sm sm:text-base text-gray-600 dark:text-system-grey mt-3 max-w-2xl mx-auto">
