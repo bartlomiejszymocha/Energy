@@ -112,7 +112,7 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave,
                     {[1, 2, 3, 4, 5].map(level => (
                          <button
                             key={level}
-                            onClick={() => setRating(level)}
+                            onClick={() => setRating(rating === level ? 0 : level)}
                             className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full text-xl font-bold transition-all duration-200 flex items-center justify-center
                                 ${rating === level ? `text-white ${RATING_CONFIG[level].color} scale-110 shadow-lg` : 'bg-gray-100 dark:bg-space-800 border border-gray-200 dark:border-white/20 text-gray-600 dark:text-system-grey hover:bg-gray-200 dark:hover:bg-space-700'}`}
                         >
