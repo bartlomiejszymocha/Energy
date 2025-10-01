@@ -1,11 +1,22 @@
-import React from 'react';
-import { ArrowLeftIcon, SettingsIcon } from './icons/LucideIcons';
+import React, { useState } from 'react';
+import { ArrowLeftIcon, SettingsIcon, PlusIcon, ListIcon } from './icons/LucideIcons';
+import { WorkoutBuilder } from './WorkoutBuilder';
 
 interface AdminPageProps {
     onBack: () => void;
 }
 
 export const AdminPage: React.FC<AdminPageProps> = ({ onBack }) => {
+    const [currentView, setCurrentView] = useState<'dashboard' | 'workout-builder'>('dashboard');
+
+    if (currentView === 'workout-builder') {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-space-950">
+                <WorkoutBuilder onClose={() => setCurrentView('dashboard')} />
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-space-950">
             <div className="max-w-4xl mx-auto px-4 py-8">
@@ -26,19 +37,69 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onBack }) => {
                     </div>
                 </div>
 
-                {/* Content */}
-                <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-6 sm:p-8">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-cloud-white mb-4">
-                        Tworzenie treningów
-                    </h2>
-                    <p className="text-gray-600 dark:text-system-grey mb-6">
-                        Tutaj będzie możliwość tworzenia i zarządzania dodatkowymi treningami.
-                    </p>
-                    
-                    <div className="bg-gray-50 dark:bg-space-800 rounded-lg p-4">
-                        <p className="text-sm text-gray-500 dark:text-system-grey/70">
-                            🚧 Funkcjonalność w przygotowaniu...
+                {/* Dashboard */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Create Workout Card */}
+                    <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 bg-electric-500/10 rounded-lg">
+                                <PlusIcon className="h-6 w-6 text-electric-500" />
+                            </div>
+                            <h2 className="text-xl font-semibold text-gray-900 dark:text-cloud-white">
+                                Nowy trening
+                            </h2>
+                        </div>
+                        <p className="text-gray-600 dark:text-system-grey mb-6">
+                            Stwórz nowy trening interwałowy używając ćwiczeń z bazy danych. Trening zostanie zapisany jako nowa akcja.
                         </p>
+                        <button
+                            onClick={() => setCurrentView('workout-builder')}
+                            className="w-full bg-electric-500 text-white font-medium py-3 px-4 rounded-lg hover:bg-electric-600 transition-colors"
+                        >
+                            Stwórz trening
+                        </button>
+                    </div>
+
+                    {/* Manage Workouts Card */}
+                    <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 bg-blue-500/10 rounded-lg">
+                                <ListIcon className="h-6 w-6 text-blue-500" />
+                            </div>
+                            <h2 className="text-xl font-semibold text-gray-900 dark:text-cloud-white">
+                                Zarządzaj treningami
+                            </h2>
+                        </div>
+                        <p className="text-gray-600 dark:text-system-grey mb-6">
+                            Przeglądaj i edytuj istniejące treningi. Zarządzaj uprawnieniami i widocznością.
+                        </p>
+                        <button
+                            disabled
+                            className="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-medium py-3 px-4 rounded-lg cursor-not-allowed"
+                        >
+                            Wkrótce
+                        </button>
+                    </div>
+                </div>
+
+                {/* Stats */}
+                <div className="mt-8 bg-white dark:bg-space-900 rounded-xl shadow-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-cloud-white mb-4">
+                        Statystyki
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="text-center">
+                            <div className="text-2xl font-bold text-electric-500">0</div>
+                            <div className="text-sm text-gray-600 dark:text-system-grey">Utworzone treningi</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-2xl font-bold text-blue-500">0</div>
+                            <div className="text-sm text-gray-600 dark:text-system-grey">Aktywne treningi</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-2xl font-bold text-green-500">0</div>
+                            <div className="text-sm text-gray-600 dark:text-system-grey">Wykonania</div>
+                        </div>
                     </div>
                 </div>
             </div>
