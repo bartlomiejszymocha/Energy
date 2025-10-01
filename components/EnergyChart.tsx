@@ -127,6 +127,7 @@ const CustomDot = (props: any) => {
     return <circle cx={cx} cy={cy} r={6} fill={colors.fill} stroke={colors.stroke} strokeWidth={2} />;
 };
 
+
 const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
     const { cx, cy, payload } = props;
     const { isDark } = useTheme();
@@ -365,6 +366,15 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
         <ResponsiveContainer key={`chart-container-${isDark}`} width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 10, right: 15, left: 0, bottom: 10 }}>
                 <defs>
+                    {/* Gradient dla linii - od góry (poziom 5) do dołu (poziom 1) */}
+                    <linearGradient id="energyLineGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={energyColors[5]} />
+                        <stop offset="25%" stopColor={energyColors[4]} />
+                        <stop offset="50%" stopColor={energyColors[3]} />
+                        <stop offset="75%" stopColor={energyColors[2]} />
+                        <stop offset="100%" stopColor={energyColors[1]} />
+                    </linearGradient>
+                    
                     {/* Gradient dla wypełnienia pod wykresem - od góry (poziom 5) do dołu (poziom 1) */}
                     <linearGradient id="energyAreaGradient" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor={energyColors[5]} stopOpacity={0.2} />
@@ -395,8 +405,8 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
                 <Line
                     type="monotone"
                     dataKey="rating"
-                    stroke="#6B7280"
-                    strokeWidth={2}
+                    stroke="url(#energyLineGradient)"
+                    strokeWidth={3}
                     dot={<CustomDot />}
                     activeDot={false}
                     connectNulls={false}
