@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(405).send("Method Not Allowed");
   }
 
-  const { title, content, type, duration, icon, workout, rules = 'priv', triggerTags = [] } = req.body;
+  const { title, content, type, duration, icon, workout, rules = 'admin', triggerTags = [] } = req.body;
 
   // SECURITY: Input validation and sanitization
   if (!title || !type) {
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   }
 
   // SECURITY: Validate rules
-  const validRules = ['priv', 'public', 'pro'];
+  const validRules = ['priv', 'public', 'pro', 'admin'];
   if (!validRules.includes(rules)) {
     return res.status(400).json({ error: "Invalid rules" });
   }

@@ -105,7 +105,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 duration: workoutDuration,
                 icon: workoutIcon,
                 workout: workoutStepsFormatted,
-                rules: 'priv' as const, // Admin-only
+                rules: 'admin' as const, // Admin-only
                 triggerTags: ['admin-created']
             };
 
