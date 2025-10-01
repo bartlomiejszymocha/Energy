@@ -171,7 +171,6 @@ export const ActionHub: React.FC<ActionHubProps> = ({
                                         className="tabular-nums w-[4ch] bg-transparent p-1 border-0 text-lg font-bold text-electric-500 focus:outline-none focus:ring-1 focus:ring-electric-500 focus:bg-gray-100 dark:focus:bg-space-800 rounded-md text-center"
                                     />
                                     <span>min</span>
-                                    <span>⏱️</span>
                                  </div>
                              </div>
                         </div>
