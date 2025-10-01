@@ -33,7 +33,7 @@ export const LogEnergyModal: React.FC<LogEnergyModalProps> = ({ onClose, onSave,
         1: { color: 'bg-danger-red', label: 'Przetrwanie' },
         2: { color: 'bg-alert-orange', label: 'Autopilot' },
         3: { color: 'bg-warning-yellow', label: 'Stabilnie' },
-        4: { color: 'bg-success-green', label: 'Fokus' },
+        4: { color: 'bg-success-green', label: 'Focus' },
         5: { color: 'bg-cyan-500', label: 'Flow' },
     };
     

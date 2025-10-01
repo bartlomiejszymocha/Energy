@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { XMarkIcon, ActivityIcon, ZapIcon, FileTextIcon } from './icons/LucideIcons';
+import React, { useMemo, useState } from 'react';
+import { XMarkIcon, ActivityIcon, ZapIcon, FileTextIcon, ChevronDownIcon } from './icons/LucideIcons';
 import { EnergyChart } from './EnergyChart';
 import type { EnergyLog, CompletedActionLog } from '../types';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
@@ -9,7 +9,7 @@ const RATING_CONFIG: { [key: number]: { color: string; label: string } } = {
     1: { color: 'bg-danger-red', label: 'Przetrwanie' },
     2: { color: 'bg-alert-orange', label: 'Autopilot' },
     3: { color: 'bg-warning-yellow', label: 'Stabilnie' },
-    4: { color: 'bg-success-green', label: 'Fokus' },
+    4: { color: 'bg-success-green', label: 'Focus' },
     5: { color: 'bg-cyan-500', label: 'Flow' },
 };
 
@@ -22,6 +22,9 @@ interface ChartModalProps {
 
 export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, completedActions }) => {
     const { actions: sheetsActions } = useSheetsActionsOptimized();
+    const [isEnergyExpanded, setIsEnergyExpanded] = useState(true);
+    const [isMealsExpanded, setIsMealsExpanded] = useState(true);
+    const [isActionsExpanded, setIsActionsExpanded] = useState(true);
     
     if (!isOpen) return null;
 
@@ -32,13 +35,16 @@ export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, c
     const todayActions = completedActions.filter(a => a.timestamp >= startOfToday && a.timestamp <= endOfToday);
 
     // Połącz wszystkie wydarzenia i posortuj chronologicznie
-    const allEvents = useMemo(() => {
-        const events: Array<{ timestamp: number; type: 'log' | 'action'; data: any }> = [
-            ...todayLogs.map(log => ({ timestamp: log.timestamp, type: 'log' as const, data: log })),
-            ...todayActions.map(action => ({ timestamp: action.timestamp, type: 'action' as const, data: action }))
-        ];
-        return events.sort((a, b) => a.timestamp - b.timestamp);
+    const categorizedEvents = useMemo(() => {
+        const energyLogs = todayLogs.filter(log => !log.meal && log.rating).sort((a, b) => b.timestamp - a.timestamp);
+        const meals = todayLogs.filter(log => log.meal).sort((a, b) => b.timestamp - a.timestamp);
+        const notes = todayLogs.filter(log => !log.meal && !log.rating).sort((a, b) => b.timestamp - a.timestamp);
+        const actions = todayActions.sort((a, b) => b.timestamp - a.timestamp);
+        
+        return { energyLogs, meals, notes, actions };
     }, [todayLogs, todayActions]);
+    
+    const totalCount = categorizedEvents.energyLogs.length + categorizedEvents.meals.length + categorizedEvents.notes.length + categorizedEvents.actions.length;
 
     return (
         <div 
@@ -113,96 +119,181 @@ export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, c
                     {/* Lista wydarzeń */}
                     <div className="w-full lg:w-80 flex flex-col border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-space-700 pt-4 lg:pt-0 lg:pl-6">
                         <h3 className="text-sm font-semibold text-gray-700 dark:text-cloud-white mb-4">
-                            Dzisiejsze wydarzenia ({allEvents.length})
+                            Dzisiejsze wydarzenia ({totalCount})
                         </h3>
-                        <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-2">
-                            {allEvents.length === 0 ? (
+                        <div className="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2">
+                            {totalCount === 0 ? (
                                 <p className="text-gray-500 dark:text-system-grey text-sm text-center py-8">
                                     Brak wydarzeń na dziś
                                 </p>
                             ) : (
-                                allEvents.map((event, idx) => {
-                                    const time = new Date(event.timestamp).toLocaleTimeString('pl-PL', { 
-                                        hour: '2-digit', 
-                                        minute: '2-digit' 
-                                    });
+                                <>
+                                    {/* Wpisy energii */}
+                                    {categorizedEvents.energyLogs.length > 0 && (
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <button
+                                                    onClick={() => setIsEnergyExpanded(!isEnergyExpanded)}
+                                                    className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-space-700 transition-colors"
+                                                    title={isEnergyExpanded ? "Zwiń" : "Rozwiń"}
+                                                >
+                                                    <ChevronDownIcon className={`h-3.5 w-3.5 text-gray-500 dark:text-system-grey transition-transform ${isEnergyExpanded ? 'rotate-180' : 'rotate-0'}`} />
+                                                </button>
+                                                <h4 className="text-[10px] font-bold text-gray-600 dark:text-system-grey uppercase tracking-wider">
+                                                    Wpisy energii ({categorizedEvents.energyLogs.length})
+                                                </h4>
+                                            </div>
+                                            {isEnergyExpanded && (
+                                            <div className="space-y-2">
+                                                {categorizedEvents.energyLogs.map((log, idx) => {
+                                                    const time = new Date(log.timestamp).toLocaleTimeString('pl-PL', { 
+                                                        hour: '2-digit', 
+                                                        minute: '2-digit' 
+                                                    });
+                                                    return (
+                                                    <div key={`energy-${idx}`} className="flex items-start gap-2 p-2 bg-gray-50 dark:bg-space-800 rounded-lg">
+                                                        <div className={`w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs text-white ${RATING_CONFIG[log.rating!].color}`}>
+                                                            {log.rating}
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex items-start justify-between gap-2">
+                                                                <div className="flex-1">
+                                                                    <p className="text-xs font-semibold text-gray-900 dark:text-cloud-white">
+                                                                        {RATING_CONFIG[log.rating!].label}
+                                                                    </p>
+                                                                    {log.note && (
+                                                                        <p className="text-xs text-gray-600 dark:text-system-grey mt-0.5 line-clamp-2">
+                                                                            {log.note}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                                <span className="text-xs text-gray-500 dark:text-system-grey/70 flex-shrink-0">
+                                                                    {time}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    );
+                                                })}
+                                            </div>
+                                            )}
+                                        </div>
+                                    )}
                                     
-                                    if (event.type === 'log') {
-                                        const log = event.data as EnergyLog;
-                                        return (
-                                            <div key={`log-${idx}`} className="flex items-start gap-2 p-2 bg-gray-50 dark:bg-space-800 rounded-lg">
-                                                {log.rating ? (
-                                                    <div className={`w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs text-white ${log.meal ? 'bg-success-green' : RATING_CONFIG[log.rating].color}`}>
-                                                        {log.meal ? '🍽️' : log.rating}
-                                                    </div>
-                                                ) : log.meal ? (
-                                                    <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center bg-success-green text-xs">
-                                                        🍽️
-                                                    </div>
-                                                ) : (
-                                                    <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center bg-alert-orange">
-                                                        <FileTextIcon className="h-3.5 w-3.5 text-white" />
-                                                    </div>
-                                                )}
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-start justify-between gap-2">
-                                                        <div className="flex-1">
-                                                            {log.rating && (
-                                                                <p className="text-xs font-semibold text-gray-900 dark:text-cloud-white">
-                                                                    Energia: {log.rating}/5
-                                                                </p>
-                                                            )}
-                                                            {log.meal && (
-                                                                <p className="text-xs font-semibold text-green-600 dark:text-green-400">
-                                                                    Posiłek
-                                                                </p>
-                                                            )}
-                                                            {log.note && (
-                                                                <p className="text-xs text-gray-600 dark:text-system-grey mt-0.5 line-clamp-2">
-                                                                    {log.note}
-                                                                </p>
-                                                            )}
-                                                        </div>
-                                                        <span className="text-xs text-gray-500 dark:text-system-grey/70 flex-shrink-0">
-                                                            {time}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                    {/* Posiłki */}
+                                    {categorizedEvents.meals.length > 0 && (
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <button
+                                                    onClick={() => setIsMealsExpanded(!isMealsExpanded)}
+                                                    className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-space-700 transition-colors"
+                                                    title={isMealsExpanded ? "Zwiń" : "Rozwiń"}
+                                                >
+                                                    <ChevronDownIcon className={`h-3.5 w-3.5 text-gray-500 dark:text-system-grey transition-transform ${isMealsExpanded ? 'rotate-180' : 'rotate-0'}`} />
+                                                </button>
+                                                <h4 className="text-[10px] font-bold text-gray-600 dark:text-system-grey uppercase tracking-wider">
+                                                    Posiłki ({categorizedEvents.meals.length})
+                                                </h4>
                                             </div>
-                                        );
-                                    } else {
-                                        const action = event.data as CompletedActionLog;
-                                        const actionDetails = sheetsActions.find(a => a.id === action.actionId);
-                                        if (!actionDetails) return null;
-                                        
-                                        return (
-                                            <div key={`action-${idx}`} className="flex items-start gap-2 p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-500/30">
-                                                <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center bg-purple-100 dark:bg-purple-900/40 text-sm">
-                                                    <IconRenderer 
-                                                        icon={actionDetails.icon} 
-                                                        className="text-base" 
-                                                        fallback={<span>⚡</span>}
-                                                    />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-start justify-between gap-2">
-                                                        <div className="flex-1">
-                                                            <p className="text-xs font-semibold text-purple-900 dark:text-purple-300">
-                                                                {actionDetails.title}
-                                                            </p>
-                                                            <p className="text-xs text-purple-700 dark:text-purple-400/70 mt-0.5">
-                                                                {actionDetails.type}
-                                                            </p>
+                                            {isMealsExpanded && (
+                                            <div className="space-y-2">
+                                                {categorizedEvents.meals.map((log, idx) => {
+                                                    const time = new Date(log.timestamp).toLocaleTimeString('pl-PL', { 
+                                                        hour: '2-digit', 
+                                                        minute: '2-digit' 
+                                                    });
+                                                    return (
+                                                        <div key={`meal-${idx}`} className="flex items-start gap-2 p-2 bg-gray-50 dark:bg-space-800 rounded-lg">
+                                                            <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center bg-success-green text-xs">
+                                                                🍽️
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="flex items-start justify-between gap-2">
+                                                                    <div className="flex-1">
+                                                                        <p className="text-xs font-semibold text-green-600 dark:text-green-400">
+                                                                            Posiłek
+                                                                        </p>
+                                                                        {log.rating && (
+                                                                            <p className="text-xs text-gray-600 dark:text-system-grey mt-0.5">
+                                                                                {RATING_CONFIG[log.rating].label}
+                                                                            </p>
+                                                                        )}
+                                                                        {log.note && (
+                                                                            <p className="text-xs text-gray-600 dark:text-system-grey mt-0.5 line-clamp-2">
+                                                                                {log.note}
+                                                                            </p>
+                                                                        )}
+                                                                    </div>
+                                                                    <span className="text-xs text-gray-500 dark:text-system-grey/70 flex-shrink-0">
+                                                                        {time}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <span className="text-xs text-gray-500 dark:text-system-grey/70 flex-shrink-0">
-                                                            {time}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                    );
+                                                })}
                                             </div>
-                                        );
-                                    }
-                                })
+                                            )}
+                                        </div>
+                                    )}
+                                    
+                                    {/* Wykonane akcje */}
+                                    {categorizedEvents.actions.length > 0 && (
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <button
+                                                    onClick={() => setIsActionsExpanded(!isActionsExpanded)}
+                                                    className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-space-700 transition-colors"
+                                                    title={isActionsExpanded ? "Zwiń" : "Rozwiń"}
+                                                >
+                                                    <ChevronDownIcon className={`h-3.5 w-3.5 text-gray-500 dark:text-system-grey transition-transform ${isActionsExpanded ? 'rotate-180' : 'rotate-0'}`} />
+                                                </button>
+                                                <h4 className="text-[10px] font-bold text-gray-600 dark:text-system-grey uppercase tracking-wider">
+                                                    Wykonane akcje ({categorizedEvents.actions.length})
+                                                </h4>
+                                            </div>
+                                            {isActionsExpanded && (
+                                            <div className="space-y-2">
+                                                {categorizedEvents.actions.map((action, idx) => {
+                                                    const time = new Date(action.timestamp).toLocaleTimeString('pl-PL', { 
+                                                        hour: '2-digit', 
+                                                        minute: '2-digit' 
+                                                    });
+                                                    const actionDetails = sheetsActions.find(a => a.id === action.actionId);
+                                                    if (!actionDetails) return null;
+                                                    
+                                                    return (
+                                                        <div key={`action-${idx}`} className="flex items-start gap-2 p-2 bg-gray-50 dark:bg-space-800 rounded-lg">
+                                                            <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center bg-gray-200 dark:bg-space-700 text-sm">
+                                                                <IconRenderer 
+                                                                    icon={actionDetails.icon} 
+                                                                    className="text-base" 
+                                                                    fallback={<span>⚡</span>}
+                                                                />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="flex items-start justify-between gap-2">
+                                                                    <div className="flex-1">
+                                                                        <p className="text-xs font-semibold text-gray-900 dark:text-cloud-white">
+                                                                            {actionDetails.title}
+                                                                        </p>
+                                                                        <p className="text-xs text-gray-600 dark:text-system-grey mt-0.5">
+                                                                            {actionDetails.type}
+                                                                        </p>
+                                                                    </div>
+                                                                    <span className="text-xs text-gray-500 dark:text-system-grey/70 flex-shrink-0">
+                                                                        {time}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>

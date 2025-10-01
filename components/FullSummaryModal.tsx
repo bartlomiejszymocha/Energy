@@ -9,7 +9,7 @@ const RATING_CONFIG: { [key: number]: { color: string; label: string } } = {
     1: { color: 'bg-danger-red', label: 'Przetrwanie' },
     2: { color: 'bg-alert-orange', label: 'Autopilot' },
     3: { color: 'bg-warning-yellow', label: 'Stabilnie' },
-    4: { color: 'bg-success-green', label: 'Fokus' },
+    4: { color: 'bg-success-green', label: 'Focus' },
     5: { color: 'bg-cyan-500', label: 'Flow' },
 };
 
@@ -142,7 +142,14 @@ export const FullSummaryModal: React.FC<{
                 </div>
                 <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar">
                      {todayLogs.length === 0 && todayCompletedActions.length === 0 ? (
-                        <p className="text-gray-600 dark:text-system-grey text-center py-4">Brak dzisiejszej aktywności.</p>
+                        <div className="text-center py-8">
+                            <p className="text-gray-600 dark:text-system-grey mb-2">
+                                Tutaj zobaczysz wszystkie wpisy energii i wykonane akcje
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-system-grey/70">
+                                Zacznij od dodania pierwszego wpisu energii
+                            </p>
+                        </div>
                     ) : (
                         <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-6">
                             {/* Energy Logs Column */}

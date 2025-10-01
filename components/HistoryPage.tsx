@@ -88,9 +88,9 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ logs, completedActions
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:items-start">
                 {/* Left Sidebar for Day Selection */}
-                <div className="md:col-span-1">
+                <div className="md:col-span-1 md:sticky md:top-6">
                     <HistoryDaySelector
                         availableDays={availableDays}
                         selectedDay={selectedDayTimestamp}

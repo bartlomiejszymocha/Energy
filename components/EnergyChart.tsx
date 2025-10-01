@@ -8,13 +8,14 @@ const RATING_LABELS: { [key: number]: string } = {
     1: 'Przetrwanie',
     2: 'Autopilot',
     3: 'Stabilnie',
-    4: 'Fokus',
+    4: 'Focus',
     5: 'Flow',
 };
 
 interface EnergyChartProps {
     logs: EnergyLog[];
     completedActions: CompletedActionLog[];
+    onAddEnergyClick?: () => void;
 }
 
 interface CustomTooltipProps {
@@ -206,7 +207,7 @@ const ThemedTooltip: React.FC = () => {
     );
 };
 
-export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions }) => {
+export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions, onAddEnergyClick }) => {
     const { isDark, mounted } = useTheme();
     const { actions: sheetsActions } = useSheetsActionsOptimized();
     
@@ -272,8 +273,37 @@ export const EnergyChart: React.FC<EnergyChartProps> = ({ logs, completedActions
 
     if (chartData.length === 0) {
         return (
-            <div className="flex items-center justify-center h-full">
-                <p className="text-gray-600 dark:text-system-grey">Brak dzisiejszych wpisów do wyświetlenia na wykresie.</p>
+            <div className="flex flex-col items-center justify-center h-full gap-6">
+                {/* Strzałka - ukośna w prawo-górę na mobile, w prawo na desktop */}
+                <div className="flex items-center gap-4">
+                    {/* Strzałka ukośna w prawo-górę (mobile) */}
+                    <svg className="sm:hidden h-16 w-16 text-electric-500 animate-bounce ml-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M7 17L17 7m0 0H7m10 0v10" />
+                    </svg>
+                    {/* Strzałka w prawo (desktop) */}
+                    <svg className="hidden sm:block h-16 w-16 text-electric-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+                
+                <div className="text-center max-w-sm">
+                    <p className="text-lg font-semibold text-gray-900 dark:text-cloud-white mb-2">
+                        Zacznij od określenia swojej energii
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-system-grey mb-3">
+                        Dodaj pierwszy wpis, aby zobaczyć wykres swojej energii w ciągu dnia
+                    </p>
+                    {onAddEnergyClick && (
+                        <div className="hidden sm:flex justify-center">
+                            <button 
+                                onClick={onAddEnergyClick}
+                                className="text-xs text-gray-500 dark:text-system-grey/70 hover:text-electric-500 transition-colors"
+                            >
+                                Skrót: <kbd className="px-2 py-1 bg-gray-200 dark:bg-space-800 rounded text-electric-500 font-mono cursor-pointer hover:bg-gray-300 dark:hover:bg-space-700 transition-colors">⌘+K</kbd>
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         );
     }

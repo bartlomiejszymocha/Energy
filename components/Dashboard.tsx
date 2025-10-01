@@ -9,7 +9,7 @@ const RATING_CONFIG: { [key: number]: { color: string; label: string } } = {
     1: { color: 'bg-danger-red', label: 'Przetrwanie' },
     2: { color: 'bg-alert-orange', label: 'Autopilot' },
     3: { color: 'bg-warning-yellow', label: 'Stabilnie' },
-    4: { color: 'bg-success-green', label: 'Fokus' },
+    4: { color: 'bg-success-green', label: 'Focus' },
     5: { color: 'bg-cyan-500', label: 'Flow' },
 };
 
@@ -114,14 +114,15 @@ const DailySummary: React.FC<{
             {/* Desktop Content */}
             {todayLogs.length === 0 && todayCompletedActions.length === 0 ? (
                 <div className="hidden lg:flex flex-grow items-center justify-center">
-                    <p className="text-system-grey text-center">Brak dzisiejszej aktywności.</p>
+                    <p className="text-gray-600 dark:text-system-grey text-center text-sm">
+                        Tutaj zobaczysz wszystkie wpisy energii i wykonane akcje z dzisiejszego dnia
+                    </p>
                 </div>
             ) : (
                 <div className="hidden lg:block h-80 lg:h-auto lg:max-h-[280px] overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                     {todayLogs.length > 0 && (
                         <div>
-                            <div className="flex items-center justify-between mb-2">
-                                <h4 className="font-bold text-gray-600 dark:text-system-grey text-[12.6px] uppercase tracking-wider">Wpisy Energii</h4>
+                            <div className="flex items-center gap-2 mb-2">
                                 <button
                                     onClick={() => setIsEnergyLogsExpanded(!isEnergyLogsExpanded)}
                                     className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-space-700 transition-colors duration-200"
@@ -133,6 +134,7 @@ const DailySummary: React.FC<{
                                         }`} 
                                     />
                                 </button>
+                                <h4 className="font-bold text-gray-600 dark:text-system-grey text-[12.6px] uppercase tracking-wider">Wpisy Energii</h4>
                             </div>
                             {isEnergyLogsExpanded && (
                                 <div className="space-y-3">
@@ -328,7 +330,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                             const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999).getTime();
                             const chartLogs = logs.filter(l => l.timestamp >= startOfToday && l.timestamp <= endOfToday);
                             const chartActions = completedActions.filter(a => a.timestamp >= startOfToday && a.timestamp <= endOfToday);
-                            return <EnergyChart logs={chartLogs} completedActions={chartActions} />;
+                            return <EnergyChart logs={chartLogs} completedActions={chartActions} onAddEnergyClick={onLogEnergyClick} />;
                         })()}
                     </div>
                     <div className="pt-4 border-t border-gray-200 dark:border-space-700 flex-shrink-0">

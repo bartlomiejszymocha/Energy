@@ -122,7 +122,7 @@ export const EnergyRatingGuideModal: React.FC<EnergyRatingGuideModalProps> = ({ 
 
                     <RatingLevel
                         level={4}
-                        title="Fokus (Deep Work)"
+                        title="Focus (Deep Work)"
                         color="#10B981"
                         feeling="Czujesz mentalną klarowność i skupienie. Masz motywację do zmierzenia się z trudnymi problemami. Jesteś proaktywny, widzisz rozwiązania, a nie tylko problemy. Czujesz, że masz kontrolę i sprawczość."
                         capable="Do zadań strategicznych i wymagających głębokiego skupienia (deep work): pisanie ofert, tworzenie strategii, programowanie, projektowanie, rozwiązywanie złożonych problemów, nagrywanie contentu."

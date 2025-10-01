@@ -268,7 +268,7 @@ function App() {
               
               <div className="mt-8 pt-6 border-t border-gray-200 dark:border-white/10">
                 <p className="text-xs font-semibold text-gray-600 dark:text-system-grey mb-3">Obserwuj po więcej:</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto">
                   <a
                     href="https://www.youtube.com/@bartlomiejszymocha"
                     target="_blank"
