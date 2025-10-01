@@ -33,6 +33,12 @@ export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, c
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999).getTime();
     const todayLogs = logs.filter(l => l.timestamp >= startOfToday && l.timestamp <= endOfToday);
     const todayActions = completedActions.filter(a => a.timestamp >= startOfToday && a.timestamp <= endOfToday);
+    
+    console.log('🔍 ChartModal data:', {
+        todayLogs: todayLogs.length,
+        todayActions: todayActions.length,
+        sampleLog: todayLogs[0]
+    });
 
     // Połącz wszystkie wydarzenia i posortuj chronologicznie
     const categorizedEvents = useMemo(() => {

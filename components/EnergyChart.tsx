@@ -88,19 +88,6 @@ const CustomDot = (props: any) => {
     const { cx, cy, payload } = props;
     const { isDark } = useTheme();
     
-    // Niebieski trójkąt dla posiłków
-    if (payload.isMeal) {
-        const size = 7;
-        const points = `${cx},${cy - size} ${cx - size},${cy + size} ${cx + size},${cy + size}`;
-        return <polygon points={points} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2} />;
-    }
-    
-    // Pomarańczowy kwadrat dla notatek
-    if (payload.isNoteOnly) {
-        const size = 5.5;
-        return <rect x={cx - size} y={cy - size} width={size * 2} height={size * 2} fill="#FB923C" stroke="#F97316" strokeWidth={2} />;
-    }
-    
     // Zielony pięciokąt dla wykonanych akcji
     if (payload.isAction) {
         const size = 6.5;
@@ -114,44 +101,54 @@ const CustomDot = (props: any) => {
         return <polygon points={points} fill="#34D399" stroke="#10B981" strokeWidth={2} />;
     }
     
-    // Kolorowa kropka dla wpisów energii zgodna z poziomem
-    const energyColors: { [key: number]: { fill: string; stroke: string } } = {
-        1: { fill: '#EF4444', stroke: '#DC2626' }, // czerwony
-        2: { fill: '#F97316', stroke: '#EA580C' }, // pomarańczowy
-        3: { fill: '#F59E0B', stroke: '#D97706' }, // żółty
-        4: { fill: '#10B981', stroke: '#059669' }, // zielony
-        5: { fill: '#06B6D4', stroke: '#0891B2' }, // cyjan
-    };
+    // Jeśli mamy rating (wpis energii), zawsze pokazuj kolorową kropkę
+    if (payload.rating) {
+        const energyColors: { [key: number]: { fill: string; stroke: string } } = {
+            1: { fill: '#EF4444', stroke: '#DC2626' }, // czerwony
+            2: { fill: '#F97316', stroke: '#EA580C' }, // pomarańczowy
+            3: { fill: '#F59E0B', stroke: '#D97706' }, // żółty
+            4: { fill: '#10B981', stroke: '#059669' }, // zielony
+            5: { fill: '#06B6D4', stroke: '#0891B2' }, // cyjan
+        };
+        
+        const colors = energyColors[payload.rating] || { fill: '#6B7280', stroke: '#4B5563' };
+        
+        // Jeśli to posiłek, dodaj emoji na kropce
+        if (payload.isMeal) {
+            return (
+                <g>
+                    <circle cx={cx} cy={cy} r={6} fill={colors.fill} stroke={colors.stroke} strokeWidth={2} />
+                    <text x={cx} y={cy + 1} textAnchor="middle" fontSize="8" fill="white">🍽️</text>
+                </g>
+            );
+        }
+        
+        return <circle cx={cx} cy={cy} r={6} fill={colors.fill} stroke={colors.stroke} strokeWidth={2} />;
+    }
     
-    const colors = energyColors[payload.rating] || { fill: '#6B7280', stroke: '#4B5563' };
-    return <circle cx={cx} cy={cy} r={6} fill={colors.fill} stroke={colors.stroke} strokeWidth={2} />;
+    // Niebieski trójkąt dla posiłków bez oceny
+    if (payload.isMeal) {
+        const size = 7;
+        const points = `${cx},${cy - size} ${cx - size},${cy + size} ${cx + size},${cy + size}`;
+        return <polygon points={points} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2} />;
+    }
+    
+    // Pomarańczowy kwadrat dla notatek bez oceny
+    if (payload.isNoteOnly) {
+        const size = 5.5;
+        return <rect x={cx - size} y={cy - size} width={size * 2} height={size * 2} fill="#FB923C" stroke="#F97316" strokeWidth={2} />;
+    }
+    
+    // Domyślna szara kropka
+    const dotFill = isDark ? '#374151' : '#6B7280';
+    const dotStroke = isDark ? '#1F2937' : '#4B5563';
+    return <circle cx={cx} cy={cy} r={6} fill={dotFill} stroke={dotStroke} strokeWidth={2} />;
 };
 
 
 const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint }) => {
     const { cx, cy, payload } = props;
     const { isDark } = useTheme();
-    
-    // Niebieski trójkąt (większy) dla posiłków
-    if (payload.isMeal) {
-        const size = 9;
-        const points = `${cx},${cy - size} ${cx - size},${cy + size} ${cx + size},${cy + size}`;
-        return (
-            <g>
-                <polygon points={points} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2.5} />
-            </g>
-        );
-    }
-    
-    // Pomarańczowy kwadrat (większy) dla notatek
-    if (payload.isNoteOnly) {
-        const size = 7;
-        return (
-            <g>
-                <rect x={cx - size} y={cy - size} width={size * 2} height={size * 2} fill="#FB923C" stroke="#F97316" strokeWidth={2.5} />
-            </g>
-        );
-    }
     
     // Zielony pięciokąt (większy) dla wykonanych akcji
     if (payload.isAction) {
@@ -170,17 +167,56 @@ const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint })
         );
     }
     
-    // Kolorowa kropka (większa) dla wpisów energii zgodna z poziomem
-    const energyColors: { [key: number]: { fill: string; stroke: string } } = {
-        1: { fill: '#EF4444', stroke: '#DC2626' }, // czerwony
-        2: { fill: '#F97316', stroke: '#EA580C' }, // pomarańczowy
-        3: { fill: '#F59E0B', stroke: '#D97706' }, // żółty
-        4: { fill: '#10B981', stroke: '#059669' }, // zielony
-        5: { fill: '#06B6D4', stroke: '#0891B2' }, // cyjan
-    };
+    // Jeśli mamy rating (wpis energii), zawsze pokazuj kolorową kropkę
+    if (payload.rating) {
+        const energyColors: { [key: number]: { fill: string; stroke: string } } = {
+            1: { fill: '#EF4444', stroke: '#DC2626' }, // czerwony
+            2: { fill: '#F97316', stroke: '#EA580C' }, // pomarańczowy
+            3: { fill: '#F59E0B', stroke: '#D97706' }, // żółty
+            4: { fill: '#10B981', stroke: '#059669' }, // zielony
+            5: { fill: '#06B6D4', stroke: '#0891B2' }, // cyjan
+        };
+        
+        const colors = energyColors[payload.rating] || { fill: '#6B7280', stroke: '#4B5563' };
+        
+        // Jeśli to posiłek, dodaj emoji na kropce
+        if (payload.isMeal) {
+            return (
+                <g>
+                    <circle cx={cx} cy={cy} r={8} fill={colors.fill} stroke={colors.stroke} strokeWidth={2.5} />
+                    <text x={cx} y={cy + 1} textAnchor="middle" fontSize="10" fill="white">🍽️</text>
+                </g>
+            );
+        }
+        
+        return <circle cx={cx} cy={cy} r={8} fill={colors.fill} stroke={colors.stroke} strokeWidth={2.5} />;
+    }
     
-    const colors = energyColors[payload.rating] || { fill: '#6B7280', stroke: '#4B5563' };
-    return <circle cx={cx} cy={cy} r={8} fill={colors.fill} stroke={colors.stroke} strokeWidth={2.5} />;
+    // Niebieski trójkąt (większy) dla posiłków bez oceny
+    if (payload.isMeal) {
+        const size = 9;
+        const points = `${cx},${cy - size} ${cx - size},${cy + size} ${cx + size},${cy + size}`;
+        return (
+            <g>
+                <polygon points={points} fill="#60A5FA" stroke="#3B82F6" strokeWidth={2.5} />
+            </g>
+        );
+    }
+    
+    // Pomarańczowy kwadrat (większy) dla notatek bez oceny
+    if (payload.isNoteOnly) {
+        const size = 7;
+        return (
+            <g>
+                <rect x={cx - size} y={cy - size} width={size * 2} height={size * 2} fill="#FB923C" stroke="#F97316" strokeWidth={2.5} />
+            </g>
+        );
+    }
+    
+    // Domyślna szara kropka (większa)
+    const dotFill = isDark ? '#374151' : '#6B7280';
+    const dotStroke = isDark ? '#1F2937' : '#4B5563';
+    return <circle cx={cx} cy={cy} r={8} fill={dotFill} stroke={dotStroke} strokeWidth={2.5} />;
 };
 
 // KLUCZOWA ZMIANA: komponenty Recharts jako oddzielne komponenty z key
