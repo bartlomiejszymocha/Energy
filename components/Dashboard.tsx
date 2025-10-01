@@ -340,7 +340,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Poziom energii</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full bg-success-green"></div>
+                                <div className="w-2.5 h-2.5 rounded-full bg-gray-500"></div>
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Posiłek</span>
                             </div>
                             <div className="flex items-center gap-1.5">
@@ -348,7 +348,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Notatka</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <ZapIcon className="h-3 w-3 text-alert-orange" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-success-green"></div>
                                 <span className="text-[10px] text-gray-600 dark:text-system-grey">Akcja</span>
                             </div>
                         </div>

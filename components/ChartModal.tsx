@@ -101,7 +101,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, c
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Poziom energii</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-success-green border border-gray-300 dark:border-white/40"></div>
+                                    <div className="w-3 h-3 rounded-full bg-gray-500 border border-gray-300 dark:border-white/40"></div>
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Posiłek</span>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, c
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Notatka</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <ZapIcon className="h-3.5 w-3.5 text-alert-orange" />
+                                    <div className="w-3 h-3 rounded-full bg-success-green border border-gray-300 dark:border-white/40"></div>
                                     <span className="text-xs text-gray-600 dark:text-system-grey">Akcja</span>
                                 </div>
                             </div>

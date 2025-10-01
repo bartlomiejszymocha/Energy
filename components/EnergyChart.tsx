@@ -3,6 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import type { EnergyLog, CompletedActionLog, ChartPoint } from '../types';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import { useTheme } from '../hooks/useTheme';
+import { IconRenderer } from './IconRenderer';
 
 const RATING_LABELS: { [key: number]: string } = {
     1: 'Przetrwanie',
@@ -35,13 +36,13 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
         let accentColor = 'text-blue-600 dark:text-blue-400';
         
         if (data.isMeal) {
+            bgColor = 'bg-gray-50 dark:bg-gray-900/20';
+            borderColor = 'border-gray-200 dark:border-gray-500/30';
+            accentColor = 'text-gray-600 dark:text-gray-400';
+        } else if (data.isAction) {
             bgColor = 'bg-green-50 dark:bg-green-900/20';
             borderColor = 'border-green-200 dark:border-green-500/30';
             accentColor = 'text-green-600 dark:text-green-400';
-        } else if (data.isAction) {
-            bgColor = 'bg-purple-50 dark:bg-purple-900/20';
-            borderColor = 'border-purple-200 dark:border-purple-500/30';
-            accentColor = 'text-purple-600 dark:text-purple-400';
         } else if (data.isNoteOnly) {
             bgColor = 'bg-orange-50 dark:bg-orange-900/20';
             borderColor = 'border-orange-200 dark:border-orange-500/30';
@@ -62,10 +63,13 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
                     {data.rating}: {RATING_LABELS[data.rating] || `Energia ${data.rating}`}
                 </p>
                 {data.isMeal && (
-                    <p className="text-green-600 dark:text-green-400 text-sm font-bold">Posiłek</p>
+                    <p className={`${accentColor} text-sm font-bold`}>Posiłek</p>
                 )}
                 {data.actionTitle && (
-                    <p className="text-gray-600 dark:text-system-grey text-sm">⚡ {data.actionTitle}</p>
+                    <div className="flex items-center gap-2">
+                        <IconRenderer icon={data.icon} fallback={<span>⚡</span>} className="text-base" />
+                        <p className={`${accentColor} text-sm font-semibold`}>{data.actionTitle}</p>
+                    </div>
                 )}
                 {data.note && (
                     <p className="text-gray-600 dark:text-system-grey text-sm italic">{data.note}</p>
@@ -81,29 +85,18 @@ const CustomDot = (props: any) => {
     const { isDark } = useTheme();
     const fillColor = isDark ? '#F4F6F8' : '#374151';
     
-    // Zielona kropka dla posiłków
+    // Szara kropka dla posiłków
     if (payload.isMeal) {
-        return <circle cx={cx} cy={cy} r={6} fill="#10B981" stroke={fillColor} strokeWidth={1} />;
+        return <circle cx={cx} cy={cy} r={6} fill="#6B7280" stroke={fillColor} strokeWidth={1} />;
     }
     
     if (payload.isNoteOnly) {
         return <circle cx={cx} cy={cy} r={6} fill="#FF9500" stroke={fillColor} strokeWidth={1} />;
     }
     
-    // Render action icon if it's an action (just icon, no circle)
-    if (payload.isAction && payload.icon) {
-        return (
-            <text 
-                x={cx} 
-                y={cy + 2} 
-                textAnchor="middle" 
-                fontSize="16" 
-                fill="#007AFF"
-                style={{ pointerEvents: 'none' }}
-            >
-                {payload.icon}
-            </text>
-        );
+    // Zielona kropka dla wykonanych akcji
+    if (payload.isAction) {
+        return <circle cx={cx} cy={cy} r={6} fill="#10B981" stroke={fillColor} strokeWidth={1} />;
     }
     
     return <circle cx={cx} cy={cy} r={6} fill="#007AFF" stroke={fillColor} strokeWidth={1} />;
@@ -117,7 +110,7 @@ const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint })
     if (payload.isMeal) {
         return (
             <g>
-                <circle cx={cx} cy={cy} r={8} stroke={strokeColor} strokeWidth={1} fill="#10B981" />
+                <circle cx={cx} cy={cy} r={8} stroke={strokeColor} strokeWidth={1} fill="#6B7280" />
             </g>
         );
     }
@@ -131,10 +124,7 @@ const CustomActiveDot = (props: { cx: number; cy: number; payload: ChartPoint })
     if (payload.isAction) {
         return (
             <g>
-                <circle cx={cx} cy={cy} r={12} stroke={strokeColor} strokeWidth={1} fill="rgba(0,122,255,0.2)" />
-                <text x={cx} y={cy} dy={6} textAnchor="middle" fontSize="20px" fill={strokeColor}>
-                    {payload.icon}
-                </text>
+                <circle cx={cx} cy={cy} r={8} stroke={strokeColor} strokeWidth={1} fill="#10B981" />
             </g>
         );
     }
