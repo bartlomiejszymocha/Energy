@@ -259,25 +259,8 @@ function App() {
               onToggleFavorite={handleToggleFavorite}
               onOpenBreathingModal={(action) => setBreathingAction(action)}
               todayCompletedActionIds={todayCompletedActionIds}
+              onOpenAdminPanel={() => setShowAdminPage(true)}
             />
-            
-            {/* Admin Section - visible only to administrators */}
-            {isAdmin && (
-                <div className="animate-fade-in-up animation-delay-300">
-                    <div className="bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl shadow-sm p-4 sm:p-6">
-                        <h3 className="text-sm font-semibold text-gray-600 dark:text-system-grey uppercase tracking-wider mb-3 text-center">
-                            Administrator
-                        </h3>
-                        <button
-                            onClick={() => setShowAdminPage(true)}
-                            className="w-full bg-white/30 dark:bg-white/10 border border-gray-200/50 dark:border-white/20 text-gray-700 dark:text-cloud-white font-medium py-2.5 px-4 rounded-lg hover:bg-white/40 dark:hover:bg-white/20 hover:border-gray-300/50 dark:hover:border-white/30 transition-all duration-200 flex items-center justify-center gap-2"
-                        >
-                            <SettingsIcon className="h-4 w-4" />
-                            <span>Tworzenie treningów</span>
-                        </button>
-                    </div>
-                </div>
-            )}
             
             <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg p-6 sm:p-8 text-center animate-fade-in-up animation-delay-400">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-cloud-white">Potrzebujesz spersonalizowanego wsparcia?</h2>

@@ -5,7 +5,8 @@ import { ActionCard } from './ActionCard';
 // import { ACTION_LIBRARY } from '../constants/actions'; // Usunięto - używamy tylko Google Sheets
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import { useUserPermissions } from '../hooks/useUserPermissions';
-import { ArrowPathCircularIcon, BoltIcon, BreathingIcon, StarIcon, CogIcon, WrenchIcon, ZapIcon, BoxIcon, LayoutGridIcon, GridIcon, BriefcaseIcon } from './icons/LucideIcons';
+import { useAdmin } from '../hooks/useAdmin';
+import { ArrowPathCircularIcon, BoltIcon, BreathingIcon, StarIcon, CogIcon, WrenchIcon, ZapIcon, BoxIcon, LayoutGridIcon, GridIcon, BriefcaseIcon, SettingsIcon } from './icons/LucideIcons';
 
 interface ActionHubProps {
     onCompleteAction: (actionId: string) => void;
@@ -15,6 +16,7 @@ interface ActionHubProps {
     onToggleFavorite: (actionId: string) => void;
     onOpenBreathingModal: (action: ActionItem) => void;
     todayCompletedActionIds: Set<string>;
+    onOpenAdminPanel?: () => void;
 }
 
 type FilterType = 'all' | 'reset' | 'movement' | 'breath' | 'favorites';
@@ -26,12 +28,15 @@ export const ActionHub: React.FC<ActionHubProps> = ({
     favoriteActionIds, 
     onToggleFavorite,
     onOpenBreathingModal,
-    todayCompletedActionIds
+    todayCompletedActionIds,
+    onOpenAdminPanel
 }) => {
     // Hook do pobierania danych z Google Sheets przez Vercel API
     const { actions: sheetsActions, loading: sheetsLoading, error: sheetsError, refresh: refreshSheets } = useSheetsActionsOptimized();
     // Hook do sprawdzania uprawnień użytkownika
     const { canViewAction, isLoading: permissionsLoading, role } = useUserPermissions();
+    // Hook do sprawdzania uprawnień administratora
+    const { isAdmin } = useAdmin();
     const [duration, setDuration] = useState(15);
     const [filter, setFilter] = useState<FilterType>('all');
     const [expandedActionId, setExpandedActionId] = useState<string | null>(null);
@@ -268,15 +273,26 @@ export const ActionHub: React.FC<ActionHubProps> = ({
             <div className="bg-gray-100 dark:bg-space-950 border border-gray-200 dark:border-white/10 rounded-xl p-1">
                 <div className="flex items-center justify-center gap-0.5 md:gap-2 flex-wrap">
                     {filterButtons.map(({ key, label, icon: Icon }) => (
-                         <button 
-                            key={key}
-                            onClick={() => setFilter(key)}
-                            className={`px-1 md:px-4 py-2 md:py-2 rounded-lg text-xs md:text-sm font-semibold flex items-center justify-center gap-1 md:gap-2 transition-all duration-200 flex-1 md:flex-none backdrop-blur-sm ${filter === key ? 'text-electric-500 hover:text-electric-600 bg-electric-500/10 hover:bg-electric-500/20 border border-electric-500/20 hover:border-electric-500/40' : 'bg-white dark:bg-space-900 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-system-grey hover:bg-gray-100 dark:hover:bg-space-700 hover:border-gray-300 dark:hover:border-white/20'}`}
-                        >
-                            {Icon && <Icon className="h-3 w-3 md:h-4 md:w-4" />}
-                            <span className="hidden sm:inline">{label}</span>
-                            <span className="sm:hidden">{label.split(' ')[0]}</span>
-                        </button>
+                        <div key={key} className="flex items-center gap-1">
+                            <button 
+                                onClick={() => setFilter(key)}
+                                className={`px-1 md:px-4 py-2 md:py-2 rounded-lg text-xs md:text-sm font-semibold flex items-center justify-center gap-1 md:gap-2 transition-all duration-200 flex-1 md:flex-none backdrop-blur-sm ${filter === key ? 'text-electric-500 hover:text-electric-600 bg-electric-500/10 hover:bg-electric-500/20 border border-electric-500/20 hover:border-electric-500/40' : 'bg-white dark:bg-space-900 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-system-grey hover:bg-gray-100 dark:hover:bg-space-700 hover:border-gray-300 dark:hover:border-white/20'}`}
+                            >
+                                {Icon && <Icon className="h-3 w-3 md:h-4 md:w-4" />}
+                                <span className="hidden sm:inline">{label}</span>
+                                <span className="sm:hidden">{label.split(' ')[0]}</span>
+                            </button>
+                            {/* Admin icon next to "Wszystko" button */}
+                            {key === 'all' && isAdmin && onOpenAdminPanel && (
+                                <button
+                                    onClick={onOpenAdminPanel}
+                                    className="p-1.5 md:p-2 rounded-lg text-gray-400 dark:text-system-grey hover:text-purple-500 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200"
+                                    title="Panel administratora"
+                                >
+                                    <SettingsIcon className="h-3 w-3 md:h-4 md:w-4" />
+                                </button>
+                            )}
+                        </div>
                     ))}
                 </div>
             </div>
