@@ -68,11 +68,14 @@ export const ChartModal: React.FC<ChartModalProps> = ({ isOpen, onClose, logs, c
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '1rem'
+                paddingTop: '10vh',
+                paddingBottom: '10vh',
+                paddingLeft: '1rem',
+                paddingRight: '1rem'
             }}
         >
             <div 
-                className="bg-white dark:bg-space-900 rounded-xl shadow-2xl w-[95vw] h-[90vh] flex flex-col border border-gray-200 dark:border-transparent"
+                className="bg-white dark:bg-space-900 rounded-xl shadow-2xl w-[95vw] h-[80vh] flex flex-col border border-gray-200 dark:border-transparent"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-space-700 flex-shrink-0">
