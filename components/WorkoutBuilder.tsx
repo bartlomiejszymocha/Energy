@@ -253,18 +253,18 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         {/* Workout Title */}
                         <div>
                             <h2 className="text-2xl font-semibold text-gray-900 dark:text-cloud-white mb-4">
-                                Name your workout
+                                Nazwij swój trening
                             </h2>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                    Description
+                                    Opis
                                 </label>
                                 <textarea
                                     value={workoutDescription}
                                     onChange={(e) => setWorkoutDescription(e.target.value)}
                                     rows={3}
                                     className="w-full px-3 py-2 border border-gray-200 dark:border-space-700 rounded-md bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white resize-none focus:ring-2 focus:ring-electric-500/20 focus:border-electric-500"
-                                    placeholder="Add a description"
+                                    placeholder="Dodaj opis treningu"
                                 />
                             </div>
                         </div>
@@ -273,21 +273,21 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         <div className="space-y-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                    Title
+                                    Tytuł
                                 </label>
                                 <input
                                     type="text"
                                     value={workoutTitle}
                                     onChange={(e) => setWorkoutTitle(e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-200 dark:border-space-700 rounded-md bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/20 focus:border-electric-500"
-                                    placeholder="Workout name"
+                                    placeholder="Nazwa treningu"
                                 />
                             </div>
                             
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        Type
+                                        Typ
                                     </label>
                                     <select
                                         value={workoutType}
@@ -301,7 +301,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        Duration (min)
+                                        Czas (min)
                                     </label>
                                     <input
                                         type="number"
@@ -316,7 +316,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                             
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                    Icon
+                                    Ikona
                                 </label>
                                 <input
                                     type="text"
@@ -334,10 +334,10 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 <div className="w-2/3 bg-gray-50 dark:bg-space-950 p-8 pb-24 overflow-y-auto">
                     <div className="space-y-6">
                         {/* Add Exercise Section */}
-                        <div className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-6">
-                            <div className="mb-6">
+                        <div className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-4">
+                            <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                    Choose Exercise
+                                    Wybierz ćwiczenie
                                 </label>
                                 <select
                                     value={selectedExerciseId}
@@ -353,10 +353,10 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 </select>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div className="grid grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        Exercise Time (sec)
+                                        Czas ćwiczenia (sek)
                                     </label>
                                     <input
                                         type="number"
@@ -370,7 +370,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        Rest Between (sec)
+                                        Przerwa między (sek)
                                     </label>
                                     <input
                                         type="number"
@@ -386,69 +386,65 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                             <button
                                 onClick={addExerciseStep}
                                 disabled={!selectedExerciseId}
-                                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-electric-500 text-white rounded-md hover:bg-electric-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-electric-500 text-white rounded-md hover:bg-electric-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                             >
                                 <PlusIcon className="h-4 w-4" />
-                                Add Exercise
+                                Dodaj ćwiczenie
                             </button>
                         </div>
 
-                        {/* Workout Steps - Light Design */}
+                        {/* Workout Steps - Compact Design */}
                         {workoutSteps.length > 0 && (
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {workoutSteps.map((step, index) => (
                                     <div
                                         key={step.id}
-                                        className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-4"
+                                        className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-3"
                                     >
-                                        <div className="flex items-start gap-4">
+                                        <div className="flex items-center gap-3">
                                             {/* Exercise Icon */}
-                                            <div className="w-12 h-12 bg-gray-50 dark:bg-space-800 rounded-md flex items-center justify-center flex-shrink-0">
-                                                <PlayIcon className="h-5 w-5 text-gray-500 dark:text-system-grey" />
+                                            <div className="w-10 h-10 bg-gray-50 dark:bg-space-800 rounded-md flex items-center justify-center flex-shrink-0">
+                                                <PlayIcon className="h-4 w-4 text-gray-500 dark:text-system-grey" />
                                             </div>
                                             
                                             {/* Exercise Details */}
-                                            <div className="flex-1">
-                                                <div className="flex items-center justify-between mb-3">
-                                                    <h3 className="font-medium text-gray-900 dark:text-cloud-white text-base">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <h3 className="font-medium text-gray-900 dark:text-cloud-white text-sm truncate">
                                                         {exercises[step.exerciseId]?.name || 'Nieznane ćwiczenie'}
                                                     </h3>
-                                                    <div className="flex items-center gap-1">
+                                                    <div className="flex items-center gap-1 ml-2">
                                                         <button
                                                             onClick={() => moveStep(step.id, 'up')}
                                                             disabled={index === 0}
-                                                            className="p-1.5 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
+                                                            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
+                                                            title="Przenieś w górę"
                                                         >
                                                             ↑
                                                         </button>
                                                         <button
                                                             onClick={() => moveStep(step.id, 'down')}
                                                             disabled={index === workoutSteps.length - 1}
-                                                            className="p-1.5 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
+                                                            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
+                                                            title="Przenieś w dół"
                                                         >
                                                             ↓
                                                         </button>
                                                         <button
                                                             onClick={() => removeStep(step.id)}
-                                                            className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded"
+                                                            className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded"
+                                                            title="Usuń ćwiczenie"
                                                         >
-                                                            <TrashIcon className="h-4 w-4" />
+                                                            <TrashIcon className="h-3 w-3" />
                                                         </button>
                                                     </div>
                                                 </div>
                                                 
-                                                {/* Exercise Info */}
-                                                <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-system-grey mb-3">
-                                                    <span>Duration: {step.duration}s</span>
-                                                    <span>Rest: {restDuration}s</span>
+                                                {/* Exercise Info - Compact */}
+                                                <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-system-grey">
+                                                    <span>Czas: {step.duration}s</span>
+                                                    <span>Przerwa: {restDuration}s</span>
                                                 </div>
-                                                
-                                                {/* Note Field */}
-                                                <input
-                                                    type="text"
-                                                    placeholder="Add note for this exercise"
-                                                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-space-700 rounded-md bg-white dark:bg-space-800 text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/20 focus:border-electric-500"
-                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -466,7 +462,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         onClick={onClose}
                         className="px-6 py-2 text-gray-500 dark:text-system-grey hover:text-gray-700 dark:hover:text-cloud-white transition-colors font-medium"
                     >
-                        Cancel
+                        Anuluj
                     </button>
                     
                     <button
@@ -475,7 +471,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         className="flex items-center gap-2 px-6 py-2 bg-electric-500 text-white rounded-md hover:bg-electric-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                     >
                         <SaveIcon className="h-4 w-4" />
-                        Save Workout
+                        Zapisz trening
                     </button>
                 </div>
             </div>
