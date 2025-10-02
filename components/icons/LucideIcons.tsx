@@ -412,3 +412,30 @@ export const XIcon: React.FC<IconProps> = (props) => (
     <line x1="6" y1="6" x2="18" y2="18"/>
   </svg>
 );
+
+export const TimerIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="10" y1="2" x2="14" y2="2"/>
+    <line x1="12" y1="6" x2="15" y2="9"/>
+    <circle cx="12" cy="13" r="8"/>
+  </svg>
+);
+
+export const TargetIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <circle cx="12" cy="12" r="10"/>
+    <circle cx="12" cy="12" r="6"/>
+    <circle cx="12" cy="12" r="2"/>
+  </svg>
+);
+
+export const MoveIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <polyline points="5,9 2,12 5,15"/>
+    <polyline points="9,5 12,2 15,5"/>
+    <polyline points="15,19 12,22 9,19"/>
+    <polyline points="19,9 22,12 19,15"/>
+    <line x1="2" y1="12" x2="22" y2="12"/>
+    <line x1="12" y1="2" x2="12" y2="22"/>
+  </svg>
+);
