@@ -417,108 +417,109 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 </div>
             </div>
 
-            {/* Main Content - Two Column Layout */}
-            <div className="flex flex-col md:flex-row h-[calc(100vh-80px)] w-full">
-                {/* Left Column - Metadata - Sticky to left */}
-                <div className="w-full md:w-80 md:flex-shrink-0 backdrop-blur-xl bg-white/70 dark:bg-space-900/70 border-b md:border-b-0 md:border-r border-white/20 dark:border-space-700/30 p-4 md:p-8 overflow-y-auto shadow-xl">
-                    <div className="space-y-6 md:space-y-8">
-                        {/* Workout Title */}
-                        <div>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm">
-                                    <EditIcon className="h-5 w-5 text-purple-500" />
+            {/* Main Content - Single Scroll Layout */}
+            <div className="flex-1 overflow-y-auto">
+                <div className="flex flex-col md:flex-row min-h-full">
+                    {/* Left Column - Metadata - Sticky to left on desktop */}
+                    <div className="w-full md:w-80 md:flex-shrink-0 backdrop-blur-xl bg-white/70 dark:bg-space-900/70 border-b md:border-b-0 md:border-r border-white/20 dark:border-space-700/30 p-4 md:p-8 shadow-xl">
+                        <div className="space-y-6 md:space-y-8">
+                            {/* Workout Title */}
+                            <div>
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm">
+                                        <EditIcon className="h-5 w-5 text-purple-500" />
+                                    </div>
+                                    <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white">
+                                        Nazwij swój trening
+                                    </h2>
                                 </div>
-                                <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white">
-                                    Nazwij swój trening
-                                </h2>
+                                <div className="space-y-4 md:space-y-6">
+                                    <div>
+                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
+                                            <TargetIcon className="h-4 w-4" />
+                                            Tytuł
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={workoutTitle}
+                                            onChange={(e) => setWorkoutTitle(e.target.value)}
+                                            className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
+                                            placeholder="Nazwa treningu"
+                                        />
+                                    </div>
+                                    
+                                    <div>
+                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
+                                            <FileTextIcon className="h-4 w-4" />
+                                            Opis
+                                        </label>
+                                        <textarea
+                                            value={workoutDescription}
+                                            onChange={(e) => setWorkoutDescription(e.target.value)}
+                                            rows={3}
+                                            className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white resize-none focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
+                                            placeholder="Dodaj opis treningu"
+                                        />
+                                    </div>
+                                </div>
                             </div>
+
+                            {/* Workout Settings */}
                             <div className="space-y-4 md:space-y-6">
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
+                                            <SettingsIcon className="h-4 w-4" />
+                                            Typ
+                                        </label>
+                                        <select
+                                            value={workoutType}
+                                            onChange={(e) => setWorkoutType(e.target.value as ActionType)}
+                                            className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
+                                        >
+                                            <option value="Protokół Ruchowy">Protokół Ruchowy</option>
+                                            <option value="Reset Energetyczny">Reset Energetyczny</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
+                                            <TimerIcon className="h-4 w-4" />
+                                            Czas (min)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            value={workoutDuration}
+                                            onChange={(e) => setWorkoutDuration(parseInt(e.target.value) || 15)}
+                                            min="1"
+                                            max="60"
+                                            className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
+                                        />
+                                    </div>
+                                </div>
+                                
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        <TargetIcon className="h-4 w-4" />
-                                        Tytuł
+                                        <ZapIcon className="h-4 w-4" />
+                                        Ikona
                                     </label>
                                     <input
                                         type="text"
-                                        value={workoutTitle}
-                                        onChange={(e) => setWorkoutTitle(e.target.value)}
+                                        value={workoutIcon}
+                                        onChange={(e) => setWorkoutIcon(e.target.value)}
                                         className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                        placeholder="Nazwa treningu"
+                                        placeholder="⚡"
                                     />
                                 </div>
-                                
-                                <div>
-                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        <FileTextIcon className="h-4 w-4" />
-                                        Opis
-                                    </label>
-                                    <textarea
-                                        value={workoutDescription}
-                                        onChange={(e) => setWorkoutDescription(e.target.value)}
-                                        rows={3}
-                                        className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white resize-none focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                        placeholder="Dodaj opis treningu"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Workout Settings */}
-                        <div className="space-y-4 md:space-y-6">
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        <SettingsIcon className="h-4 w-4" />
-                                        Typ
-                                    </label>
-                                    <select
-                                        value={workoutType}
-                                        onChange={(e) => setWorkoutType(e.target.value as ActionType)}
-                                        className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                    >
-                                        <option value="Protokół Ruchowy">Protokół Ruchowy</option>
-                                        <option value="Reset Energetyczny">Reset Energetyczny</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        <TimerIcon className="h-4 w-4" />
-                                        Czas (min)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        value={workoutDuration}
-                                        onChange={(e) => setWorkoutDuration(parseInt(e.target.value) || 15)}
-                                        min="1"
-                                        max="60"
-                                        className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                    />
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                    <ZapIcon className="h-4 w-4" />
-                                    Ikona
-                                </label>
-                                <input
-                                    type="text"
-                                    value={workoutIcon}
-                                    onChange={(e) => setWorkoutIcon(e.target.value)}
-                                    className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                    placeholder="⚡"
-                                />
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Right Column - Builder - Centered */}
-                <div className="w-full md:flex-1 p-4 md:p-8 pb-24 overflow-y-auto">
-                    <div className="w-full max-w-4xl mx-auto">
-                    <div className="space-y-6">
+                    {/* Right Column - Builder - Centered */}
+                    <div className="w-full md:flex-1 p-4 md:p-8 pb-24">
+                        <div className="w-full max-w-4xl mx-auto">
+                        <div className="space-y-6">
                         {/* Add Exercise Section */}
                         <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-6 shadow-xl">
                             <div className="flex items-center gap-3 mb-6">
@@ -621,7 +622,8 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 </SortableContext>
                             </DndContext>
                         )}
-                    </div>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
