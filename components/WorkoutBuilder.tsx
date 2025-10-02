@@ -433,7 +433,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                     type="text"
                                     value={workoutTitle}
                                     onChange={(e) => setWorkoutTitle(e.target.value)}
-                                    className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white bg-transparent border-none outline-none focus:ring-2 focus:ring-purple-500/30 rounded-lg px-2 py-1 -mx-2 -my-1"
+                                    className="flex-1 text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white bg-transparent border-none outline-none focus:ring-2 focus:ring-purple-500/30 rounded-lg px-2 py-1 min-w-0"
                                     placeholder="Nazwij swój trening"
                                 />
                             </div>
