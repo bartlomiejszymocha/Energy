@@ -394,9 +394,9 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             </div>
 
             {/* Main Content - Two Column Layout */}
-            <div className="flex flex-col md:flex-row h-[calc(100vh-80px)] w-full max-w-4xl mx-auto">
-                {/* Left Column - Metadata */}
-                <div className="w-full md:w-1/3 bg-white dark:bg-space-900 border-b md:border-b-0 md:border-r border-gray-100 dark:border-space-800 p-4 md:p-8 overflow-y-auto">
+            <div className="flex flex-col md:flex-row h-[calc(100vh-80px)] w-full">
+                {/* Left Column - Metadata - Sticky to left */}
+                <div className="w-full md:w-80 md:flex-shrink-0 bg-white dark:bg-space-900 border-b md:border-b-0 md:border-r border-gray-100 dark:border-space-800 p-4 md:p-8 overflow-y-auto">
                     <div className="space-y-6 md:space-y-8">
                         {/* Workout Title */}
                         <div>
@@ -478,8 +478,9 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Right Column - Builder */}
-                <div className="w-full md:w-2/3 bg-gray-50 dark:bg-space-950 p-4 md:p-8 pb-24 overflow-y-auto">
+                {/* Right Column - Builder - Centered */}
+                <div className="w-full md:flex-1 bg-gray-50 dark:bg-space-950 p-4 md:p-8 pb-24 overflow-y-auto">
+                    <div className="w-full max-w-4xl mx-auto">
                     <div className="space-y-6">
                         {/* Add Exercise Section */}
                         <div className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-4">
@@ -572,12 +573,13 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                             </DndContext>
                         )}
                     </div>
+                    </div>
                 </div>
             </div>
 
             {/* Save Button - Fixed at bottom */}
             <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-space-900 border-t border-gray-100 dark:border-space-800 px-4 md:px-8 py-4">
-                <div className="flex justify-end gap-3 w-full max-w-4xl mx-auto">
+                <div className="flex justify-end gap-3 w-full max-w-4xl mx-auto md:ml-80">
                     <button
                         onClick={onClose}
                         className="px-4 md:px-6 py-2 text-gray-500 dark:text-system-grey hover:text-gray-700 dark:hover:text-cloud-white transition-colors font-medium text-sm md:text-base"
