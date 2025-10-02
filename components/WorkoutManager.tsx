@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import type { ActionItem } from '../types';
-import { EditIcon, TrashIcon, EyeIcon, EyeOffIcon, SaveIcon, XIcon, SettingsIcon } from './icons/LucideIcons';
+import { EditIcon, TrashIcon, EyeIcon, EyeOffIcon, SaveIcon, XIcon, SettingsIcon, ArrowLeftIcon, PlayIcon, ClockIcon, TargetIcon } from './icons/LucideIcons';
+import { WorkoutBuilder } from './WorkoutBuilder';
 
 interface WorkoutManagerProps {
     onClose: () => void;
@@ -12,6 +13,7 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editForm, setEditForm] = useState<Partial<ActionItem>>({});
     const [filter, setFilter] = useState<'all' | 'admin' | 'public' | 'pro'>('all');
+    const [editingWorkoutId, setEditingWorkoutId] = useState<string | null>(null);
 
     // Filter actions based on rules
     const filteredActions = useMemo(() => {
@@ -38,6 +40,10 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
             icon: action.icon,
             rules: action.rules
         });
+    };
+
+    const startWorkoutEdit = (action: ActionItem) => {
+        setEditingWorkoutId(action.id);
     };
 
     const cancelEdit = () => {
@@ -128,6 +134,15 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
         }
     };
 
+    // Show WorkoutBuilder for editing
+    if (editingWorkoutId) {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-space-950">
+                <WorkoutBuilder onClose={() => setEditingWorkoutId(null)} />
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
@@ -137,78 +152,86 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
     }
 
     return (
-        <div className="max-w-6xl mx-auto p-6 space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <SettingsIcon className="h-6 w-6 text-electric-500" />
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-cloud-white">
-                        Zarządzaj treningami
-                    </h1>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-space-950 dark:via-space-900 dark:to-space-800">
+            <div className="max-w-6xl mx-auto p-6 space-y-6">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-gradient-to-r from-electric-500/20 to-blue-500/20 backdrop-blur-sm">
+                            <SettingsIcon className="h-6 w-6 text-electric-500" />
+                        </div>
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-cloud-white">
+                            Zarządzaj treningami
+                        </h1>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 rounded-lg text-gray-400 dark:text-system-grey hover:text-gray-600 dark:hover:text-cloud-white hover:bg-white/50 dark:hover:bg-space-800/50 transition-all duration-200"
+                    >
+                        <XIcon className="h-5 w-5" />
+                    </button>
                 </div>
-                <button
-                    onClick={onClose}
-                    className="text-gray-600 dark:text-system-grey hover:text-gray-900 dark:hover:text-cloud-white transition-colors"
-                >
-                    ✕
-                </button>
-            </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-electric-500">{adminWorkouts.length}</div>
-                    <div className="text-sm text-gray-600 dark:text-system-grey">Twoje treningi</div>
-                </div>
-                <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-blue-500">
-                        {adminWorkouts.filter(a => a.rules === 'public').length}
+                {/* Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-4 text-center shadow-xl">
+                        <div className="text-2xl font-bold text-electric-500">{adminWorkouts.length}</div>
+                        <div className="text-sm text-gray-600 dark:text-system-grey">Twoje treningi</div>
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-system-grey">Publiczne</div>
-                </div>
-                <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-orange-500">
-                        {adminWorkouts.filter(a => a.rules === 'admin').length}
+                    <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-4 text-center shadow-xl">
+                        <div className="text-2xl font-bold text-blue-500">
+                            {adminWorkouts.filter(a => a.rules === 'public').length}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-system-grey">Publiczne</div>
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-system-grey">Prywatne</div>
-                </div>
-                <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-green-500">
-                        {adminWorkouts.filter(a => a.workout && a.workout.length > 0).length}
+                    <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-4 text-center shadow-xl">
+                        <div className="text-2xl font-bold text-orange-500">
+                            {adminWorkouts.filter(a => a.rules === 'admin').length}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-system-grey">Prywatne</div>
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-system-grey">Z treningiem</div>
+                    <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-4 text-center shadow-xl">
+                        <div className="text-2xl font-bold text-green-500">
+                            {adminWorkouts.filter(a => a.workout && a.workout.length > 0).length}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-system-grey">Z treningiem</div>
+                    </div>
                 </div>
-            </div>
 
-            {/* Filters */}
-            <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-4">
-                <div className="flex items-center gap-4">
-                    <span className="text-sm font-medium text-gray-700 dark:text-system-grey">Filtruj:</span>
-                    <div className="flex gap-2">
-                        {(['all', 'admin', 'public', 'pro'] as const).map(rule => (
-                            <button
-                                key={rule}
-                                onClick={() => setFilter(rule)}
-                                className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                                    filter === rule
-                                        ? 'bg-electric-500 text-white'
-                                        : 'bg-gray-100 dark:bg-space-800 text-gray-600 dark:text-system-grey hover:bg-gray-200 dark:hover:bg-space-700'
-                                }`}
-                            >
-                                {rule === 'all' ? 'Wszystkie' : 
-                                 rule === 'admin' ? 'Prywatne' :
-                                 rule === 'public' ? 'Publiczne' : 'Pro'}
-                            </button>
-                        ))}
+                {/* Filters */}
+                <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-4 shadow-xl">
+                    <div className="flex items-center gap-4">
+                        <span className="text-sm font-medium text-gray-700 dark:text-system-grey">Filtruj:</span>
+                        <div className="flex gap-2">
+                            {(['all', 'admin', 'public', 'pro'] as const).map(rule => (
+                                <button
+                                    key={rule}
+                                    onClick={() => setFilter(rule)}
+                                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                                        filter === rule
+                                            ? 'bg-gradient-to-r from-electric-500 to-blue-500 text-white shadow-lg'
+                                            : 'bg-white/50 dark:bg-space-800/50 text-gray-600 dark:text-system-grey hover:bg-white/70 dark:hover:bg-space-700/70 backdrop-blur-sm'
+                                    }`}
+                                >
+                                    {rule === 'all' ? 'Wszystkie' : 
+                                     rule === 'admin' ? 'Prywatne' :
+                                     rule === 'public' ? 'Publiczne' : 'Pro'}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Workouts List */}
-            <div className="bg-white dark:bg-space-900 rounded-xl shadow-lg p-6">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-cloud-white mb-4">
-                    Twoje treningi ({adminWorkouts.length})
-                </h2>
+                {/* Workouts List */}
+                <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-6 shadow-xl">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 rounded-lg bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm">
+                            <PlayIcon className="h-5 w-5 text-green-500" />
+                        </div>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-cloud-white">
+                            Twoje treningi ({adminWorkouts.length})
+                        </h2>
+                    </div>
                 
                 {adminWorkouts.length === 0 ? (
                     <div className="text-center py-8">
@@ -224,7 +247,7 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
                         {adminWorkouts.map(action => (
                             <div
                                 key={action.id}
-                                className="border border-gray-200 dark:border-space-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-space-800 transition-colors"
+                                className="backdrop-blur-xl bg-white/40 dark:bg-space-900/40 rounded-2xl border border-white/20 dark:border-space-700/20 p-4 hover:bg-white/60 dark:hover:bg-space-900/60 transition-all duration-200 shadow-lg hover:shadow-xl"
                             >
                                 {editingId === action.id ? (
                                     // Edit Mode
@@ -325,6 +348,15 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
+                                            {action.workout && action.workout.length > 0 && (
+                                                <button
+                                                    onClick={() => startWorkoutEdit(action)}
+                                                    className="p-2 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors"
+                                                    title="Edytuj trening"
+                                                >
+                                                    <PlayIcon className="h-4 w-4" />
+                                                </button>
+                                            )}
                                             <button
                                                 onClick={() => toggleVisibility(action)}
                                                 className={`p-2 rounded-lg transition-colors ${
@@ -339,7 +371,7 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
                                             <button
                                                 onClick={() => startEdit(action)}
                                                 className="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                                                title="Edytuj"
+                                                title="Edytuj metadane"
                                             >
                                                 <EditIcon className="h-4 w-4" />
                                             </button>
@@ -357,6 +389,7 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
                         ))}
                     </div>
                 )}
+                </div>
             </div>
         </div>
     );
