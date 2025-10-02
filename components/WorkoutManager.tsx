@@ -3,6 +3,7 @@ import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import type { ActionItem } from '../types';
 import { EditIcon, TrashIcon, EyeIcon, EyeOffIcon, SaveIcon, XIcon, SettingsIcon, ArrowLeftIcon, PlayIcon, ClockIcon, TargetIcon } from './icons/LucideIcons';
 import { WorkoutBuilder } from './WorkoutBuilder';
+import { IconRenderer } from './IconRenderer';
 
 interface WorkoutManagerProps {
     onClose: () => void;
@@ -332,7 +333,9 @@ export const WorkoutManager: React.FC<WorkoutManagerProps> = ({ onClose }) => {
                                     // View Mode
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
-                                            <div className="text-2xl">{action.icon}</div>
+                                            <div className="text-2xl">
+                                                <IconRenderer icon={action.icon || '⚡'} />
+                                            </div>
                                             <div>
                                                 <h3 className="font-semibold text-gray-900 dark:text-cloud-white">
                                                     {action.title}
