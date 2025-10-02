@@ -432,36 +432,39 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                     Nazwij swój trening
                                 </h2>
                             </div>
-                            <div>
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                    <FileTextIcon className="h-4 w-4" />
-                                    Opis
-                                </label>
-                                <textarea
-                                    value={workoutDescription}
-                                    onChange={(e) => setWorkoutDescription(e.target.value)}
-                                    rows={3}
-                                    className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white resize-none focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                    placeholder="Dodaj opis treningu"
-                                />
+                            <div className="space-y-4 md:space-y-6">
+                                <div>
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
+                                        <TargetIcon className="h-4 w-4" />
+                                        Tytuł
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={workoutTitle}
+                                        onChange={(e) => setWorkoutTitle(e.target.value)}
+                                        className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
+                                        placeholder="Nazwa treningu"
+                                    />
+                                </div>
+                                
+                                <div>
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
+                                        <FileTextIcon className="h-4 w-4" />
+                                        Opis
+                                    </label>
+                                    <textarea
+                                        value={workoutDescription}
+                                        onChange={(e) => setWorkoutDescription(e.target.value)}
+                                        rows={3}
+                                        className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white resize-none focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
+                                        placeholder="Dodaj opis treningu"
+                                    />
+                                </div>
                             </div>
                         </div>
 
                         {/* Workout Settings */}
                         <div className="space-y-4 md:space-y-6">
-                            <div>
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                    <TargetIcon className="h-4 w-4" />
-                                    Tytuł
-                                </label>
-                                <input
-                                    type="text"
-                                    value={workoutTitle}
-                                    onChange={(e) => setWorkoutTitle(e.target.value)}
-                                    className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                    placeholder="Nazwa treningu"
-                                />
-                            </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
