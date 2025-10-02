@@ -1,8 +1,27 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useSheetsExercises } from '../hooks/useSheetsExercises';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import type { Exercise, WorkoutStep, ActionItem, ActionType } from '../types';
 import { PlusIcon, TrashIcon, SaveIcon, PlayIcon, ClockIcon, SettingsIcon } from './icons/LucideIcons';
+import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragEndEvent,
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+    useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface WorkoutBuilderProps {
     onClose: () => void;
@@ -15,9 +34,124 @@ interface WorkoutStepBuilder {
     duration: number;
 }
 
+// Sortable Exercise Item Component
+interface SortableExerciseItemProps {
+    step: WorkoutStepBuilder;
+    index: number;
+    exercises: { [key: string]: Exercise };
+    restDuration: number;
+    onMoveUp: (stepId: string) => void;
+    onMoveDown: (stepId: string) => void;
+    onRemove: (stepId: string) => void;
+    isFirst: boolean;
+    isLast: boolean;
+}
+
+const SortableExerciseItem: React.FC<SortableExerciseItemProps> = ({
+    step,
+    index,
+    exercises,
+    restDuration,
+    onMoveUp,
+    onMoveDown,
+    onRemove,
+    isFirst,
+    isLast,
+}) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: step.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-3"
+        >
+            <div className="flex items-center gap-3">
+                {/* Drag Handle */}
+                <div
+                    {...attributes}
+                    {...listeners}
+                    className="w-6 h-6 flex items-center justify-center cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    title="Przeciągnij aby zmienić kolejność"
+                >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                    </svg>
+                </div>
+
+                {/* Exercise Icon */}
+                <div className="w-10 h-10 bg-gray-50 dark:bg-space-800 rounded-md flex items-center justify-center flex-shrink-0">
+                    <PlayIcon className="h-4 w-4 text-gray-500 dark:text-system-grey" />
+                </div>
+                
+                {/* Exercise Details */}
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-medium text-gray-900 dark:text-cloud-white text-sm truncate">
+                            {exercises[step.exerciseId]?.name || 'Nieznane ćwiczenie'}
+                        </h3>
+                        <div className="flex items-center gap-1 ml-2">
+                            <button
+                                onClick={() => onMoveUp(step.id)}
+                                disabled={isFirst}
+                                className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
+                                title="Przenieś w górę"
+                            >
+                                ↑
+                            </button>
+                            <button
+                                onClick={() => onMoveDown(step.id)}
+                                disabled={isLast}
+                                className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
+                                title="Przenieś w dół"
+                            >
+                                ↓
+                            </button>
+                            <button
+                                onClick={() => onRemove(step.id)}
+                                className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded"
+                                title="Usuń ćwiczenie"
+                            >
+                                <TrashIcon className="h-3 w-3" />
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Exercise Info - Compact */}
+                    <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-system-grey">
+                        <span>Czas: {step.duration}s</span>
+                        <span>Przerwa: {restDuration}s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
     const { exercises, loading: exercisesLoading, error: exercisesError } = useSheetsExercises();
     const { actions, refresh: refreshActions } = useSheetsActionsOptimized();
+    
+    // Drag and Drop sensors
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
     
     // Workout metadata
     const [workoutTitle, setWorkoutTitle] = useState('');
@@ -74,6 +208,20 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             
             return newSteps;
         });
+    };
+
+    // Drag and Drop handler
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (active.id !== over?.id) {
+            setWorkoutSteps((items) => {
+                const oldIndex = items.findIndex(item => item.id === active.id);
+                const newIndex = items.findIndex(item => item.id === over?.id);
+
+                return arrayMove(items, oldIndex, newIndex);
+            });
+        }
     };
 
     const calculateTotalDuration = () => {
@@ -393,63 +541,35 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                             </button>
                         </div>
 
-                        {/* Workout Steps - Compact Design */}
+                        {/* Workout Steps - Drag and Drop */}
                         {workoutSteps.length > 0 && (
-                            <div className="space-y-3">
-                                {workoutSteps.map((step, index) => (
-                                    <div
-                                        key={step.id}
-                                        className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-3"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            {/* Exercise Icon */}
-                                            <div className="w-10 h-10 bg-gray-50 dark:bg-space-800 rounded-md flex items-center justify-center flex-shrink-0">
-                                                <PlayIcon className="h-4 w-4 text-gray-500 dark:text-system-grey" />
-                                            </div>
-                                            
-                                            {/* Exercise Details */}
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <h3 className="font-medium text-gray-900 dark:text-cloud-white text-sm truncate">
-                                                        {exercises[step.exerciseId]?.name || 'Nieznane ćwiczenie'}
-                                                    </h3>
-                                                    <div className="flex items-center gap-1 ml-2">
-                                                        <button
-                                                            onClick={() => moveStep(step.id, 'up')}
-                                                            disabled={index === 0}
-                                                            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
-                                                            title="Przenieś w górę"
-                                                        >
-                                                            ↑
-                                                        </button>
-                                                        <button
-                                                            onClick={() => moveStep(step.id, 'down')}
-                                                            disabled={index === workoutSteps.length - 1}
-                                                            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 rounded hover:bg-gray-100 dark:hover:bg-space-800"
-                                                            title="Przenieś w dół"
-                                                        >
-                                                            ↓
-                                                        </button>
-                                                        <button
-                                                            onClick={() => removeStep(step.id)}
-                                                            className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded"
-                                                            title="Usuń ćwiczenie"
-                                                        >
-                                                            <TrashIcon className="h-3 w-3" />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                
-                                                {/* Exercise Info - Compact */}
-                                                <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-system-grey">
-                                                    <span>Czas: {step.duration}s</span>
-                                                    <span>Przerwa: {restDuration}s</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <DndContext
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                            >
+                                <SortableContext
+                                    items={workoutSteps.map(step => step.id)}
+                                    strategy={verticalListSortingStrategy}
+                                >
+                                    <div className="space-y-3">
+                                        {workoutSteps.map((step, index) => (
+                                            <SortableExerciseItem
+                                                key={step.id}
+                                                step={step}
+                                                index={index}
+                                                exercises={exercises}
+                                                restDuration={restDuration}
+                                                onMoveUp={moveStep}
+                                                onMoveDown={moveStep}
+                                                onRemove={removeStep}
+                                                isFirst={index === 0}
+                                                isLast={index === workoutSteps.length - 1}
+                                            />
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
+                                </SortableContext>
+                            </DndContext>
                         )}
                     </div>
                 </div>
