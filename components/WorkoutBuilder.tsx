@@ -426,14 +426,14 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         {/* Workout Title */}
                         <div>
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm">
+                                <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm flex-shrink-0">
                                     <EditIcon className="h-5 w-5 text-purple-500" />
                                 </div>
                                 <input
                                     type="text"
                                     value={workoutTitle}
                                     onChange={(e) => setWorkoutTitle(e.target.value)}
-                                    className="flex-1 text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white bg-transparent border-none outline-none focus:ring-2 focus:ring-purple-500/30 rounded-lg px-2 py-1 min-w-0"
+                                    className="flex-1 text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white bg-transparent border-none outline-none focus:ring-2 focus:ring-purple-500/30 rounded-lg px-3 py-2 min-w-0 w-full"
                                     placeholder="Nazwij swój trening"
                                 />
                             </div>
