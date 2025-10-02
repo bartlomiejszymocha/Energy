@@ -24,10 +24,10 @@ export const FavoritesBar: React.FC<FavoritesBarProps> = ({
 
     if (favoriteActions.length === 0) {
         return (
-             <div className="hidden sm:block bg-gray-100 dark:bg-space-950 border-t border-b border-gray-200 dark:border-space-800">
-                <div className="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8 text-center">
-                    <p className="text-xs text-gray-600 dark:text-system-grey flex items-center justify-center gap-2">
-                        <StarIcon className="h-4 w-4 text-warning-yellow" />
+             <div className="hidden bg-gray-100 border-t border-b border-gray-200 sm:block dark:bg-space-950 dark:border-space-800">
+                <div className="px-4 py-2 mx-auto max-w-7xl text-center sm:px-6 lg:px-8">
+                    <p className="flex gap-2 justify-center items-center text-xs text-gray-600 dark:text-system-grey">
+                        <StarIcon className="w-4 h-4 text-warning-yellow" />
                         <span>Kliknij gwiazdkę przy akcjach, które stosujesz najczęściej - będą tutaj</span>
                     </p>
                 </div>
@@ -36,14 +36,14 @@ export const FavoritesBar: React.FC<FavoritesBarProps> = ({
     }
 
     return (
-        <div className="hidden sm:block bg-gray-100 dark:bg-space-950 border-t border-b border-gray-200 dark:border-space-800">
-            <div className="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center gap-3">
+        <div className="hidden bg-gray-100 border-t border-b border-gray-200 sm:block dark:bg-space-950 dark:border-space-800">
+            <div className="px-4 py-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="flex gap-3 items-center">
                     <div className="flex-shrink-0">
-                        <StarIcon className="h-4 w-4 text-warning-yellow" />
+                        <StarIcon className="w-4 h-4 text-warning-yellow" />
                     </div>
-                    <div className="flex-grow overflow-x-auto custom-scrollbar-thin">
-                        <div className="flex items-center gap-3">
+                    <div className="overflow-x-auto flex-grow custom-scrollbar-thin">
+                        <div className="flex gap-3 items-center">
                             {favoriteActions.map(action => {
                                 const isCompleted = completedActionIds.has(action.id);
                                 const REBOOT_PREFIX = 'Energetyczny Reboot - ';
@@ -69,7 +69,7 @@ export const FavoritesBar: React.FC<FavoritesBarProps> = ({
                                             title={action.title}
                                         >
                                             <IconRenderer icon={action.icon} className="text-base" />
-                                            <CheckCircleIcon className="h-4 w-4 text-success-green" />
+                                            <CheckCircleIcon className="w-4 h-4 text-success-green" />
                                         </button>
                                     );
                                 } else {

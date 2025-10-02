@@ -209,15 +209,30 @@ export const useEnergyData = (uid: string | null) => {
   }, [uid]);
 
   const removeCompletedAction = useCallback(async (logId: string) => {
+    console.log('🔍 removeCompletedAction called:', { logId, uid, hasUid: !!uid });
     if (uid) {
         try {
-            console.log('🔍 Removing completed action from Firestore:', logId);
+            const docPath = `${USERS_COLLECTION}/${uid}/${ACTIONS_COLLECTION}/${logId}`;
+            console.log('🔍 Attempting to delete from path:', docPath);
             await deleteDoc(doc(db, USERS_COLLECTION, uid, ACTIONS_COLLECTION, logId));
             console.log('✅ Completed action removed successfully from Firestore');
         } catch (error) {
             console.error('❌ Failed to remove completed action from Firestore:', error);
+            console.error('Error details:', {
+                code: (error as any)?.code,
+                message: (error as any)?.message,
+                logId,
+                uid
+            });
+            // Fallback to localStorage if Firestore fails
+            setCompletedActions(prev => {
+                const updated = prev.filter(a => a.id !== logId);
+                localStorage.setItem(LS_ACTIONS_KEY, JSON.stringify(updated));
+                return updated;
+            });
         }
     } else {
+        console.log('📝 Removing from localStorage (anonymous user)');
         setCompletedActions(prev => {
             const updated = prev.filter(a => a.id !== logId);
             localStorage.setItem(LS_ACTIONS_KEY, JSON.stringify(updated));

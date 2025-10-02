@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useSheetsExercises } from '../hooks/useSheetsExercises';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import type { Exercise, WorkoutStep, ActionItem, ActionType } from '../types';
-import { PlusIcon, TrashIcon, SaveIcon, PlayIcon, ClockIcon, SettingsIcon, FileTextIcon, TimerIcon, ZapIcon, TargetIcon, EditIcon, MoveIcon, XIcon } from './icons/LucideIcons';
+import { PlusIcon, TrashIcon, SaveIcon, PlayIcon, ClockIcon, SettingsIcon, FileTextIcon, TimerIcon, ZapIcon, TargetIcon, EditIcon, MoveIcon, XIcon, ZapIconFilled, PlayIconFilled, SettingsIconFilled, PlusIconFilled, EditIconFilled, FileTextIconFilled, TimerIconFilled, TargetIconFilled, ClockIconFilled, SaveIconFilled, RocketIconFilled } from './icons/LucideIcons';
 import {
     DndContext,
     closestCenter,
@@ -93,7 +93,7 @@ const SortableExerciseItem: React.FC<SortableExerciseItemProps> = ({
 
                 {/* Exercise Icon */}
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500/20 to-emerald-500/20 dark:from-green-500/10 dark:to-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
-                    <PlayIcon className="h-5 w-5 text-green-500" />
+                    <PlayIconFilled className="h-5 w-5 text-green-500" />
                 </div>
                 
                 {/* Exercise Details */}
@@ -402,7 +402,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 <div className="flex items-center justify-between w-full max-w-4xl mx-auto">
                     <div className="flex items-center gap-3">
                         <div className="p-2 rounded-lg bg-gradient-to-r from-electric-500/20 to-blue-500/20 backdrop-blur-sm">
-                            <SettingsIcon className="h-5 w-5 text-electric-500" />
+                            <SettingsIconFilled className="h-5 w-5 text-electric-500" />
                         </div>
                         <h1 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-cloud-white">
                             Tworzenie treningu
@@ -427,7 +427,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         <div>
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm flex-shrink-0">
-                                    <EditIcon className="h-5 w-5 text-purple-500" />
+                                    <EditIconFilled className="h-5 w-5 text-purple-500" />
                                 </div>
                                 <input
                                     type="text"
@@ -440,7 +440,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 <div className="space-y-4 md:space-y-6">
                                     <div>
                                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                            <FileTextIcon className="h-4 w-4" />
+                                            <FileTextIconFilled className="h-4 w-4" />
                                             Opis
                                         </label>
                                         <textarea
@@ -460,7 +460,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                            <SettingsIcon className="h-4 w-4" />
+                                            <SettingsIconFilled className="h-4 w-4" />
                                             Typ
                                         </label>
                                         <select
@@ -475,7 +475,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                     
                                     <div>
                                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                            <TimerIcon className="h-4 w-4" />
+                                            <TimerIconFilled className="h-4 w-4" />
                                             Czas (min)
                                         </label>
                                         <input
@@ -491,7 +491,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                        <ZapIcon className="h-4 w-4" />
+                                        <ZapIconFilled className="h-4 w-4" />
                                         Ikona
                                     </label>
                                     <input
@@ -514,7 +514,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-6 shadow-xl">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm">
-                                    <PlusIcon className="h-5 w-5 text-blue-500" />
+                                    <PlusIconFilled className="h-5 w-5 text-blue-500" />
                                 </div>
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-cloud-white">
                                     Dodaj ćwiczenie
@@ -523,7 +523,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                             
                             <div className="mb-6">
                                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-3">
-                                    <TargetIcon className="h-4 w-4" />
+                                    <TargetIconFilled className="h-4 w-4" />
                                     Wybierz ćwiczenie
                                 </label>
                                 <select
@@ -543,7 +543,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-3">
-                                        <TimerIcon className="h-4 w-4" />
+                                        <TimerIconFilled className="h-4 w-4" />
                                         Czas ćwiczenia (sek)
                                     </label>
                                     <input
@@ -558,7 +558,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-3">
-                                        <ClockIcon className="h-4 w-4" />
+                                        <ClockIconFilled className="h-4 w-4" />
                                         Domyślna przerwa (sek)
                                     </label>
                                     <input
@@ -577,7 +577,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 disabled={!selectedExerciseId}
                                 className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-electric-500 to-blue-500 text-white rounded-xl hover:from-electric-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                             >
-                                <PlusIcon className="h-5 w-5" />
+                                <PlusIconFilled className="h-5 w-5" />
                                 Dodaj ćwiczenie
                             </button>
                         </div>
@@ -633,7 +633,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         disabled={!workoutTitle.trim() || workoutSteps.length === 0}
                         className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-electric-500 to-blue-500 text-white rounded-xl hover:from-electric-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                     >
-                        <SaveIcon className="h-4 w-4" />
+                        <RocketIconFilled className="h-4 w-4" />
                         Zapisz trening
                     </button>
                 </div>
