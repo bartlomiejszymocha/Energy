@@ -52,7 +52,7 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
       
       if (isLocalhost) { // ENABLED - use different sample actions for testing
         console.log('🔍 Development mode - using static actions fallback');
-        console.log('🔍 Hostname:', window.location.hostname);
+        console.log('🔍 Hosttitle:', window.location.hostname);
         
         // Get saved actions from localStorage
         const savedActions = JSON.parse(localStorage.getItem('dev-actions') || '[]');
@@ -61,36 +61,55 @@ export const useSheetsActionsOptimized = (): UseSheetsActionsReturn => {
         const sampleActions: ActionItem[] = [
           {
             id: 'dev_action_1',
-            name: 'Reboot - BrainFlow (DEV)',
+            title: 'Reboot - BrainFlow (DEV)',
             type: 'Protokół Ruchowy',
             icon: '🧠',
-            description: 'Test akcji z workout string 1',
+            content: 'Test akcji z workout string 1',
             triggerTags: ['focus', 'brain'],
-            timeOfDay: ['Poranek'],
+            duration: 15,
             rules: 'admin',
-            workout: 'ex005 60, R 30, ex002 45, R 30, ex003 60'
+            workout: [
+                { type: 'exercise', exerciseId: 'ex005', duration: 60 },
+                { type: 'rest', duration: 30 },
+                { type: 'exercise', exerciseId: 'ex002', duration: 45 },
+                { type: 'rest', duration: 30 },
+                { type: 'exercise', exerciseId: 'ex003', duration: 60 }
+            ]
           },
           {
             id: 'dev_action_2', 
-            name: 'NSDR (DEV)',
+            title: 'NSDR (DEV)',
             type: 'Protokół Ruchowy',
             icon: '🧘',
-            description: 'Test akcji z workout string 2',
+            content: 'Test akcji z workout string 2',
             triggerTags: ['relax', 'energy'],
-            timeOfDay: ['Wieczór'],
+            duration: 20,
             rules: 'public',
-            workout: 'ex017 20, R 20, ex002 30, R10, ex10 40, R 10'
+            workout: [
+                { type: 'exercise', exerciseId: 'ex017', duration: 20 },
+                { type: 'rest', duration: 20 },
+                { type: 'exercise', exerciseId: 'ex002', duration: 30 },
+                { type: 'rest', duration: 10 },
+                { type: 'exercise', exerciseId: 'ex10', duration: 40 },
+                { type: 'rest', duration: 10 }
+            ]
           },
           {
             id: 'dev_action_3',
-            name: 'Stwórz coś kreatywnego (DEV)',
+            title: 'Stwórz coś kreatywnego (DEV)',
             type: 'Protokół Ruchowy',
             icon: '🎨',
-            description: 'Test akcji z workout string 3',
+            content: 'Test akcji z workout string 3',
             triggerTags: ['creative', 'focus'],
-            timeOfDay: ['Południe'],
+            duration: 25,
             rules: 'public',
-            workout: 'ex003 60, R 30, ex005 45, R 30, ex007 60'
+            workout: [
+                { type: 'exercise', exerciseId: 'ex003', duration: 60 },
+                { type: 'rest', duration: 30 },
+                { type: 'exercise', exerciseId: 'ex005', duration: 45 },
+                { type: 'rest', duration: 30 },
+                { type: 'exercise', exerciseId: 'ex007', duration: 60 }
+            ]
           }
         ];
         

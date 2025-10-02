@@ -24,7 +24,7 @@ const DailySummary: React.FC<{
     onOpenModal: () => void;
     onShowHistory: () => void;
 }> = ({ logs, completedActions, onCopySummary, isCopied, onResetDataClick, onRemoveCompletedAction, onRemoveLog, onOpenModal, onShowHistory }) => {
-    const { actions: sheetsActions } = useSheetsActionsOptimized();
+    const { actions: actions } = useSheetsActionsOptimized();
     const [isEnergyLogsExpanded, setIsEnergyLogsExpanded] = useState(true);
     const { todayLogs, todayCompletedActions } = useMemo(() => {
         const today = new Date();
@@ -175,7 +175,7 @@ const DailySummary: React.FC<{
                             <h4 className="font-bold text-gray-600 dark:text-system-grey mb-2 text-[12.6px] uppercase tracking-wider">Wykonane Akcje</h4>
                             <div className="space-y-2">
                                 {todayCompletedActions.map(actionLog => {
-                                    const actionDetails = sheetsActions.find(a => a.id === actionLog.actionId);
+                                    const actionDetails = actions.find(a => a.id === actionLog.actionId);
                                     if (!actionDetails) return null;
                                     return (
                                         <div key={actionLog.id} className="group relative flex items-center gap-3 p-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg backdrop-blur-sm">
@@ -235,6 +235,7 @@ interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, onLogEnergyClick, onInstructionsClick, onResetDataClick, onRemoveCompletedAction, onRemoveLog, onOpenSummaryModal, onShowHistory, onOpenChartModal }) => {
     const [isCopied, setIsCopied] = useState(false);
+    const { actions } = useSheetsActionsOptimized();
 
     const handleCopySummary = async () => {
         const today = new Date();
@@ -264,7 +265,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ logs, completedActions, on
         if (todayCompletedActions.length > 0) {
             summary += "**⚡ Wykonane Akcje:**\n";
             todayCompletedActions.sort((a, b) => a.timestamp - b.timestamp).forEach(actionLog => {
-                const actionDetails = sheetsActions.find(a => a.id === actionLog.actionId);
+                const actionDetails = actions.find(a => a.id === actionLog.actionId);
                 const title = actionDetails ? actionDetails.title : 'Nieznana akcja';
                 summary += `- ${timeFormatter.format(new Date(actionLog.timestamp))} | Akcja: ${title}\n`;
             });

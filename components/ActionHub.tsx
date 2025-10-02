@@ -58,7 +58,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({
         
         const filtered = actionsSource.filter(action => {
             // 1. Check permissions first
-            const hasPermission = canViewAction(action.rules || 'public');
+            const hasPermission = canViewAction((action.rules as 'admin' | 'public' | 'pro') || 'public');
             
             if (!hasPermission) {
                 return false;

@@ -49,7 +49,7 @@ export interface ActionItem {
   icon?: string;
   breathingPattern?: '478' | '4784';
   workout?: WorkoutStep[];
-  rules?: 'priv' | 'public' | 'pro'; // Permission rules
+  rules?: 'admin' | 'public' | 'pro'; // Permission rules
   // used in Workout modal to inject close handler
   onClose?: () => void;
 }

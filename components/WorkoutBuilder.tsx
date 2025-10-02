@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useSheetsExercises } from '../hooks/useSheetsExercises';
 import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 import type { Exercise, WorkoutStep, ActionItem, ActionType } from '../types';
-import { PlusIcon, TrashIcon, SaveIcon, PlayIcon, ClockIcon, SettingsIcon, FileTextIcon, TimerIcon, ZapIcon, TargetIcon, EditIcon, MoveIcon } from './icons/LucideIcons';
+import { PlusIcon, TrashIcon, SaveIcon, PlayIcon, ClockIcon, SettingsIcon, FileTextIcon, TimerIcon, ZapIcon, TargetIcon, EditIcon, MoveIcon, XIcon } from './icons/LucideIcons';
 import {
     DndContext,
     closestCenter,
@@ -32,6 +32,7 @@ interface WorkoutStepBuilder {
     type: 'exercise';
     exerciseId: string;
     duration: number;
+    restDuration: number; // Individual rest duration for each exercise
 }
 
 // Sortable Exercise Item Component
@@ -39,10 +40,10 @@ interface SortableExerciseItemProps {
     step: WorkoutStepBuilder;
     index: number;
     exercises: { [key: string]: Exercise };
-    restDuration: number;
     onMoveUp: (stepId: string) => void;
     onMoveDown: (stepId: string) => void;
     onRemove: (stepId: string) => void;
+    onUpdateRestDuration: (stepId: string, restDuration: number) => void;
     isFirst: boolean;
     isLast: boolean;
 }
@@ -51,10 +52,10 @@ const SortableExerciseItem: React.FC<SortableExerciseItemProps> = ({
     step,
     index,
     exercises,
-    restDuration,
     onMoveUp,
     onMoveDown,
     onRemove,
+    onUpdateRestDuration,
     isFirst,
     isLast,
 }) => {
@@ -134,9 +135,17 @@ const SortableExerciseItem: React.FC<SortableExerciseItemProps> = ({
                             <TimerIcon className="h-4 w-4" />
                             <span>{step.duration}s</span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
                             <ClockIcon className="h-4 w-4" />
-                            <span>{restDuration}s</span>
+                            <input
+                                type="number"
+                                value={step.restDuration}
+                                onChange={(e) => onUpdateRestDuration(step.id, parseInt(e.target.value) || 15)}
+                                min="5"
+                                max="120"
+                                className="w-16 px-2 py-1 text-xs border border-white/30 dark:border-space-700/50 rounded-md bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-1 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
+                            />
+                            <span>s</span>
                         </div>
                     </div>
                 </div>
@@ -186,7 +195,8 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             id: `exercise-${Date.now()}`,
             type: 'exercise',
             exerciseId: selectedExerciseId,
-            duration: exerciseDuration
+            duration: exerciseDuration,
+            restDuration: restDuration
         };
         
         setWorkoutSteps(prev => [...prev, newStep]);
@@ -196,6 +206,14 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
 
     const removeStep = (stepId: string) => {
         setWorkoutSteps(prev => prev.filter(step => step.id !== stepId));
+    };
+
+    const updateStepRestDuration = (stepId: string, newRestDuration: number) => {
+        setWorkoutSteps(prev => prev.map(step => 
+            step.id === stepId 
+                ? { ...step, restDuration: newRestDuration }
+                : step
+        ));
     };
 
     const moveStep = (stepId: string, direction: 'up' | 'down') => {
@@ -239,7 +257,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
         }
 
         try {
-            // Convert builder steps to WorkoutStep format with automatic rest periods
+            // Convert builder steps to WorkoutStep format with individual rest periods
             const workoutStepsFormatted: WorkoutStep[] = [];
             workoutSteps.forEach((step, index) => {
                 // Add exercise
@@ -249,11 +267,11 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                     duration: step.duration
                 });
                 
-                // Add rest period after each exercise (except the last one)
+                // Add rest period after each exercise (except the last one) using individual rest duration
                 if (index < workoutSteps.length - 1) {
                     workoutStepsFormatted.push({
                         type: 'rest',
-                        duration: restDuration
+                        duration: step.restDuration
                     });
                 }
             });
@@ -266,7 +284,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 duration: workoutDuration,
                 icon: workoutIcon,
                 workout: workoutStepsFormatted,
-                rules: 'admin' as const, // Admin-only
+                        rules: 'admin' as const, // Admin-only
                 triggerTags: ['admin-created']
             };
 
@@ -282,12 +300,12 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 // Generate unique ID for the action
                 const actionId = `dev-workout-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 
-                // Convert workout steps to workout string format with automatic rest periods
+                // Convert workout steps to workout string format with individual rest periods
                 const workoutStringParts: string[] = [];
                 workoutSteps.forEach((step, index) => {
                     workoutStringParts.push(`${step.exerciseId} ${step.duration}`);
                     if (index < workoutSteps.length - 1) {
-                        workoutStringParts.push(`R ${restDuration}`);
+                        workoutStringParts.push(`R ${step.restDuration}`);
                     }
                 });
                 const workoutString = workoutStringParts.join(', ');
@@ -301,7 +319,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                     duration: workoutDuration,
                     icon: workoutIcon,
                     workout: workoutStepsFormatted,
-                    rules: 'admin',
+                        rules: 'admin',
                     triggerTags: ['admin-created', 'dev-created']
                 };
                 
@@ -547,7 +565,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-3">
                                         <ClockIcon className="h-4 w-4" />
-                                        Przerwa między (sek)
+                                        Domyślna przerwa (sek)
                                     </label>
                                     <input
                                         type="number"
@@ -588,10 +606,10 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                                 step={step}
                                                 index={index}
                                                 exercises={exercises}
-                                                restDuration={restDuration}
                                                 onMoveUp={moveStep}
                                                 onMoveDown={moveStep}
                                                 onRemove={removeStep}
+                                                onUpdateRestDuration={updateStepRestDuration}
                                                 isFirst={index === 0}
                                                 isLast={index === workoutSteps.length - 1}
                                             />
