@@ -377,7 +377,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
         <div className="min-h-screen bg-gray-50 dark:bg-space-950">
             {/* Header */}
             <div className="bg-white dark:bg-space-900 border-b border-gray-100 dark:border-space-800 px-8 py-3">
-                <div className="flex items-center justify-between max-w-6xl mx-auto">
+                <div className="flex items-center justify-between max-w-4xl mx-auto">
                     <div className="flex items-center gap-2">
                         <SettingsIcon className="h-5 w-5 text-electric-500" />
                         <h1 className="text-xl font-semibold text-gray-900 dark:text-cloud-white">
@@ -394,7 +394,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             </div>
 
             {/* Main Content - Two Column Layout */}
-            <div className="flex h-[calc(100vh-80px)] max-w-6xl mx-auto">
+            <div className="flex h-[calc(100vh-80px)] max-w-4xl mx-auto">
                 {/* Left Column - Metadata */}
                 <div className="w-1/3 bg-white dark:bg-space-900 border-r border-gray-100 dark:border-space-800 p-8 overflow-y-auto">
                     <div className="space-y-8">
@@ -577,7 +577,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
 
             {/* Save Button - Fixed at bottom */}
             <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-space-900 border-t border-gray-100 dark:border-space-800 px-8 py-4">
-                <div className="flex justify-end gap-3 max-w-6xl mx-auto">
+                <div className="flex justify-end gap-3 max-w-4xl mx-auto">
                     <button
                         onClick={onClose}
                         className="px-6 py-2 text-gray-500 dark:text-system-grey hover:text-gray-700 dark:hover:text-cloud-white transition-colors font-medium"
