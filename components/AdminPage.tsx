@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ArrowLeftIcon, SettingsIcon, PlusIcon, ListIcon, ZapIcon, HeartIcon, ClockIcon, TargetIcon } from './icons/LucideIcons';
 import { WorkoutBuilder } from './WorkoutBuilder';
 import { WorkoutManager } from './WorkoutManager';
+import { useSheetsActionsOptimized } from '../hooks/useSheetsActionsOptimized';
 
 interface AdminPageProps {
     onBack: () => void;
@@ -9,6 +10,16 @@ interface AdminPageProps {
 
 export const AdminPage: React.FC<AdminPageProps> = ({ onBack }) => {
     const [currentView, setCurrentView] = useState<'dashboard' | 'workout-builder' | 'workout-manager'>('dashboard');
+    const { actions } = useSheetsActionsOptimized();
+
+    // Calculate action statistics by permission level
+    const actionStats = useMemo(() => {
+        const adminCount = actions.filter(action => action.rules === 'admin').length;
+        const publicCount = actions.filter(action => action.rules === 'public').length;
+        const proCount = actions.filter(action => action.rules === 'pro').length;
+        
+        return { adminCount, publicCount, proCount };
+    }, [actions]);
 
     if (currentView === 'workout-builder') {
         return (
@@ -163,28 +174,28 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onBack }) => {
                     </div>
                 </div>
 
-                {/* Stats */}
+                {/* Action Statistics */}
                 <div className="backdrop-blur-xl bg-white/60 dark:bg-space-900/60 rounded-2xl border border-white/30 dark:border-space-700/30 p-6 shadow-xl">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="p-2 rounded-lg bg-gradient-to-r from-indigo-500/20 to-purple-500/20 backdrop-blur-sm">
-                            <ClockIcon className="h-5 w-5 text-indigo-500" />
+                            <TargetIcon className="h-5 w-5 text-indigo-500" />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-cloud-white">
-                            Statystyki
+                            Podział Akcji
                         </h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="text-center p-4 rounded-xl bg-gradient-to-r from-electric-500/10 to-blue-500/10 backdrop-blur-sm">
-                            <div className="text-3xl font-bold text-electric-500 mb-2">0</div>
-                            <div className="text-sm text-gray-600 dark:text-system-grey">Utworzone treningi</div>
-                        </div>
-                        <div className="text-center p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-sm">
-                            <div className="text-3xl font-bold text-blue-500 mb-2">0</div>
-                            <div className="text-sm text-gray-600 dark:text-system-grey">Aktywne treningi</div>
+                        <div className="text-center p-4 rounded-xl bg-gradient-to-r from-red-500/10 to-orange-500/10 backdrop-blur-sm">
+                            <div className="text-3xl font-bold text-red-500 mb-2">{actionStats.adminCount}</div>
+                            <div className="text-sm text-gray-600 dark:text-system-grey">Admin Only</div>
                         </div>
                         <div className="text-center p-4 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm">
-                            <div className="text-3xl font-bold text-green-500 mb-2">0</div>
-                            <div className="text-sm text-gray-600 dark:text-system-grey">Wykonania</div>
+                            <div className="text-3xl font-bold text-green-500 mb-2">{actionStats.publicCount}</div>
+                            <div className="text-sm text-gray-600 dark:text-system-grey">Publiczne</div>
+                        </div>
+                        <div className="text-center p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-sm">
+                            <div className="text-3xl font-bold text-blue-500 mb-2">{actionStats.proCount}</div>
+                            <div className="text-sm text-gray-600 dark:text-system-grey">Pro</div>
                         </div>
                     </div>
                 </div>
