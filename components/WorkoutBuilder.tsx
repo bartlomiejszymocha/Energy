@@ -376,11 +376,11 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-space-950">
             {/* Header */}
-            <div className="bg-white dark:bg-space-900 border-b border-gray-100 dark:border-space-800 px-8 py-3">
-                <div className="flex items-center justify-between max-w-4xl mx-auto">
+            <div className="bg-white dark:bg-space-900 border-b border-gray-100 dark:border-space-800 px-4 md:px-8 py-3">
+                <div className="flex items-center justify-between w-full max-w-4xl mx-auto">
                     <div className="flex items-center gap-2">
                         <SettingsIcon className="h-5 w-5 text-electric-500" />
-                        <h1 className="text-xl font-semibold text-gray-900 dark:text-cloud-white">
+                        <h1 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-cloud-white">
                             Tworzenie treningu
                         </h1>
                     </div>
@@ -394,13 +394,13 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             </div>
 
             {/* Main Content - Two Column Layout */}
-            <div className="flex h-[calc(100vh-80px)] max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row h-[calc(100vh-80px)] w-full max-w-4xl mx-auto">
                 {/* Left Column - Metadata */}
-                <div className="w-1/3 bg-white dark:bg-space-900 border-r border-gray-100 dark:border-space-800 p-8 overflow-y-auto">
-                    <div className="space-y-8">
+                <div className="w-full md:w-1/3 bg-white dark:bg-space-900 border-b md:border-b-0 md:border-r border-gray-100 dark:border-space-800 p-4 md:p-8 overflow-y-auto">
+                    <div className="space-y-6 md:space-y-8">
                         {/* Workout Title */}
                         <div>
-                            <h2 className="text-2xl font-semibold text-gray-900 dark:text-cloud-white mb-4">
+                            <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white mb-4">
                                 Nazwij swój trening
                             </h2>
                             <div>
@@ -418,7 +418,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                         </div>
 
                         {/* Workout Settings */}
-                        <div className="space-y-6">
+                        <div className="space-y-4 md:space-y-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
                                     Tytuł
@@ -432,7 +432,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                                 />
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
                                         Typ
@@ -479,7 +479,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                 </div>
 
                 {/* Right Column - Builder */}
-                <div className="w-2/3 bg-gray-50 dark:bg-space-950 p-8 pb-24 overflow-y-auto">
+                <div className="w-full md:w-2/3 bg-gray-50 dark:bg-space-950 p-4 md:p-8 pb-24 overflow-y-auto">
                     <div className="space-y-6">
                         {/* Add Exercise Section */}
                         <div className="bg-white dark:bg-space-900 rounded-lg border border-gray-100 dark:border-space-800 p-4">
@@ -576,11 +576,11 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
             </div>
 
             {/* Save Button - Fixed at bottom */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-space-900 border-t border-gray-100 dark:border-space-800 px-8 py-4">
-                <div className="flex justify-end gap-3 max-w-4xl mx-auto">
+            <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-space-900 border-t border-gray-100 dark:border-space-800 px-4 md:px-8 py-4">
+                <div className="flex justify-end gap-3 w-full max-w-4xl mx-auto">
                     <button
                         onClick={onClose}
-                        className="px-6 py-2 text-gray-500 dark:text-system-grey hover:text-gray-700 dark:hover:text-cloud-white transition-colors font-medium"
+                        className="px-4 md:px-6 py-2 text-gray-500 dark:text-system-grey hover:text-gray-700 dark:hover:text-cloud-white transition-colors font-medium text-sm md:text-base"
                     >
                         Anuluj
                     </button>
@@ -588,7 +588,7 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                     <button
                         onClick={saveWorkout}
                         disabled={!workoutTitle.trim() || workoutSteps.length === 0}
-                        className="flex items-center gap-2 px-6 py-2 bg-electric-500 text-white rounded-md hover:bg-electric-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                        className="flex items-center gap-2 px-4 md:px-6 py-2 bg-electric-500 text-white rounded-md hover:bg-electric-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm md:text-base"
                     >
                         <SaveIcon className="h-4 w-4" />
                         Zapisz trening
