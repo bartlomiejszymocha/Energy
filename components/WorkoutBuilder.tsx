@@ -423,31 +423,21 @@ export const WorkoutBuilder: React.FC<WorkoutBuilderProps> = ({ onClose }) => {
                     {/* Left Column - Metadata - Sticky to left on desktop */}
                     <div className="w-full md:w-80 md:flex-shrink-0 backdrop-blur-xl bg-white/70 dark:bg-space-900/70 border-b md:border-b-0 md:border-r border-white/20 dark:border-space-700/30 p-4 md:p-8 shadow-xl">
                         <div className="space-y-6 md:space-y-8">
-                            {/* Workout Title */}
-                            <div>
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm">
-                                        <EditIcon className="h-5 w-5 text-purple-500" />
-                                    </div>
-                                    <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white">
-                                        Nazwij swój trening
-                                    </h2>
+                        {/* Workout Title */}
+                        <div>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm">
+                                    <EditIcon className="h-5 w-5 text-purple-500" />
                                 </div>
+                                <input
+                                    type="text"
+                                    value={workoutTitle}
+                                    onChange={(e) => setWorkoutTitle(e.target.value)}
+                                    className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-cloud-white bg-transparent border-none outline-none focus:ring-2 focus:ring-purple-500/30 rounded-lg px-2 py-1 -mx-2 -my-1"
+                                    placeholder="Nazwij swój trening"
+                                />
+                            </div>
                                 <div className="space-y-4 md:space-y-6">
-                                    <div>
-                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
-                                            <TargetIcon className="h-4 w-4" />
-                                            Tytuł
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={workoutTitle}
-                                            onChange={(e) => setWorkoutTitle(e.target.value)}
-                                            className="w-full px-4 py-3 border border-white/30 dark:border-space-700/50 rounded-xl bg-white/50 dark:bg-space-800/50 backdrop-blur-sm text-gray-900 dark:text-cloud-white focus:ring-2 focus:ring-electric-500/30 focus:border-electric-500/50 transition-all duration-200"
-                                            placeholder="Nazwa treningu"
-                                        />
-                                    </div>
-                                    
                                     <div>
                                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-system-grey mb-2">
                                             <FileTextIcon className="h-4 w-4" />
